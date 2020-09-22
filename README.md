@@ -1,4 +1,4 @@
-# Buszkalauz/Buspal
+# Buspal
 
 We want to develop an easy-to-use **bus application**, which aims to help navigate the bus-routes in Hungary. 
 - No jumping between websites
