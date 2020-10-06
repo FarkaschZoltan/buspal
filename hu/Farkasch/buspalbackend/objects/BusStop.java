@@ -88,7 +88,9 @@ public class BusStop {
     }
 
     @Override
-    public String toString(){ //not finished yet
+    public String toString(){ //not finished yet(?)
         return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords);
     }
+
+    //to-so: override compareTo() (for easier comparing and organizing)
 }
