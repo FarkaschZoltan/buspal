@@ -88,7 +88,7 @@ public class BusStop {
     }
 
     @Override
-    public String toString(){ //not finished
+    public String toString(){ //not finished yet
         return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords);
     }
 }
