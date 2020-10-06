@@ -3,7 +3,7 @@ package hu.Farkasch.buspalbackend.objects;
 import hu.Farkasch.buspalbackend.datastructures.Coordinates;
 import java.time.LocalTime;
 
-public class BusStop {
+public class BusStop implements Comparable{
     private Coordinates cords;
     private String stopName;
     private int stopId;
@@ -92,5 +92,17 @@ public class BusStop {
         return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords);
     }
 
-    //to-so: override compareTo() (for easier comparing and organizing)
+    @Override
+    public int compareTo(BusStop bs){  //for easier sorting
+        if(stopSequencePlace < bs.getStopSequencePlace()){
+            return -1;
+        }
+        else if (stopSequencePlace > bs.getStopSequencePlace()){
+            return 1;
+        }
+        else {
+            return 0 //do we need further comparing, if they are equal?
+        }
+    }
+
 }
