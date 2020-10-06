@@ -34,11 +34,21 @@ public class BusTrip{
         this.tripId = tripId;
     }
 
-    //would be usefull to organize busStopList in ascending order (stopSequencePlace)
+    //would be usefull to sort busStopList in ascending order (stopSequencePlace)
 
-    public void addBusStop(BusStop bs){
-        busStopList.add(bs);
+    public void addBusStop(BusStop bs){ 
+        busStopList.add(bs);           
     }
 
-    public 
+    public void removeBusStop(BusStop bs){ //removing a busStop object
+        busStopList.remove(bs);            //to-do(?) handleing trying to remove a non-existent BusStop
+    }
+
+    public void removeBusStop(int i){ //removing a BusStop on a specific index (maybe even its stopSequencePlace???)
+        busStopList.remove(i);        //to-do(?) handleing trying to remove a non-existent BusStop
+    }
+
+    public void clear(){
+        busStopList = new ArrayList<BusStop>();
+    }
 }
