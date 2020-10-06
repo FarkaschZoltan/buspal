@@ -9,9 +9,9 @@
 ### Usage:
 * Open your command line and type:
 ```
-python db_generate.py *database_type* *database_name* *[host]* *[username]* *[password]*
+python db_generate.py database_type database_name [host] [username] [password]
 ```
-*Creditentials are only needed, when you are generating a MySQL database
+* Creditentials are only needed, when you are generating a MySQL database
 
 ### Supported databases:
 * MySQL
