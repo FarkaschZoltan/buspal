@@ -1,4 +1,4 @@
-package hu.Farkasch.buspalbackend.objects;
+package hu.farkasch.buspalbackend.objects;
 
 import java.utils.ArrayList;
 

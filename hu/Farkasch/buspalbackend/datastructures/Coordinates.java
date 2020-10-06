@@ -1,4 +1,4 @@
-package hu.Farkasch.buspalbackend.datastructures;
+package hu.farkasch.buspalbackend.objects;
 
 public class Coordinates {
     private double lat; //lattitude of the coordinate
