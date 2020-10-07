@@ -2,7 +2,7 @@ package hu.thepocok.statements;
 
 public class Statements {
     public static String getScheduleByStop(String route, String stop, String direction, String date){
-        String statement = "SELECT stop_times.trip_id, stop_times.departure_time FROM routes " +
+        String statement = "SELECT stop_times.departure_time FROM routes " +
                 "INNER JOIN trips on routes.route_id = trips.route_id " +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
@@ -15,7 +15,7 @@ public class Statements {
     }
 
     public static String getScheduleByRoute(String route, String direction, String date){
-        String statement = "SELECT stop_times.trip_id, stop_times.departure_time FROM routes " +
+        String statement = "SELECT stop_times.departure_time FROM routes " +
                 "INNER JOIN trips on routes.route_id = trips.route_id " +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
@@ -36,4 +36,26 @@ public class Statements {
                 "WHERE stops.stop_name = " + stop;
         return statement;
     }
+
+    public static String getTripIdByRouteId(int routeId){ //TO_DO
+        String statement = "temp";
+        return statement;
+    }
+
+    public static String getStopIdByTripId(int tripId){ //TO-DO
+        String statement = "temp";
+        return statement;
+    }
+
+    public static String getTripData(int tripId){ //TO-DO
+        String statement = "temp";
+        return statement;
+    }
+
+    public static String getBusStopData(int stopId){ //TO-DO
+        String statement = "temp";
+        return statement;
+    }
+
+
 }
