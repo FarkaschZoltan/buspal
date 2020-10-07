@@ -37,7 +37,7 @@ public class Statements {
         return statement;
     }
 
-    public static String getTripIdByRouteId(int routeId){ //TO_DO
+    public static String getTripIdByRouteId(int routeId){ //TO-DO
         String statement = "temp";
         return statement;
     }
