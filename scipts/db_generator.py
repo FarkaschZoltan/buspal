@@ -1,4 +1,5 @@
 import os
+import csv
 import time
 import sys
 import sqlite3
@@ -6,6 +7,15 @@ import mysql.connector
 
 ## .py sqlite db
 ## .py mysql db host username password
+
+def compress(city, is_enabled):
+    if is_enabled:
+        os.system("go get github.com/patrickbr/gtfstidy")
+        command = "gtfstidy -SCRmTcisOeD -o "
+        command += city + " " + city + ".zip"
+        print(command)
+        print("Compression in progress ...")
+        os.system(command)
 
 def delete_old(db_type, db_name, cursor):
     if args[1] == "sqlite" and os.path.exists(db + ".db"):
@@ -15,6 +25,45 @@ def delete_old(db_type, db_name, cursor):
         for i in files:
             if ".txt" in i:
                 cursor.execute("DROP TABLE " + i[:-4])
+
+def determine_column_type(column_name, database_type):
+    type_name = ""
+    size = ""
+
+    if "date" in column_name:
+        type_name = "INT"
+        size = "8"
+    elif column_name == "monday" or column_name == "tuesday" or column_name == "wednesday" or \
+        column_name == "thursday" or column_name == "friday" or column_name == "saturday" or \
+        column_name == "sunday":
+        type_name = "INT"
+        size = "1"
+    elif column_name == "exception_type":
+        type_name = "INT"
+        size = "4"
+    elif "id" in column_name:
+        type_name = "INT"
+        size = "8"
+    elif "time" in column_name and column_name != "exact_times" and column_name != "traversal_time" and database_type == "mysql":
+        type_name = "TIME"
+    elif column_name == "is_bidirectional":
+        type_name = "BOOL"
+    elif column_name == "traversal_time":
+        type_name = "INT"
+        size = "4"
+    elif column_name == "route_color" or column_name == "route_text_color":
+        type_name = "VARCHAR"
+        size = "6"
+    elif column_name == "shape_pt_lat" or column_name == "shape_pt_lon" or column_name == "stop_lat" or column_name == "stop_lon":
+        type_name = "VARCHAR"
+        size = "9"
+    elif column_name == "stop_sequence":
+        type_name = "VARCHAR"
+        size = "3"
+    else:
+        type_name = "VARCHAR"
+        size = "255"
+    return "{}({}) NOT NULL".format(type_name, size)
 
 start_time = time.time()
 args = sys.argv
@@ -27,7 +76,7 @@ if args[1] == "-help":
 if len(args) < 3:
     raise BaseException("Not enough parameters. Needed at least 2, got: " + str(len(args)-1) + ". Type " + __name__ + ".py -help for help.")
 
-if not os.path.exists(args[2]):
+if not os.path.exists(args[2]) and not os.path.exists(args[2] + ".zip"):
     raise FileNotFoundError("No directory exists: " + args[2])
 
 if args[1] != "mysql" and args[1] != "sqlite":
@@ -57,6 +106,9 @@ if args[1]== "mysql":
         user=user,
         password=password,
         database=db)
+
+## compressing input data
+compress(db, args[-1] != "-nogo")
 
 ## deleting database if outdated
 database_version = None
@@ -89,47 +141,38 @@ for i in files:
 ## creating tables and inserting data
 for i in range(len(input_files)):
     with open(db + "/" + input_files[i], encoding="utf-8") as data:
-        print("Working on " + input_files[i])
+        print("Working on " + input_files[i] + "...")
         col_names = data.readline().strip().split(",")
 
         create_table_query = "CREATE TABLE IF NOT EXISTS `" + input_files[i][:-4] + "` ("
         for j in range(len(col_names)-1):
-            create_table_query += "`" + col_names[j] + "` VARCHAR(255) NOT NULL, "
-        create_table_query += "`" + col_names[-1] + "` VARCHAR(255) NOT NULL)"
+            column_type = determine_column_type(col_names[j], args[1])
+            create_table_query += "`" + col_names[j] + "` " + column_type + ", "
+        column_type = determine_column_type(col_names[-1], args[1])
+        create_table_query += "`" + col_names[-1] + "` " + column_type + ")"
 
         cursor.execute(create_table_query)
 
-        data_to_insert = data.readline().strip().split(",")
+        data_read = data.readline().strip()
+        data_to_insert = [ '{}'.format(x) for x in list(csv.reader([data_read], delimiter=',', quotechar='"'))[0] ]
 
         count = 0
         while len(data_to_insert) >= 1 and data_to_insert[0] != "":
-            start = 0
-            stop = 0
-            for j in range(len(data_to_insert)):
-                if len(data_to_insert[j]) == 0:
-                   continue
-                if data_to_insert[j][0] == '"':
-                    start = j
-                if data_to_insert[j][-1] == '"':
-                   stop = j
-            if start != 0:
-                for j in range(start+1, stop+1):
-                    data_to_insert[start] += "," + data_to_insert[j]
-                for j in range(start+1, stop+1):
-                    data_to_insert.pop(j)
-                data_to_insert[start] = data_to_insert[start][1:-1]
             
             insert_query = "INSERT INTO `" + input_files[i][:-4] +"` VALUES ("
             for j in range(len(data_to_insert)-1):
                 insert_query += "'" + data_to_insert[j] + "', "
             insert_query += "'" + data_to_insert[-1] + "')"
+            
             cursor.execute(insert_query)
 
             if(count == 5000):
                 conn.commit()
                 
             count += 1
-            data_to_insert = data.readline().strip().split(",")
+            data_read = data.readline().strip()
+            data_to_insert = [ '{}'.format(x) for x in list(csv.reader([data_read], delimiter=',', quotechar='"'))[0] ]
+
         conn.commit()
 
 ## finalizing     
