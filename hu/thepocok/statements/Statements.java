@@ -37,13 +37,15 @@ public class Statements {
         return statement;
     }
 
-    public static String getTripIdByRouteId(int routeId){ //TO-DO
-        String statement = "temp";
+    public static String getTripIdByRouteId(int routeId){
+        String statement = "SELECT DISTINCT trip_id FROM trips " +
+        "WHERE trips.route_id = " routeId ";";
         return statement;
     }
 
-    public static String getStopIdByTripId(int tripId){ //TO-DO
-        String statement = "temp";
+    public static String getStopIdByTripId(int tripId){
+        String statement = "SELECT DISTINCT stop_id FROM stop_times " +
+        "WHERE stop_times.trip_id = " tripId ";";
         return statement;
     }
 
