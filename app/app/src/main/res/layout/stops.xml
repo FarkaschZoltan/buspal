@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/stops"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:text="Stops:"
+        android:textAlignment="textStart"
+        android:textSize="40dp"
+        tools:ignore="RtlCompat" />
+
+    <TextView
+        android:id="@+id/stop1"
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+        android:layout_below="@id/stops"
+        android:gravity="center"
+        android:text="Alkotmány utca"
+        android:textAlignment="center"
+        android:textSize="30dp"
+        />
+
+    <TextView
+        android:id="@+id/vehicles"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_below="@id/stops"
+        android:layout_toRightOf="@id/stop1"
+        android:gravity="center"
+        android:paddingLeft="30dp"
+        android:text="17,   56,    47"
+        android:textAlignment="textStart"
+        android:textSize="30dp"
+        tools:ignore="RtlCompat" />
+
+    <!--2-->
+
+    <TextView
+        android:id="@+id/stop2"
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+        android:layout_below="@id/stop1"
+        android:gravity="center"
+        android:text="Blaha Lújza tér"
+        android:textAlignment="center"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/vehicles2"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_below="@id/stop1"
+        android:layout_toRightOf="@id/stop2"
+        android:gravity="center"
+        android:paddingLeft="30dp"
+        android:text="5,   7,   8,  8E"
+        android:textAlignment="textStart"
+        android:textSize="30dp"
+        tools:ignore="RtlCompat" />
+
+    <!--3-->
+    <TextView
+        android:id="@+id/stop3"
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+        android:layout_below="@id/stop2"
+        android:gravity="center"
+        android:text="Centenárium lakótelep"
+        android:textAlignment="center"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/vehicles3"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_below="@id/stop2"
+        android:layout_toRightOf="@id/stop3"
+        android:gravity="center"
+        android:paddingLeft="30dp"
+        android:text="44"
+        android:textAlignment="textStart"
+        android:textSize="30dp"
+        tools:ignore="RtlCompat" />
+</RelativeLayout>
+
+
