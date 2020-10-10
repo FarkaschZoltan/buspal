@@ -8,6 +8,8 @@ import mysql.connector
 ## .py sqlite db
 ## .py mysql db host username password
 
+## TODO query feed info from database, check if db is outdated and download the newer version + add database_version.txt
+
 def compress(city, is_enabled):
     if is_enabled:
         os.system("go get github.com/patrickbr/gtfstidy")
@@ -64,6 +66,26 @@ def determine_column_type(column_name, database_type):
         type_name = "VARCHAR"
         size = "255"
     return "{}({}) NOT NULL".format(type_name, size)
+
+def add_keys(table):
+    keys = ""
+
+    if table == "agency":
+        keys = ", PRIMARY_KEY(`agency_id`)"
+    elif table == "calendar":
+        keys = ", PRIMARY_KEY(`service_id`)"
+    elif table == "pathways":
+        keys = ", PRIMARY_KEY(`pathway_id`)"
+    elif table == "routes":
+        keys = ", PRIMARY_KEY(`route_id`)"
+    elif table == "stop_times":
+        keys = ", PRIMARY_KEY(`stop_id`), FOREIGN_KEY(`trip_id`) REFERENCES trips(`trip_id`)"
+    elif table == "stops":
+        keys = ", PRIMARY_KEY(`stop_id`)"
+    elif table == "trips":
+        keys = ", PRIMARY_KEY(`trip_id`), FOREIGN_KEY(`route_id`) REFERENCES routes(`route_id`)"
+
+    return keys
 
 start_time = time.time()
 args = sys.argv
@@ -141,7 +163,7 @@ for i in files:
 ## creating tables and inserting data
 for i in range(len(input_files)):
     with open(db + "/" + input_files[i], encoding="utf-8") as data:
-        print("Working on " + input_files[i] + "...")
+        print("Working on " + input_files[i] + "...", end="")
         col_names = data.readline().strip().split(",")
 
         create_table_query = "CREATE TABLE IF NOT EXISTS `" + input_files[i][:-4] + "` ("
@@ -149,7 +171,7 @@ for i in range(len(input_files)):
             column_type = determine_column_type(col_names[j], args[1])
             create_table_query += "`" + col_names[j] + "` " + column_type + ", "
         column_type = determine_column_type(col_names[-1], args[1])
-        create_table_query += "`" + col_names[-1] + "` " + column_type + ")"
+        create_table_query += "`" + col_names[-1] + "` " + column_type + add_keys(input_files[i][:-4]) + ")"
 
         cursor.execute(create_table_query)
 
@@ -174,6 +196,7 @@ for i in range(len(input_files)):
             data_to_insert = [ '{}'.format(x) for x in list(csv.reader([data_read], delimiter=',', quotechar='"'))[0] ]
 
         conn.commit()
+        print(" done")
 
 ## finalizing     
 conn.close()
