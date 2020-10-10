@@ -19,7 +19,7 @@ def compress(city, is_enabled):
         print("Compression in progress ...")
         os.system(command)
 
-def delete_old(db_type, db_name, cursor):
+def delete_old(db_type, db_name, cursor, conn):
     if args[1] == "sqlite" and os.path.exists(db + ".db"):
         os.remove(db + ".db")
     else:
@@ -27,6 +27,7 @@ def delete_old(db_type, db_name, cursor):
         for i in files:
             if ".txt" in i:
                 cursor.execute("DROP TABLE " + i[:-4])
+        conn.commit()
 
 def determine_column_type(column_name, database_type):
     type_name = ""
@@ -46,8 +47,9 @@ def determine_column_type(column_name, database_type):
     elif "id" in column_name:
         type_name = "INT"
         size = "8"
-    elif "time" in column_name and column_name != "exact_times" and column_name != "traversal_time" and database_type == "mysql":
+    elif "time" in column_name and column_name != "exact_times" and column_name != "traversal_time" and column_name != "agency_timezone" and database_type == "mysql":
         type_name = "TIME"
+        return "{}{} NOT NULL".format(type_name, size)
     elif column_name == "is_bidirectional":
         type_name = "BOOL"
     elif column_name == "traversal_time":
@@ -71,19 +73,19 @@ def add_keys(table):
     keys = ""
 
     if table == "agency":
-        keys = ", PRIMARY_KEY(`agency_id`)"
+        keys = ", PRIMARY KEY(`agency_id`)"
     elif table == "calendar":
-        keys = ", PRIMARY_KEY(`service_id`)"
+        keys = ", PRIMARY KEY(`service_id`)"
     elif table == "pathways":
-        keys = ", PRIMARY_KEY(`pathway_id`)"
+        keys = ", PRIMARY KEY(`pathway_id`)"
     elif table == "routes":
-        keys = ", PRIMARY_KEY(`route_id`)"
+        keys = ", PRIMARY KEY(`route_id`)"
     elif table == "stop_times":
-        keys = ", PRIMARY_KEY(`stop_id`), FOREIGN_KEY(`trip_id`) REFERENCES trips(`trip_id`)"
+        keys = ", PRIMARY KEY(`trip_id`,`stop_id`,`stop_sequence`)"
     elif table == "stops":
-        keys = ", PRIMARY_KEY(`stop_id`)"
+        keys = ", PRIMARY KEY(`stop_id`)"
     elif table == "trips":
-        keys = ", PRIMARY_KEY(`trip_id`), FOREIGN_KEY(`route_id`) REFERENCES routes(`route_id`)"
+        keys = ", PRIMARY KEY(`trip_id`)"
 
     return keys
 
@@ -149,7 +151,7 @@ except:
 
 if database_version != None:
     if int(database_version[0]) != int(current_version):
-        delete_old(args[1], db, cursor)
+        delete_old(args[1], db, cursor, conn)
     elif int(database_version[0]) == int(current_version):
         raise SystemExit("Database exists with the current version number")
 
@@ -163,7 +165,7 @@ for i in files:
 ## creating tables and inserting data
 for i in range(len(input_files)):
     with open(db + "/" + input_files[i], encoding="utf-8") as data:
-        print("Working on " + input_files[i] + "...", end="")
+        print("Working on " + input_files[i] + "...")
         col_names = data.readline().strip().split(",")
 
         create_table_query = "CREATE TABLE IF NOT EXISTS `" + input_files[i][:-4] + "` ("
@@ -196,7 +198,7 @@ for i in range(len(input_files)):
             data_to_insert = [ '{}'.format(x) for x in list(csv.reader([data_read], delimiter=',', quotechar='"'))[0] ]
 
         conn.commit()
-        print(" done")
+    print("done")
 
 ## finalizing     
 conn.close()
