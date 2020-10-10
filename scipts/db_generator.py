@@ -181,7 +181,7 @@ for i in range(len(input_files)):
         data_to_insert = [ '{}'.format(x) for x in list(csv.reader([data_read], delimiter=',', quotechar='"'))[0] ]
 
         count = 0
-        while len(data_to_insert) >= 1 and data_to_insert[0] != "":
+        while len(data_to_insert) >= 1 and (data_to_insert[0] != "" or len(data_to_insert) > 1):
             
             insert_query = "INSERT INTO `" + input_files[i][:-4] +"` VALUES ("
             for j in range(len(data_to_insert)-1):
