@@ -11,7 +11,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
@@ -21,14 +20,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-
-import hu.farkasch.buspalbackend.datastructures.KeyDataPairs;
 import hu.thepocok.statements.*;
 import hu.thepocok.webconnection.APIConnection;
 
@@ -56,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String url = "http://192.168.0.164/index.php";
 
-                String[] strings = new String[]{Statements.getRoutesByStop(inText)};
+                String[] strings = new String[]{Statements.getRoutesByStop(inText), "route_activity"};
 
                 APIConnection apiConnection = new APIConnection(c, url, "localhost", "root", "", "budapest");
                 apiConnection.execute(strings);

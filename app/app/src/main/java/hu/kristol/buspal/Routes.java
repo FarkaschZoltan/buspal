@@ -1,5 +1,6 @@
 package hu.kristol.buspal;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -48,9 +49,54 @@ public class Routes extends AppCompatActivity {
 
         // Add text
         for(BusRoute routes : routesList){
-            TextView tv = new TextView(this);
-            tv.setText(routes.getName());
-            ll.addView(tv);
+            LinearLayout innerLayout = new LinearLayout(this);
+            innerLayout.setOrientation(LinearLayout.HORIZONTAL);
+            innerLayout.setMinimumHeight(100);
+
+            TextView color = new TextView(this);
+            switch (routes.getType()){
+                case BUS:
+                    color.setBackgroundColor(getResources().getColor(R.color.bus));
+                    break;
+                case TRAM:
+                    color.setBackgroundColor(getResources().getColor(R.color.tram));
+                    break;
+                case TROLLEY:
+                    color.setBackgroundColor(getResources().getColor(R.color.trolley));
+                    break;
+                case METRO:
+                    if(routes.getName().equals("M1")){
+                        color.setBackgroundColor(getResources().getColor(R.color.metro_1));
+                    }else if(routes.getName().equals("M2")){
+                        color.setBackgroundColor(getResources().getColor(R.color.metro_2));
+                    }else if(routes.getName().equals("M3")){
+                        color.setBackgroundColor(getResources().getColor(R.color.metro_3));
+                    }else if(routes.getName().equals("M4")){
+                        color.setBackgroundColor(getResources().getColor(R.color.metro_4));
+                    }
+                    break;
+                case SUBURBAN_RAILWAY:
+                    if(routes.getName().equals("H5")){
+                        color.setBackgroundColor(getResources().getColor(R.color.suburban_5));
+                    }else if(routes.getName().equals("H6")){
+                        color.setBackgroundColor(getResources().getColor(R.color.suburban_6));
+                    }else if(routes.getName().equals("H7")){
+                        color.setBackgroundColor(getResources().getColor(R.color.suburban_7));
+                    }else if(routes.getName().equals("H8") || routes.getName().equals("H9")){
+                        color.setBackgroundColor(getResources().getColor(R.color.suburban_8));
+                    }
+            }
+            innerLayout.addView(color, 100, 100);
+
+            TextView routeName = new TextView(this);
+            routeName.setText(routes.getName());
+            innerLayout.addView(routeName);
+
+            TextView routeDest = new TextView(this);
+            routeDest.setText(routes.getDestinations());
+            innerLayout.addView(routeDest);
+
+            ll.addView(innerLayout);
         }
 
         // Add the LinearLayout element to the ScrollView
