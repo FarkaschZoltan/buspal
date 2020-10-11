@@ -1,23 +1,22 @@
 package hu.farkasch.buspalbackend.objects;
 
-import java.time.LocalTime;
-
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
+import hu.farkasch.buspalbackend.datastructures.Time;
 
-public class BusStop {
+public class BusStop /*implements Comparable*/{
     private Coordinates cords;
     private String stopName;
     private int stopId;
-    private LocalTime arrivalTime;
-    private LocalTime departureTime;
+    private Time arrivalTime;
+    private Time departureTime;
     private int stopSequencePlace;
 
     public BusStop(){
         this.cords = new Coordinates();
         this.stopName = "";
         this.stopId = -1; //no id = -1
-        this.arrivalTime = arrivalTime.of(0, 0, 0);
-        this.arrivalTime = arrivalTime.of(0, 0, 0);
+        this.arrivalTime = new Time();
+        this.arrivalTime = new Time();
         this.stopSequencePlace = -1; //not in a sequence
     }
 
@@ -25,8 +24,8 @@ public class BusStop {
         this.stopId = stopId;
         this.stopName = stopName;
         this.cords = cords;
-        arrivalTime = arrivalTime.parse(timeDataArrival);
-        departureTime = departureTime.parse(timeDataDeparture);
+        arrivalTime = new Time(timeDataArrival);
+        departureTime = new Time(timeDataDeparture);
         this.stopSequencePlace = stopSequencePlace;
     }
 
@@ -44,11 +43,11 @@ public class BusStop {
         return stopId;
     }
 
-    public LocalTime getArrivalTime(){
+    public Time getArrivalTime(){
         return arrivalTime;
     }
 
-    public LocalTime getDepartureTime(){
+    public Time getDepartureTime(){
         return departureTime;
     }
 
@@ -69,18 +68,18 @@ public class BusStop {
     }
 
     public void setArrivalTime(String timeDataArrival){ //String version
-        arrivalTime = arrivalTime.parse(timeDataArrival);
+        arrivalTime = new Time(timeDataArrival);
     }
 
-    public void setArrivalTime(LocalTime arrivalTime){ //LocalTime version
+    public void setArrivalTime(Time arrivalTime){ //Time version
         this.arrivalTime = arrivalTime;
     }
 
     public void setDepartureTime(String timeDataDeparture){ //String version
-        departureTime = departureTime.parse(timeDataDeparture);
+        departureTime = new Time(timeDataDeparture);
     }
 
-    public void setDepartureTime(LocalTime departureTime){ //LocalTime version
+    public void setDepartureTime(Time departureTime){ //Time version
         this.departureTime = departureTime;
     }
 
@@ -102,8 +101,9 @@ public class BusStop {
             return 1;
         }
         else {
-            return 0; //do we need further comparing, if they are equal?
+            return 0 //do we need further comparing, if they are equal?
         }
-    }*/
+    }
+    */
 
 }
