@@ -1,6 +1,6 @@
 package hu.farkasch.buspalbackend.objects;
 
-import java.utils.ArrayList;
+import java.util.ArrayList;
 
 public class BusTrip{
     private ArrayList<BusStop> busStopList;
