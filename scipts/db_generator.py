@@ -8,6 +8,8 @@ import mysql.connector
 ## .py sqlite db
 ## .py mysql db host username password
 
+## TODO query feed info from database, check if db is outdated and download the newer version + add database_version.txt
+
 def compress(city, is_enabled):
     if is_enabled:
         os.system("go get github.com/patrickbr/gtfstidy")
@@ -17,7 +19,7 @@ def compress(city, is_enabled):
         print("Compression in progress ...")
         os.system(command)
 
-def delete_old(db_type, db_name, cursor):
+def delete_old(db_type, db_name, cursor, conn):
     if args[1] == "sqlite" and os.path.exists(db + ".db"):
         os.remove(db + ".db")
     else:
@@ -25,6 +27,7 @@ def delete_old(db_type, db_name, cursor):
         for i in files:
             if ".txt" in i:
                 cursor.execute("DROP TABLE " + i[:-4])
+        conn.commit()
 
 def determine_column_type(column_name, database_type):
     type_name = ""
@@ -44,8 +47,9 @@ def determine_column_type(column_name, database_type):
     elif "id" in column_name:
         type_name = "INT"
         size = "8"
-    elif "time" in column_name and column_name != "exact_times" and column_name != "traversal_time" and database_type == "mysql":
+    elif "time" in column_name and column_name != "exact_times" and column_name != "traversal_time" and column_name != "agency_timezone" and database_type == "mysql":
         type_name = "TIME"
+        return "{}{} NOT NULL".format(type_name, size)
     elif column_name == "is_bidirectional":
         type_name = "BOOL"
     elif column_name == "traversal_time":
@@ -64,6 +68,26 @@ def determine_column_type(column_name, database_type):
         type_name = "VARCHAR"
         size = "255"
     return "{}({}) NOT NULL".format(type_name, size)
+
+def add_keys(table):
+    keys = ""
+
+    if table == "agency":
+        keys = ", PRIMARY KEY(`agency_id`)"
+    elif table == "calendar":
+        keys = ", PRIMARY KEY(`service_id`)"
+    elif table == "pathways":
+        keys = ", PRIMARY KEY(`pathway_id`)"
+    elif table == "routes":
+        keys = ", PRIMARY KEY(`route_id`)"
+    elif table == "stop_times":
+        keys = ", PRIMARY KEY(`trip_id`,`stop_id`,`stop_sequence`)"
+    elif table == "stops":
+        keys = ", PRIMARY KEY(`stop_id`)"
+    elif table == "trips":
+        keys = ", PRIMARY KEY(`trip_id`)"
+
+    return keys
 
 start_time = time.time()
 args = sys.argv
@@ -127,7 +151,7 @@ except:
 
 if database_version != None:
     if int(database_version[0]) != int(current_version):
-        delete_old(args[1], db, cursor)
+        delete_old(args[1], db, cursor, conn)
     elif int(database_version[0]) == int(current_version):
         raise SystemExit("Database exists with the current version number")
 
@@ -149,7 +173,7 @@ for i in range(len(input_files)):
             column_type = determine_column_type(col_names[j], args[1])
             create_table_query += "`" + col_names[j] + "` " + column_type + ", "
         column_type = determine_column_type(col_names[-1], args[1])
-        create_table_query += "`" + col_names[-1] + "` " + column_type + ")"
+        create_table_query += "`" + col_names[-1] + "` " + column_type + add_keys(input_files[i][:-4]) + ")"
 
         cursor.execute(create_table_query)
 
@@ -157,7 +181,7 @@ for i in range(len(input_files)):
         data_to_insert = [ '{}'.format(x) for x in list(csv.reader([data_read], delimiter=',', quotechar='"'))[0] ]
 
         count = 0
-        while len(data_to_insert) >= 1 and data_to_insert[0] != "":
+        while len(data_to_insert) >= 1 and (data_to_insert[0] != "" or len(data_to_insert) > 1):
             
             insert_query = "INSERT INTO `" + input_files[i][:-4] +"` VALUES ("
             for j in range(len(data_to_insert)-1):
@@ -174,6 +198,7 @@ for i in range(len(input_files)):
             data_to_insert = [ '{}'.format(x) for x in list(csv.reader([data_read], delimiter=',', quotechar='"'))[0] ]
 
         conn.commit()
+    print("done")
 
 ## finalizing     
 conn.close()
