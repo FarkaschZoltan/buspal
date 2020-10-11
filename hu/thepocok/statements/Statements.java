@@ -43,21 +43,18 @@ public class Statements {
         return statement;
     }
 
-    public static String getStopIdByTripId(int tripId){
+    public static String getStopIdByTripId(int tripId){ //not sure of needed
         String statement = "SELECT DISTINCT stop_id FROM stop_times " + 
                 "WHERE stop_times.trip_id = " + tripId + ";";
         return statement;
     }
 
-    public static String getTripData(int tripId){ //not sure if needed
-        String statement = "temp";
+    public static String getTripData(int tripId){ //gets all the needed data for the BusTrip, incuding the datae for its BusStops-s
+        String statement = "SELECT DISTINCT stops.stop_lat, stops.stop_lat, stops.stop_name, stops.stop_id, stop_times.arrival_time, stop_times.departure_time, stop_times.stop_sequence FROM trips " + 
+        "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " + 
+        "INNER JOIN stops on stops.stop_id = stop_times.stop_id " + 
+        "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id " + 
+        "WHERE trips.trip_id = " + tripId + ";";
         return statement;
     }
-
-    public static String getBusStopData(int stopId){ //TO-DO
-        String statement = "temp";
-        return statement;
-    }
-
-
 }
