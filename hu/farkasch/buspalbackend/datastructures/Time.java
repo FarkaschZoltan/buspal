@@ -1,4 +1,4 @@
-package hu.farkasch.buspalbackend.objects.datastructures;
+package hu.farkasch.buspalbackend.datastructures;
 
 public class Time{
     private int hour;
