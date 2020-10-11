@@ -1,4 +1,4 @@
-package hu.farkasch.buspalbackend.objects;
+package hu.farkasch.buspalbackend.datastructures;
 
 public class Coordinates {
     private static final int EARTH_RADIUS = 6_371_000; //in metres
