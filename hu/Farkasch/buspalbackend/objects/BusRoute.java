@@ -1,6 +1,7 @@
 package hu.farkasch.buspalbackend.objects;
 
-import hu.Farkasch.buspalbackend.datastructures.Coordinates;
+import hu.farkasch.buspalbackend.datastructures.Coordinates;
+import java.util.ArrayList;
 
 public class BusRoute{
     private ArrayList<BusTrip> busTripList;
