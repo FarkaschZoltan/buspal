@@ -9,160 +9,172 @@
     android:orientation="vertical">
 
 
-    <TextView
-        android:id="@+id/vehicle"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:gravity="center"
-        android:paddingLeft="20dp"
-        android:text="65A -> Fenyőgyönyge"
-        android:textAlignment="textStart"
-        android:textSize="40dp"
-        tools:ignore="RtlCompat" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/stop"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:paddingLeft="20dp"
-        android:layout_below="@id/vehicle"
-        android:text="Kolosi tér"
-        android:textSize="30dp"
-        tools:ignore="RtlCompat" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/stop"
-        android:text="2020.10.07. 13:00"
-        android:gravity="center"
-        android:textSize="30dp" />
+            <TextView
+                android:id="@+id/vehicle"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:text="65A -> Fenyőgyönyge"
+                android:textAlignment="textStart"
+                android:textSize="40dp"
+                tools:ignore="RtlCompat" />
 
-    <!--1-->
-    <TextView
-        android:id="@+id/hours"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_below="@id/time"
-        android:gravity="center"
-        android:text="13"
-        android:textAlignment="center"
-        android:textSize="40dp" />
+            <TextView
+                android:id="@+id/stop"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:text="Kolosi tér"
+                android:textSize="30dp"
+                android:layout_below="@id/vehicle"
+                tools:ignore="RtlCompat" />
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/stop"
+                android:text="2020.10.07. 13:00"
+                android:gravity="center"
+                android:textSize="30dp" />
 
-    <TextView
-        android:id="@+id/mins"
+            <!--1-->
+            <TextView
+                android:id="@+id/hours"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_below="@id/time"
+                android:gravity="center"
+                android:text="13"
+                android:textAlignment="center"
+                android:textSize="40dp" />
 
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_below="@id/time"
-        android:layout_toRightOf="@id/hours"
-        android:gravity="center"
-        android:paddingLeft="30dp"
-        android:text="15    20    35    50"
-        android:textAlignment="textStart"
-        android:textSize="30dp"
-        tools:ignore="RtlCompat" />
+            <TextView
+                android:id="@+id/mins"
 
-    <!--2-->
-    <TextView
-        android:id="@+id/hours2"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_below="@id/hours"
-        android:gravity="center"
-        android:text="14"
-        android:textAlignment="center"
-        android:textSize="40dp" />
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_below="@id/time"
+                android:layout_toRightOf="@id/hours"
+                android:gravity="center"
+                android:paddingLeft="30dp"
+                android:text="15    20    35    50"
+                android:textAlignment="textStart"
+                android:textSize="30dp"
+                tools:ignore="RtlCompat" />
 
-    <TextView
-        android:id="@+id/mins2"
+            <!--2-->
+            <TextView
+                android:id="@+id/hours2"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_below="@id/hours"
+                android:gravity="center"
+                android:text="14"
+                android:textAlignment="center"
+                android:textSize="40dp" />
 
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_below="@id/hours"
-        android:layout_toRightOf="@id/hours2"
-        android:gravity="center"
-        android:text="15    40"
-        android:paddingLeft="30dp"
-        android:textAlignment="textStart"
-        android:textSize="30dp"
-        tools:ignore="RtlCompat" />
+            <TextView
+                android:id="@+id/mins2"
 
-    <!--3-->
-    <TextView
-        android:id="@+id/hours3"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_below="@id/hours2"
-        android:gravity="center"
-        android:text="15"
-        android:textAlignment="center"
-        android:textSize="40dp" />
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_below="@id/hours"
+                android:layout_toRightOf="@id/hours2"
+                android:gravity="center"
+                android:text="15    40"
+                android:paddingLeft="30dp"
+                android:textAlignment="textStart"
+                android:textSize="30dp"
+                tools:ignore="RtlCompat" />
 
-    <TextView
-        android:id="@+id/mins3"
+            <!--3-->
+            <TextView
+                android:id="@+id/hours3"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_below="@id/hours2"
+                android:gravity="center"
+                android:text="15"
+                android:textAlignment="center"
+                android:textSize="40dp" />
 
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_below="@id/hours2"
-        android:layout_toRightOf="@id/hours3"
-        android:gravity="center"
-        android:text="10    30"
-        android:paddingLeft="30dp"
-        android:textAlignment="textStart"
-        android:textSize="30dp"
-        tools:ignore="RtlCompat" />
+            <TextView
+                android:id="@+id/mins3"
 
-    <!--4-->
-    <TextView
-        android:id="@+id/hours4"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_below="@id/hours3"
-        android:gravity="center"
-        android:text="16"
-        android:textAlignment="center"
-        android:textSize="40dp" />
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_below="@id/hours2"
+                android:layout_toRightOf="@id/hours3"
+                android:gravity="center"
+                android:text="10    30"
+                android:paddingLeft="30dp"
+                android:textAlignment="textStart"
+                android:textSize="30dp"
+                tools:ignore="RtlCompat" />
 
-    <TextView
-        android:id="@+id/mins4"
+            <!--4-->
+            <TextView
+                android:id="@+id/hours4"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_below="@id/hours3"
+                android:gravity="center"
+                android:text="16"
+                android:textAlignment="center"
+                android:textSize="40dp" />
 
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_below="@id/hours3"
-        android:layout_toRightOf="@id/hours4"
-        android:gravity="center"
-        android:text="10    20    50"
-        android:paddingLeft="30dp"
-        android:textAlignment="textStart"
-        android:textSize="30dp"
-        tools:ignore="RtlCompat" />
+            <TextView
+                android:id="@+id/mins4"
 
-    <!--5-->
-    <TextView
-        android:id="@+id/hours5"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_below="@id/hours4"
-        android:gravity="center"
-        android:text="17"
-        android:textAlignment="center"
-        android:textSize="40dp" />
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_below="@id/hours3"
+                android:layout_toRightOf="@id/hours4"
+                android:gravity="center"
+                android:text="10    20    50"
+                android:paddingLeft="30dp"
+                android:textAlignment="textStart"
+                android:textSize="30dp"
+                tools:ignore="RtlCompat" />
 
-    <TextView
-        android:id="@+id/mins5"
+            <!--5-->
+            <TextView
+                android:id="@+id/hours5"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_below="@id/hours4"
+                android:gravity="center"
+                android:text="17"
+                android:textAlignment="center"
+                android:textSize="40dp" />
 
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_below="@id/hours4"
-        android:layout_toRightOf="@id/hours5"
-        android:gravity="center"
-        android:text=""
-        android:paddingLeft="30dp"
-        android:textAlignment="textStart"
-        android:textSize="30dp"
-        tools:ignore="RtlCompat" />
+            <TextView
+                android:id="@+id/mins5"
+
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_below="@id/hours4"
+                android:layout_toRightOf="@id/hours5"
+                android:gravity="center"
+                android:text=""
+                android:paddingLeft="30dp"
+                android:textAlignment="textStart"
+                android:textSize="30dp"
+                tools:ignore="RtlCompat" />
+        </RelativeLayout>
+
+    </ScrollView>
+
+
 </RelativeLayout>
 
