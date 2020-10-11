@@ -1,12 +1,9 @@
 package hu.kristol.buspal;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
-import android.net.UrlQuerySanitizer;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,23 +21,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
-import hu.thepocok.statements.Statements;
+import hu.farkasch.buspalbackend.datastructures.KeyDataPairs;
+import hu.thepocok.statements.*;
+import hu.thepocok.webconnection.APIConnection;
 
 
 public class MainActivity extends AppCompatActivity {
-
-
+    Context c = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,26 +52,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 TextView out = findViewById(R.id.out);
                 EditText in = findViewById(R.id.in);
-
-                String url = "jdbc:mysql://192.168.0.115/budapest";
-                String user = "root";
-                String password = "";
                 String inText = in.getText().toString();
-                Connection conn = null;
-                connectToApi("192.168.0.115", inText);
-                try {
-                    conn = DriverManager.getConnection(url, user, password);
-                    Statement stmt = conn.createStatement();
-                    ResultSet rs = stmt.executeQuery(Statements.getRoutesByStop(inText));
-                    StringBuilder sb = new StringBuilder();
-                    while(rs.next()){
-                        sb.append(rs.getString("route_short_name") + ", ");
-                    }
-                    out.setText(sb.toString());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                Log.d("database", "hello világ");
+
+                String url = "http://192.168.0.164/index.php";
+
+                String[] strings = new String[]{Statements.getRoutesByStop(inText)};
+
+                APIConnection apiConnection = new APIConnection(c, url, "localhost", "root", "", "budapest");
+                apiConnection.execute(strings);
             }
         });
 
@@ -164,24 +146,6 @@ public class MainActivity extends AppCompatActivity {
                         .show();
             }
         }
-    }
-
-    public void connectToApi(String targetUrl, String stop){
-        HttpURLConnection connection = null;
-        try {
-            String u = targetUrl + "?param1=" + stop;
-            URL url = new URL(u);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
 }
