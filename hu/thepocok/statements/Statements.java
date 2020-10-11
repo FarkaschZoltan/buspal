@@ -38,18 +38,18 @@ public class Statements {
     }
 
     public static String getTripIdByRouteId(int routeId){
-        String statement = "SELECT DISTINCT trip_id FROM trips " +
-        "WHERE trips.route_id = " routeId ";";
+        String statement = "SELECT DISTINCT trip_id FROM trips " + 
+                "WHERE trips.route_id = " + routeId + ";";
         return statement;
     }
 
     public static String getStopIdByTripId(int tripId){
-        String statement = "SELECT DISTINCT stop_id FROM stop_times " +
-        "WHERE stop_times.trip_id = " tripId ";";
+        String statement = "SELECT DISTINCT stop_id FROM stop_times " + 
+                "WHERE stop_times.trip_id = " + tripId + ";";
         return statement;
     }
 
-    public static String getTripData(int tripId){ //TO-DO
+    public static String getTripData(int tripId){ //not sure if needed
         String statement = "temp";
         return statement;
     }
