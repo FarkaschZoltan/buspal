@@ -7,26 +7,18 @@ import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.security.Key;
 import java.util.ArrayList;
 
-import hu.farkasch.buspalbackend.datastructures.KeyDataPairs;
 import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.kristol.buspal.Routes;
 
@@ -75,35 +67,48 @@ public class APIConnection extends AsyncTask<String, Void, String> {
 
             urlConnection.connect();
 
-            InputStream inputStream = urlConnection.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
+            switch (strings[1]){
+                case "route_activity":
+                    InputStream inputStream = urlConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
 
-            String line = "";
-            StringBuilder result = new StringBuilder();
+                    String line = "";
+                    StringBuilder result = new StringBuilder();
 
-            while ((line = bufferedReader.readLine()) != null) {
-                result.append(line);
+                    while ((line = bufferedReader.readLine()) != null) {
+                        result.append(line);
+                    }
+
+                    JSONArray jsonArray = new JSONArray(result.toString());
+                    ArrayList<BusRoute> resultArray = new ArrayList<>();
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        int routeId = Integer.parseInt(jsonArray.getJSONObject(i).get("route_id").toString());
+                        String name = jsonArray.getJSONObject(i).get("route_short_name").toString();
+                        int type = Integer.parseInt(jsonArray.getJSONObject(i).get("route_type").toString());
+                        String destination = jsonArray.getJSONObject(i).get("route_desc").toString();
+
+                        BusRoute b = new BusRoute(routeId, name, type, destination);
+                        resultArray.add(b);
+                        Log.d("Result", b.toString());
+                    }
+
+                    Log.d("Result", String.valueOf(resultArray.size()));
+                    bufferedReader.close();
+                    inputStream.close();
+                    urlConnection.disconnect();
+
+                    Bundle extra = new Bundle();
+                    extra.putSerializable("routes", resultArray);
+
+                    Intent i = new Intent(context, Routes.class);
+                    i.putExtra("extra", extra);
+                    context.startActivity(i);
+                    break;
+                case "line_activity":
+                    //TODO
+                    break;
             }
-
-            JSONArray jsonArray = new JSONArray(result.toString());
-            ArrayList<BusRoute> resultArray = new ArrayList<>();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                resultArray.add(new BusRoute(Integer.parseInt(jsonArray.getJSONObject(i).get("route_id").toString()), jsonArray.getJSONObject(i).get("route_short_name").toString()));
-                Log.d("Result", Integer.parseInt(jsonArray.getJSONObject(i).get("route_id").toString()) + jsonArray.getJSONObject(i).get("route_short_name").toString());
-            }
-
-            Log.d("Result", String.valueOf(resultArray.size()));
-            bufferedReader.close();
-            inputStream.close();
-            urlConnection.disconnect();
-
-            Bundle extra = new Bundle();
-            extra.putSerializable("routes", resultArray);
-
-            Intent i = new Intent(context, Routes.class);
-            i.putExtra("extra", extra);
-            context.startActivity(i);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
