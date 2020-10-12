@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Routes">
-
+    tools:context=".line">
+    
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
@@ -20,12 +20,36 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:id="@+id/whole_route"
+        android:layout_below="@id/appBar">
+
+    </TextView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:id="@+id/actual_stop"
+        android:layout_below="@id/whole_route">
+
+    </TextView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:id="@+id/current_time"
+        android:layout_below="@id/actual_stop">
+
+    </TextView>
 
     <ScrollView
         android:id="@+id/routeList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appBar"
+        android:layout_below="@id/current_time"
         />
 
 </RelativeLayout>
