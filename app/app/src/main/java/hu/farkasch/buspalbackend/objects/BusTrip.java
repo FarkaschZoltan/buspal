@@ -1,3 +1,5 @@
+//WE DON'T NEED IT, IT'S SHIT
+
 package hu.farkasch.buspalbackend.objects;
 
 import java.util.ArrayList;

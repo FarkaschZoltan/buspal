@@ -2,31 +2,33 @@ package hu.farkasch.buspalbackend.objects;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
 import hu.farkasch.buspalbackend.datastructures.Time;
+import java.util.ArrayList;
 
-public class BusStop /*implements Comparable*/{
+public class BusStop implements Comparable<BusStop>{
     private Coordinates cords;
     private String stopName;
     private int stopId;
-    private Time arrivalTime;
-    private Time departureTime;
     private int stopSequencePlace;
 
     public BusStop(){
         this.cords = new Coordinates();
         this.stopName = "";
         this.stopId = -1; //no id = -1
-        this.arrivalTime = new Time();
-        this.arrivalTime = new Time();
-        this.stopSequencePlace = -1; //not in a sequence
+        this.stopSequencePlace = 0; //not in a sequence
     }
 
-    public BusStop(int stopId, String stopName, Coordinates cords, String timeDataArrival, String timeDataDeparture, int stopSequencePlace){
+    public BusStop(int stopId, String stopName, Coordinates cords, int stopSequencePlace){
         this.stopId = stopId;
         this.stopName = stopName;
         this.cords = cords;
-        arrivalTime = new Time(timeDataArrival);
-        departureTime = new Time(timeDataDeparture);
         this.stopSequencePlace = stopSequencePlace;
+    }
+
+    public BusStop(String stopName, int stopId){
+        this.stopName = stopName;
+        this.stopId = stopId;
+        this.cords = new Coordinates();
+        this.stopSequencePlace = 0;
     }
 
     //basic getters and setters
@@ -41,14 +43,6 @@ public class BusStop /*implements Comparable*/{
 
     public int getStopId(){
         return stopId;
-    }
-
-    public Time getArrivalTime(){
-        return arrivalTime;
-    }
-
-    public Time getDepartureTime(){
-        return departureTime;
     }
 
     public int getStopSequencePlace(){
@@ -67,22 +61,6 @@ public class BusStop /*implements Comparable*/{
         this.stopId = stopId;
     }
 
-    public void setArrivalTime(String timeDataArrival){ //String version
-        arrivalTime = new Time(timeDataArrival);
-    }
-
-    public void setArrivalTime(Time arrivalTime){ //Time version
-        this.arrivalTime = arrivalTime;
-    }
-
-    public void setDepartureTime(String timeDataDeparture){ //String version
-        departureTime = new Time(timeDataDeparture);
-    }
-
-    public void setDepartureTime(Time departureTime){ //Time version
-        this.departureTime = departureTime;
-    }
-
     public void setStopSequencePlace(int stopSequencePlace){
         this.stopSequencePlace = stopSequencePlace;
     }
@@ -92,18 +70,9 @@ public class BusStop /*implements Comparable*/{
         return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords);
     }
 
-    /*@Override
+    @Override
     public int compareTo(BusStop bs){  //for easier sorting
-        if(stopSequencePlace < bs.getStopSequencePlace()){
-            return -1;
-        }
-        else if (stopSequencePlace > bs.getStopSequencePlace()){
-            return 1;
-        }
-        else {
-            return 0 //do we need further comparing, if they are equal?
-        }
+        return Integer.compare(this.stopSequencePlace, bs.stopSequencePlace);
     }
-    */
 
 }
