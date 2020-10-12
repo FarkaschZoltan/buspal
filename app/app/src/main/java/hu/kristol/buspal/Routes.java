@@ -29,8 +29,8 @@ public class Routes extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        /*Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
 
         Bundle extra = getIntent().getBundleExtra("extra");
         ArrayList<BusRoute> routesList = (ArrayList<BusRoute>) extra.getSerializable("routes");
@@ -56,7 +56,12 @@ public class Routes extends AppCompatActivity {
             TextView color = new TextView(this);
             switch (routes.getType()){
                 case BUS:
-                    color.setBackgroundColor(getResources().getColor(R.color.bus));
+                    if(routes.getName().length() >= 3 && routes.getName().charAt(0) == '9'){
+                        color.setBackgroundColor(getResources().getColor(R.color.night_bus));
+                    }
+                    else{
+                        color.setBackgroundColor(getResources().getColor(R.color.bus));
+                    }
                     break;
                 case TRAM:
                     color.setBackgroundColor(getResources().getColor(R.color.tram));

@@ -33,7 +33,7 @@ public class Statements {
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
                 "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id " +
-                "WHERE stops.stop_name LIKE '" + stop + "%' ORDER BY routes.route_short_name";
+                "WHERE stops.stop_name LIKE '" + stop + "%' ORDER BY routes.route_sort_order";
         return statement;
     }
 
