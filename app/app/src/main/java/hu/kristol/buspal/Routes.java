@@ -3,11 +3,23 @@ package hu.kristol.buspal;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,93 +28,96 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import hu.farkasch.buspalbackend.objects.BusRoute;
+import hu.thepocok.RouteAdapter;
+import hu.thepocok.statements.Statements;
 
 public class Routes extends AppCompatActivity {
+    private RequestQueue mRequestQueue;
+    String url = "http://192.168.0.164/index.php";
 
+    List<Routes> routesList;
+
+    //the recyclerview
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        /*AppBarLayout toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
 
-        Bundle extra = getIntent().getBundleExtra("extra");
-        ArrayList<BusRoute> routesList = (ArrayList<BusRoute>) extra.getSerializable("routes");
+        mRequestQueue = Volley.newRequestQueue(this);
 
-        //ArrayList<BusRoute> routesList = (ArrayList<BusRoute>) getIntent().getSerializableExtra("routes");
-        Log.d("Routes", String.valueOf(routesList.size()));
-        Log.d("Routes", routesList.toString());
+        recyclerView = findViewById(R.id.routes_list);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ScrollView sv = (ScrollView) findViewById(R.id.routeList);
+        loadResources(url, "localhost", "root", "", "budapest", Statements.getRoutesByStop("Blaha"));
+        Log.d("Routes", mRequestQueue.getCache().get(url).toString());
 
-        LayoutInflater inflater =  (LayoutInflater)getSystemService(this.LAYOUT_INFLATER_SERVICE);
+    }
 
-        // Create a LinearLayout element
-        LinearLayout ll = new LinearLayout(this);
-        ll.setOrientation(LinearLayout.VERTICAL);
+    private void loadResources(String url, String host, String username, String password, String db, String statement){
+        StringRequest sr = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Routes", response);
+                        try {
+                            //converting the string to json array object
+                            JSONArray jsonArray = new JSONArray(response);
+                            ArrayList<BusRoute> resultArray = new ArrayList<>();
 
-        // Add text
-        for(BusRoute routes : routesList){
-            LinearLayout innerLayout = new LinearLayout(this);
-            innerLayout.setOrientation(LinearLayout.HORIZONTAL);
-            innerLayout.setMinimumHeight(100);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                int routeId = Integer.parseInt(jsonArray.getJSONObject(i).get("route_id").toString());
+                                String name = jsonArray.getJSONObject(i).get("route_short_name").toString();
+                                int type = Integer.parseInt(jsonArray.getJSONObject(i).get("route_type").toString());
+                                String destination = jsonArray.getJSONObject(i).get("route_desc").toString();
 
-            TextView color = new TextView(this);
-            switch (routes.getType()){
-                case BUS:
-                    color.setBackgroundColor(getResources().getColor(R.color.bus));
-                    break;
-                case TRAM:
-                    color.setBackgroundColor(getResources().getColor(R.color.tram));
-                    break;
-                case TROLLEY:
-                    color.setBackgroundColor(getResources().getColor(R.color.trolley));
-                    break;
-                case METRO:
-                    if(routes.getName().equals("M1")){
-                        color.setBackgroundColor(getResources().getColor(R.color.metro_1));
-                    }else if(routes.getName().equals("M2")){
-                        color.setBackgroundColor(getResources().getColor(R.color.metro_2));
-                    }else if(routes.getName().equals("M3")){
-                        color.setBackgroundColor(getResources().getColor(R.color.metro_3));
-                    }else if(routes.getName().equals("M4")){
-                        color.setBackgroundColor(getResources().getColor(R.color.metro_4));
+                                BusRoute b = new BusRoute(routeId, name, type, destination);
+                                resultArray.add(b);
+                                Log.d("Result", b.toString());
+                            }
+
+                            //creating adapter object and setting it to recyclerview
+                            RouteAdapter adapter = new RouteAdapter(Routes.this, resultArray);
+                            recyclerView.setAdapter(adapter);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    break;
-                case SUBURBAN_RAILWAY:
-                    if(routes.getName().equals("H5")){
-                        color.setBackgroundColor(getResources().getColor(R.color.suburban_5));
-                    }else if(routes.getName().equals("H6")){
-                        color.setBackgroundColor(getResources().getColor(R.color.suburban_6));
-                    }else if(routes.getName().equals("H7")){
-                        color.setBackgroundColor(getResources().getColor(R.color.suburban_7));
-                    }else if(routes.getName().equals("H8") || routes.getName().equals("H9")){
-                        color.setBackgroundColor(getResources().getColor(R.color.suburban_8));
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("HttpClient", "error: " + error.toString());
                     }
+                })
+        {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("host", "localhost");
+                params.put("username", "root");
+                params.put("password", "");
+                params.put("database", "budapest");
+                params.put("statement", Statements.getRoutesByStop("Blaha"));
+                return params;
             }
-            innerLayout.addView(color, 100, 100);
-
-            TextView routeName = new TextView(this);
-            routeName.setText(routes.getName());
-            innerLayout.addView(routeName);
-
-            TextView routeDest = new TextView(this);
-            routeDest.setText(routes.getDestinations());
-            innerLayout.addView(routeDest);
-
-            ll.addView(innerLayout);
-        }
-
-        // Add the LinearLayout element to the ScrollView
-        sv.addView(ll);
-
-        // Display the view
-        //setContentView(v);
+        };
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        sr.setRetryPolicy(policy);
+        mRequestQueue.add(sr);
     }
 }

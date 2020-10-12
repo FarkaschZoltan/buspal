@@ -2,6 +2,7 @@ package hu.kristol.buspal;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
@@ -20,6 +22,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import hu.farkasch.buspalbackend.objects.BusRoute;
+import hu.thepocok.RouteAdapter;
 import hu.thepocok.statements.*;
 import hu.thepocok.webconnection.APIConnection;
 
@@ -44,13 +62,9 @@ public class MainActivity extends AppCompatActivity {
                 TextView out = findViewById(R.id.out);
                 EditText in = findViewById(R.id.in);
                 String inText = in.getText().toString();
-
-                String url = "http://192.168.0.164/index.php";
-
-                String[] strings = new String[]{Statements.getRoutesByStop(inText), "route_activity"};
-
-                APIConnection apiConnection = new APIConnection(c, url, "localhost", "root", "", "budapest");
-                apiConnection.execute(strings);
+                
+                Intent i = new Intent(c, Routes.class);
+                c.startActivity(i);
             }
         });
 
