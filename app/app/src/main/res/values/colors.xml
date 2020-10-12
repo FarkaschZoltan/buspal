@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="bus">#009FE3</color>
+    <color name="tram">#FFD800</color>
+    <color name="trolley">#FF1609</color>
+    <color name="metro_1">#FFD800</color>
+    <color name="metro_2">#E41F18</color>
+    <color name="metro_3">#005CA5</color>
+    <color name="metro_4">#4CA22F</color>
+    <color name="suburban_5">#821066</color>
+    <color name="suburban_6">#824B00</color>
+    <color name="suburban_7">#EE7203</color>
+    <color name="suburban_8">#ED677E</color>
+    <color name="suburban_9">#ED677E</color>
+</resources>
