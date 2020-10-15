@@ -36,4 +36,21 @@ public class Statements {
                 "WHERE stops.stop_name LIKE '" + stop + "%' ORDER BY routes.route_short_name";
         return statement;
     }
+
+    /*PRO TIPP: If a bus with the same name has multiple types of trips, it will list the stops in the following way:
+        trip1 - stop1
+        trip2 - stop1
+        trip1 - stop2
+        trip2 - stop2
+        ...
+    */
+    public static String getStopsByRouteShortName(String routeShortName, int direction){ //this statement sorts the stops in ascending order according to stop_sequence
+        String statement = "SELECT DISTINCT stops.stop_name, stop_times.stop_sequence FROM routes " +
+                "INNER JOIN trips ON routes.route_id = trips.route_id " +
+                "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id " +
+                "INNER JOIN stops ON stop_times.stop_id = stops.stop_id " +
+                "WHERE routes.route_short_name = " + routeShortName + " AND trips.direction_id = " + direction +
+                "ORDER BY CAST(stop_times.stop_sequence as int) ASC;";
+        return statement;
+    }
 }
