@@ -19,12 +19,12 @@ public class BusLine{
         currentStopTimes = new ArrayList<Time>();
     }
 
-    public BusLine(String lineName, BusStop currentStop, int direction, ArrayList<BusStop> busStops, ArrayList<Time> currentStopTimes) { //busStops will already be sorted with the help of the SQL statement
+    public BusLine(String lineName, BusStop currentStop, int direction, ArrayList<BusStop> busStops, ArrayList<Time> currentStopTimes) { //busStops will already be sorted with the help of getStopsByRouteShortName statement
         this.lineName = lineName;
         this.currentStop = currentStop;
         this.direction = direction;
-        this.busStops = busStops;
-        this.currentStopTimes = currentStopTimes;
+        this.busStops = busStops; //we get this, with the help of getStopsByRouteShortName
+        this.currentStopTimes = currentStopTimes; //we get this, with the help of getScheduleByStop
     }
 
     public String getLineName() {
