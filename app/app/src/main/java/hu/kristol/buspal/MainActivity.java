@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 String inText = in.getText().toString();
                 
                 Intent i = new Intent(c, Routes.class);
+                i.putExtra("stop", inText);
                 c.startActivity(i);
             }
         });
