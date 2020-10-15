@@ -1,6 +1,7 @@
 package hu.kristol.buspal;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.android.volley.AuthFailureError;
@@ -62,7 +63,10 @@ public class Routes extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        loadResources(url, "localhost", "root", "", "budapest", Statements.getRoutesByStop("Blaha"));
+        Intent i = this.getIntent();
+        String stop = i.getStringExtra("stop");
+
+        loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getRoutesByStop(stop));
         Log.d("Routes", mRequestQueue.getCache().get(url).toString());
 
     }
@@ -107,11 +111,11 @@ public class Routes extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("host", "localhost");
-                params.put("username", "root");
-                params.put("password", "");
-                params.put("database", "budapest");
-                params.put("statement", Statements.getRoutesByStop("Blaha"));
+                params.put("host", host);
+                params.put("username", username);
+                params.put("password", password);
+                params.put("database", db);
+                params.put("statement", statement);
                 return params;
             }
         };
