@@ -53,4 +53,32 @@ public class Statements {
                 "ORDER BY CAST(stop_times.stop_sequence as int) ASC;";
         return statement;
     }
+
+    public static String getRouteDeparturesFromStop(int stop_id){
+        String statement = "SELECT stop_times.departure_time, routes.route_short_name\n" +
+                "FROM routes\n" +
+                "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
+                "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
+                "WHERE stop_times.stop_id = " + stop_id + "\n" +
+                "GROUP BY stop_times.departure_time, routes.route_short_name\n" +
+                "ORDER BY departure_time";
+        return statement;
+    }
+
+    public static String routeFirstStop(int trip_id){
+        String statement = "SELECT stops.stop_name\n" +
+                "FROM stops\n" +
+                "INNER JOIN stop_times on stop_times.stop_id = stops.stop_id\n" +
+                "WHERE stop_times.stop_sequence = 0 AND stop_times.trip_id = " + trip_id;
+        return statement;
+    }
+
+    public static String routeLastStop(int trip_id){
+        String statement = "SELECT stops.stop_name\n" +
+                "FROM stops\n" +
+                "INNER JOIN stop_times on stop_times.stop_id = stops.stop_id\n" +
+                "WHERE stop_times.stop_sequence IN (SELECT trip_lengths.line_length FROM trip_lengths " +
+                "WHERE trip_lengths.trip_id = " + trip_id + ") AND stop_times.trip_id = " + trip_id;
+        return statement;
+    }
 }
