@@ -9,12 +9,13 @@ public class BusStop implements Comparable<BusStop>{
     private String stopName;
     private int stopId;
     private int stopSequencePlace;
+    private double distanceFromPosition;
 
     public BusStop(){
         this.cords = new Coordinates();
         this.stopName = "";
         this.stopId = -1; //no id = -1
-        this.stopSequencePlace = 0; //not in a sequence
+        this.stopSequencePlace = -1; //not in a sequence
     }
 
     public BusStop(int stopId, String stopName, Coordinates cords, int stopSequencePlace){
@@ -22,13 +23,23 @@ public class BusStop implements Comparable<BusStop>{
         this.stopName = stopName;
         this.cords = cords;
         this.stopSequencePlace = stopSequencePlace;
+        this.distanceFromPosition = 999;
+    }
+
+    public BusStop(int stopId, String stopName, Coordinates cords, double distanceFromPosition){
+        this.stopId = stopId;
+        this.stopName = stopName;
+        this.cords = cords;
+        this.stopSequencePlace = -1;
+        this.distanceFromPosition = distanceFromPosition * 1000;
     }
 
     public BusStop(String stopName, int stopId){
         this.stopName = stopName;
         this.stopId = stopId;
         this.cords = new Coordinates();
-        this.stopSequencePlace = 0;
+        this.stopSequencePlace = -1;
+        this.distanceFromPosition = 999;
     }
 
     //basic getters and setters
@@ -65,9 +76,13 @@ public class BusStop implements Comparable<BusStop>{
         this.stopSequencePlace = stopSequencePlace;
     }
 
+    public int getDistance(){
+        return (int)distanceFromPosition;
+    }
+
     @Override
     public String toString(){ //not finished yet(?)
-        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords);
+        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition);
     }
 
     @Override

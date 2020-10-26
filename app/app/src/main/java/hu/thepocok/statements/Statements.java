@@ -94,9 +94,9 @@ public class Statements {
         return statement;
     }
 
-    public static String getNearbyStops(float lat, float lon, float distance){
+    public static String getNearbyStops(double lat, double lon, double distance){
         String statement = "SELECT\n" +
-                "stops.stop_id, stops.stop_name,\n" +
+                "stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, \n" +
                 "(\n" +
                 "  6371 * acos (\n" +
                 "      cos ( radians(" + lat + ") )\n" +

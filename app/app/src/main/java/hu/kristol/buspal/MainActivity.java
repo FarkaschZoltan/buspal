@@ -12,7 +12,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
@@ -21,25 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import hu.farkasch.buspalbackend.objects.BusRoute;
-import hu.thepocok.RouteAdapter;
-import hu.thepocok.statements.*;
-import hu.thepocok.webconnection.APIConnection;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -52,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Button button = findViewById(R.id.button);
+        Button button2 = findViewById(R.id.button2);
 
         checkPermission(Manifest.permission.ACCESS_NETWORK_STATE, 100);
         checkPermission(Manifest.permission.INTERNET,101);
@@ -65,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
                 
                 Intent i = new Intent(c, Routes.class);
                 i.putExtra("stop", inText);
+                c.startActivity(i);
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(c, Stops.class);
                 c.startActivity(i);
             }
         });
