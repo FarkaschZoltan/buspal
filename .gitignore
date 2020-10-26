@@ -16,3 +16,4 @@ app/captures
 app/.externalNativeBuild
 app/.cxx
 app/.idea
+app/.idea/misc.xml
