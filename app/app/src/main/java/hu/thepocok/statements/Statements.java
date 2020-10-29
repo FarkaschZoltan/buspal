@@ -28,7 +28,7 @@ public class Statements {
     }
 
     public static String getRoutesByStop(String stop) {
-        String statement = "SELECT DISTINCT routes.route_id, routes.route_short_name, routes.route_type, routes.route_desc FROM routes" +
+        String statement = "SELECT DISTINCT routes.route_id, routes.route_short_name, routes.route_type, routes.route_desc FROM routes " +
                 "INNER JOIN trips on routes.route_id = trips.route_id " +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
