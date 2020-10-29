@@ -10,20 +10,24 @@ public class BusStop implements Comparable<BusStop>{
     private int stopId;
     private int stopSequencePlace;
     private double distanceFromPosition;
+    private Departures departures;
 
     public BusStop(){
-        this.cords = new Coordinates();
-        this.stopName = "";
-        this.stopId = -1; //no id = -1
-        this.stopSequencePlace = -1; //not in a sequence
+        cords = new Coordinates();
+        stopName = "";
+        stopId = -1; //no id = -1
+        stopSequencePlace = -1; //not in a sequence
+        departures = new Departures();
     }
 
-    public BusStop(int stopId, String stopName, Coordinates cords, int stopSequencePlace){
+    public BusStop(int stopId, String stopName, Coordinates cords, int stopSequencePlace, Departures departures){
         this.stopId = stopId;
         this.stopName = stopName;
         this.cords = cords;
         this.stopSequencePlace = stopSequencePlace;
         this.distanceFromPosition = 999;
+        this.departures = departures;
+
     }
 
     public BusStop(int stopId, String stopName, Coordinates cords, double distanceFromPosition){
@@ -32,6 +36,7 @@ public class BusStop implements Comparable<BusStop>{
         this.cords = cords;
         this.stopSequencePlace = -1;
         this.distanceFromPosition = distanceFromPosition * 1000;
+        this.departures = new Departures();
     }
 
     public BusStop(String stopName, int stopId){
@@ -40,40 +45,55 @@ public class BusStop implements Comparable<BusStop>{
         this.cords = new Coordinates();
         this.stopSequencePlace = -1;
         this.distanceFromPosition = 999;
+        this.departures = new Departures();
     }
 
-    //basic getters and setters
-
-    public Coordinates getCords(){
+    public Coordinates getCords() {
         return cords;
     }
 
-    public String getStopName(){
-        return stopName;
-    }
-
-    public int getStopId(){
-        return stopId;
-    }
-
-    public int getStopSequencePlace(){
-        return stopSequencePlace;
-    }
-
-    public void setCords(Coordinates cords){
+    public void setCords(Coordinates cords) {
         this.cords = cords;
     }
 
-    public void setStopName(String stopName){
+    public String getStopName() {
+        return stopName;
+    }
+
+    public void setStopName(String stopName) {
         this.stopName = stopName;
     }
 
-    public void setStopId(int stopId){
+    public int getStopId() {
+        return stopId;
+    }
+
+    public void setStopId(int stopId) {
         this.stopId = stopId;
     }
 
-    public void setStopSequencePlace(int stopSequencePlace){
+    public int getStopSequencePlace() {
+        return stopSequencePlace;
+    }
+
+    public void setStopSequencePlace(int stopSequencePlace) {
         this.stopSequencePlace = stopSequencePlace;
+    }
+
+    public double getDistanceFromPosition() {
+        return distanceFromPosition;
+    }
+
+    public void setDistanceFromPosition(double distanceFromPosition) {
+        this.distanceFromPosition = distanceFromPosition;
+    }
+
+    public Departures getDepartures() {
+        return departures;
+    }
+
+    public void setDepartures(Departures departures) {
+        this.departures = departures;
     }
 
     public int getDistance(){
@@ -82,7 +102,7 @@ public class BusStop implements Comparable<BusStop>{
 
     @Override
     public String toString(){ //not finished yet(?)
-        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition);
+        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition + ", " + departures);
     }
 
     @Override
