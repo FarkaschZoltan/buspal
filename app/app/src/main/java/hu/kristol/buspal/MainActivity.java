@@ -2,6 +2,7 @@ package hu.kristol.buspal;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -20,9 +21,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import hu.thepocok.statements.*;
-import hu.thepocok.webconnection.APIConnection;
-
 
 public class MainActivity extends AppCompatActivity {
     Context c = this;
@@ -34,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Button button = findViewById(R.id.button);
+        Button button2 = findViewById(R.id.button2);
 
         checkPermission(Manifest.permission.ACCESS_NETWORK_STATE, 100);
         checkPermission(Manifest.permission.INTERNET,101);
@@ -44,13 +43,18 @@ public class MainActivity extends AppCompatActivity {
                 TextView out = findViewById(R.id.out);
                 EditText in = findViewById(R.id.in);
                 String inText = in.getText().toString();
+                
+                Intent i = new Intent(c, Routes.class);
+                i.putExtra("stop", inText);
+                c.startActivity(i);
+            }
+        });
 
-                String url = "http://192.168.0.164/index.php";
-
-                String[] strings = new String[]{Statements.getRoutesByStop(inText), "route_activity"};
-
-                APIConnection apiConnection = new APIConnection(c, url, "localhost", "root", "", "budapest");
-                apiConnection.execute(strings);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(c, Stops.class);
+                c.startActivity(i);
             }
         });
 

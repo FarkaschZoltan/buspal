@@ -11,13 +11,13 @@ public class Time{
         second = 0;
     }
 
-    public Time(int hour, int minute, int second){ //assumeing only correct values
+    public Time(int hour, int minute, int second){ //assuming only correct values
         this.hour = hour;
         this.minute = minute;
         this.second = second;
     }
 
-    public Time(String timeData){ //cunstructing with the help of a string, delimited with ":", assumeing only correct values
+    public Time(String timeData){ //constructing with the help of a string, delimited with ":", assuming only correct values
         String[] timeArray = timeData.split(":");
         hour = Integer.parseInt(timeArray[0]);
         minute = Integer.parseInt(timeArray[1]);

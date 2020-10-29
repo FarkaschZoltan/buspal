@@ -2,108 +2,112 @@ package hu.farkasch.buspalbackend.objects;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
 import hu.farkasch.buspalbackend.datastructures.Time;
+import java.util.ArrayList;
 
-public class BusStop /*implements Comparable*/{
+public class BusStop implements Comparable<BusStop>{
     private Coordinates cords;
     private String stopName;
     private int stopId;
-    private Time arrivalTime;
-    private Time departureTime;
     private int stopSequencePlace;
+    private double distanceFromPosition;
+    private Departures departures;
 
     public BusStop(){
-        this.cords = new Coordinates();
-        this.stopName = "";
-        this.stopId = -1; //no id = -1
-        this.arrivalTime = new Time();
-        this.arrivalTime = new Time();
-        this.stopSequencePlace = -1; //not in a sequence
+        cords = new Coordinates();
+        stopName = "";
+        stopId = -1; //no id = -1
+        stopSequencePlace = -1; //not in a sequence
+        departures = new Departures();
     }
 
-    public BusStop(int stopId, String stopName, Coordinates cords, String timeDataArrival, String timeDataDeparture, int stopSequencePlace){
+    public BusStop(int stopId, String stopName, Coordinates cords, int stopSequencePlace, Departures departures){
         this.stopId = stopId;
         this.stopName = stopName;
         this.cords = cords;
-        arrivalTime = new Time(timeDataArrival);
-        departureTime = new Time(timeDataDeparture);
         this.stopSequencePlace = stopSequencePlace;
+        this.distanceFromPosition = 999;
+        this.departures = departures;
+
     }
 
-    //basic getters and setters
+    public BusStop(int stopId, String stopName, Coordinates cords, double distanceFromPosition){
+        this.stopId = stopId;
+        this.stopName = stopName;
+        this.cords = cords;
+        this.stopSequencePlace = -1;
+        this.distanceFromPosition = distanceFromPosition * 1000;
+        this.departures = new Departures();
+    }
 
-    public Coordinates getCords(){
+    public BusStop(String stopName, int stopId){
+        this.stopName = stopName;
+        this.stopId = stopId;
+        this.cords = new Coordinates();
+        this.stopSequencePlace = -1;
+        this.distanceFromPosition = 999;
+        this.departures = new Departures();
+    }
+
+    public Coordinates getCords() {
         return cords;
     }
 
-    public String getStopName(){
-        return stopName;
-    }
-
-    public int getStopId(){
-        return stopId;
-    }
-
-    public Time getArrivalTime(){
-        return arrivalTime;
-    }
-
-    public Time getDepartureTime(){
-        return departureTime;
-    }
-
-    public int getStopSequencePlace(){
-        return stopSequencePlace;
-    }
-
-    public void setCords(Coordinates cords){
+    public void setCords(Coordinates cords) {
         this.cords = cords;
     }
 
-    public void setStopName(String stopName){
+    public String getStopName() {
+        return stopName;
+    }
+
+    public void setStopName(String stopName) {
         this.stopName = stopName;
     }
 
-    public void setStopId(int stopId){
+    public int getStopId() {
+        return stopId;
+    }
+
+    public void setStopId(int stopId) {
         this.stopId = stopId;
     }
 
-    public void setArrivalTime(String timeDataArrival){ //String version
-        arrivalTime = new Time(timeDataArrival);
+    public int getStopSequencePlace() {
+        return stopSequencePlace;
     }
 
-    public void setArrivalTime(Time arrivalTime){ //Time version
-        this.arrivalTime = arrivalTime;
-    }
-
-    public void setDepartureTime(String timeDataDeparture){ //String version
-        departureTime = new Time(timeDataDeparture);
-    }
-
-    public void setDepartureTime(Time departureTime){ //Time version
-        this.departureTime = departureTime;
-    }
-
-    public void setStopSequencePlace(int stopSequencePlace){
+    public void setStopSequencePlace(int stopSequencePlace) {
         this.stopSequencePlace = stopSequencePlace;
+    }
+
+    public double getDistanceFromPosition() {
+        return distanceFromPosition;
+    }
+
+    public void setDistanceFromPosition(double distanceFromPosition) {
+        this.distanceFromPosition = distanceFromPosition;
+    }
+
+    public Departures getDepartures() {
+        return departures;
+    }
+
+    public void setDepartures(Departures departures) {
+        this.departures = departures;
+    }
+
+    public int getDistance(){
+        return (int)distanceFromPosition;
     }
 
     @Override
     public String toString(){ //not finished yet(?)
-        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords);
+        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition + ", " + departures);
     }
 
-    /*@Override
+    @Override
     public int compareTo(BusStop bs){  //for easier sorting
-        if(stopSequencePlace < bs.getStopSequencePlace()){
-            return -1;
-        }
-        else if (stopSequencePlace > bs.getStopSequencePlace()){
-            return 1;
-        }
-        else {
-            return 0 //do we need further comparing, if they are equal?
-        }
+        return Integer.compare(this.stopSequencePlace, bs.stopSequencePlace);
     }
-    */
 
 }

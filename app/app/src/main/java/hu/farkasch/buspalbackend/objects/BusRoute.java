@@ -6,14 +6,6 @@ import hu.thepocok.statements.Statements;
 import java.io.Serializable;
 
 public class BusRoute implements Serializable {
-    public String getDestinations() {
-        return destinations;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
     private int routeId;
     private boolean favourite = false;
     private String name;
@@ -60,6 +52,14 @@ public class BusRoute implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getDestinations() {
+        return destinations;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     @Override

@@ -1,33 +1,33 @@
 package hu.thepocok.statements;
 
 public class Statements {
-    public static String getScheduleByStop(String route, String stop, String direction, String date){
+    public static String getScheduleByStop(String route, String stop, String direction, String date) {
         String statement = "SELECT stop_times.departure_time FROM routes " +
                 "INNER JOIN trips on routes.route_id = trips.route_id " +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
                 "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id " +
-                "WHERE routes.route_short_name = '" + route +"' AND stops.stop_name = '" + stop +
-                "' AND trips.direction_id ='" + direction + "' AND calendar_dates.date = '" + date  +
+                "WHERE routes.route_short_name = '" + route + "' AND stops.stop_name = '" + stop +
+                "' AND trips.direction_id ='" + direction + "' AND calendar_dates.date = '" + date +
                 "' ORDER BY stop_times.departure_time";
 
         return statement;
     }
 
-    public static String getScheduleByRoute(String route, String direction, String date){
+    public static String getScheduleByRoute(String route, String direction, String date) {
         String statement = "SELECT stop_times.departure_time FROM routes " +
                 "INNER JOIN trips on routes.route_id = trips.route_id " +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
                 "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id " +
-                "WHERE routes.route_short_name = '" + route +"' AND stop_times.stop_sequence = '1' "+
-                "' AND trips.direction_id ='" + direction + "' AND calendar_dates.date = '" + date  +
+                "WHERE routes.route_short_name = '" + route + "' AND stop_times.stop_sequence = '1' " +
+                "' AND trips.direction_id ='" + direction + "' AND calendar_dates.date = '" + date +
                 "' ORDER BY stop_times.departure_time";
 
         return statement;
     }
 
-    public static String getRoutesByStop(String stop){
+    public static String getRoutesByStop(String stop) {
         String statement = "SELECT DISTINCT routes.route_short_name, routes.route_desc, routes.route_type, routes.route_id FROM routes " +
                 "INNER JOIN trips on routes.route_id = trips.route_id " +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
@@ -37,24 +37,87 @@ public class Statements {
         return statement;
     }
 
-    public static String getTripIdByRouteId(int routeId){
-        String statement = "SELECT DISTINCT trip_id FROM trips " + 
-                "WHERE trips.route_id = " + routeId + ";";
+    /*PRO TIPP: If a bus with the same name has multiple types of trips, it will list the stops in the following way:
+        trip1 - stop1
+        trip2 - stop1
+        trip1 - stop2
+        trip2 - stop2
+        ...
+    */
+    public static String getStopsByRouteShortName(String routeShortName, int direction){ //this statement sorts the stops in ascending order according to stop_sequence
+        String statement = "SELECT DISTINCT stops.stop_name, stop_times.stop_sequence FROM routes " +
+                "INNER JOIN trips ON routes.route_id = trips.route_id " +
+                "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id " +
+                "INNER JOIN stops ON stop_times.stop_id = stops.stop_id " +
+                "WHERE routes.route_short_name = " + routeShortName + " AND trips.direction_id = " + direction +
+                "ORDER BY CAST(stop_times.stop_sequence as int) ASC;";
         return statement;
     }
 
-    public static String getStopIdByTripId(int tripId){ //not sure if needed
-        String statement = "SELECT DISTINCT stop_id FROM stop_times " + 
-                "WHERE stop_times.trip_id = " + tripId + ";";
+    public static String getRouteDeparturesFromStop(int stop_id){
+        String statement = "SELECT stop_times.departure_time, routes.route_short_name\n" +
+                "FROM routes\n" +
+                "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
+                "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
+                "WHERE stop_times.stop_id = " + stop_id + "\n" +
+                "GROUP BY stop_times.departure_time, routes.route_short_name\n" +
+                "ORDER BY departure_time";
         return statement;
     }
 
-    public static String getTripData(int tripId){ //gets all the needed data for the BusTrip, including the data for its BusStops
-        String statement = "SELECT DISTINCT stops.stop_lat, stops.stop_lon, stops.stop_name, stops.stop_id, stop_times.arrival_time, stop_times.departure_time, stop_times.stop_sequence FROM trips " +
-            "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
-            "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
-            "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id " +
-            "WHERE trips.trip_id = " + tripId + ";";
+    public static String routeFirstStop(int trip_id){
+        String statement = "SELECT stops.stop_name\n" +
+                "FROM stops\n" +
+                "INNER JOIN stop_times on stop_times.stop_id = stops.stop_id\n" +
+                "WHERE stop_times.stop_sequence = 0 AND stop_times.trip_id = " + trip_id;
+        return statement;
+    }
+
+    public static String routeLastStop(int trip_id){
+        String statement = "SELECT stops.stop_name\n" +
+                "FROM stops\n" +
+                "INNER JOIN stop_times on stop_times.stop_id = stops.stop_id\n" +
+                "WHERE stop_times.stop_sequence IN (SELECT trip_lengths.line_length FROM trip_lengths " +
+                "WHERE trip_lengths.trip_id = " + trip_id + ") AND stop_times.trip_id = " + trip_id;
+        return statement;
+    }
+
+    public static String getDepartureFromStop(int stop_id, int date){
+        String statement = "SELECT stop_times.departure_time, routes.route_short_name\n" +
+                "FROM routes\n" +
+                "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
+                "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
+                "INNER JOIN calendar_dates ON calendar_dates.service_id = trips.service_id\n" +
+                "WHERE stop_times.stop_id = " + stop_id + " AND calendar_dates.date = "+ date + "\n" +
+                "GROUP BY stop_times.departure_time, routes.route_short_name\n" +
+                "ORDER BY departure_time";
+        return statement;
+    }
+
+    public static String getNearbyStops(double lat, double lon, double distance){
+        String statement = "SELECT\n" +
+                "stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, \n" +
+                "(\n" +
+                "  6371 * acos (\n" +
+                "      cos ( radians(" + lat + ") )\n" +
+                "      * cos( radians( stops.stop_lat::float ) )\n" +
+                "      * cos( radians( stops.stop_lon::float ) - radians(" + lon + ") )\n" +
+                "      + sin ( radians(" + lat + ") )\n" +
+                "      * sin( radians( stops.stop_lat::float ) )\n" +
+                "  )\n" +
+                ") AS distance\n" +
+                "FROM stops\n" +
+                "GROUP BY stops.stop_id, stops.stop_name\n" +
+                "HAVING (\n" +
+                "  6371 * acos (\n" +
+                "      cos ( radians(" + lat + ") )\n" +
+                "      * cos( radians( stops.stop_lat::float ) )\n" +
+                "      * cos( radians( stops.stop_lon::float ) - radians(" + lon + ") )\n" +
+                "      + sin ( radians(" + lat + ") )\n" +
+                "      * sin( radians( stops.stop_lat::float ) )\n" +
+                "  )\n" +
+                ") < "+ distance + "\n" +
+                "ORDER BY distance";
         return statement;
     }
 }

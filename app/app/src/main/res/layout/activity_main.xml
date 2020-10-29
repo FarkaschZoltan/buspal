@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="StopName" />
+            android:text="Blaha" />
 
         <TextView
             android:id="@+id/out"
@@ -43,7 +43,13 @@
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Find routes at this stop" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nearby stops" />
 
     </LinearLayout>
 
