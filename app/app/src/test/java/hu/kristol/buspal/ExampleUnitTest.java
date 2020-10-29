@@ -2,6 +2,8 @@ package hu.kristol.buspal;
 
 import org.junit.Test;
 
+import hu.farkasch.buspalbackend.datastructures.Coordinates;
+
 import static org.junit.Assert.*;
 
 /**
@@ -13,5 +15,15 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void isInsideRadiusTestTrue() {
+        assertTrue(Coordinates.isInsideRadius(new Coordinates(47.530207,19.007196), new Coordinates(47.530185, 19.008280), 500));
+    }
+
+    @Test
+    public void isInsideRadiusTestFalse() {
+        assertFalse(Coordinates.isInsideRadius(new Coordinates(47.530207,19.007196), new Coordinates(47.530185, 20.008280), 500));
     }
 }
