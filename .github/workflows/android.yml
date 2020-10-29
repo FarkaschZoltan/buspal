@@ -21,10 +21,6 @@ jobs:
       working-directory: ./app
       run: chmod +x ./gradlew
       
-    - name: See gradlew tasks
-      working-directory: ./app
-      run: ./gradlew tasks
-      
     - name: Build with Gradle
       working-directory: ./app
       run: ./gradlew clean build

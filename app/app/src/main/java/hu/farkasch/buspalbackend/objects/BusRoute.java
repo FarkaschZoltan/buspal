@@ -1,15 +1,26 @@
 package hu.farkasch.buspalbackend.objects;
 
-import hu.farkasch.buspalbackend.objects.RouteType;
-import hu.thepocok.statements.Statements;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 public class BusRoute implements Serializable {
+    public String getDestinations() {
+        return destinations;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    @SerializedName("route_id")
     private int routeId;
     private boolean favourite = false;
+    @SerializedName("route_short_name")
     private String name;
+    @SerializedName("route_type")
     private RouteType type;
+    @SerializedName("route_desc")
     private String destinations;
     private String color;
 
@@ -17,10 +28,11 @@ public class BusRoute implements Serializable {
         return type;
     }
 
-    public BusRoute(int routeId, String name, int type, String destinations) {
-        this.routeId = routeId;
+    public BusRoute(String routeId, String name, String type, String destinations) {
+        this.routeId = Integer.parseInt(routeId);
         this.name = name;
-        switch (type){
+        int typeOf = Integer.parseInt(type);
+        switch (typeOf){
             case 0:
                 this.type = RouteType.TRAM;
                 break;
@@ -54,14 +66,6 @@ public class BusRoute implements Serializable {
         return name;
     }
 
-    public String getDestinations() {
-        return destinations;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
     @Override
     public String toString() {
         return "BusRoute{" +
@@ -69,7 +73,6 @@ public class BusRoute implements Serializable {
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", destinations='" + destinations + '\'' +
-                ", color='" + color + '\'' +
                 '}';
     }
 }

@@ -71,9 +71,9 @@ public class Routes extends AppCompatActivity {
                             ArrayList<BusRoute> resultArray = new ArrayList<>();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                int routeId = Integer.parseInt(jsonArray.getJSONObject(i).get("route_id").toString());
+                                String routeId = jsonArray.getJSONObject(i).get("route_id").toString();
                                 String name = jsonArray.getJSONObject(i).get("route_short_name").toString();
-                                int type = Integer.parseInt(jsonArray.getJSONObject(i).get("route_type").toString());
+                                String type = jsonArray.getJSONObject(i).get("route_type").toString();
                                 String destination = jsonArray.getJSONObject(i).get("route_desc").toString();
 
                                 BusRoute b = new BusRoute(routeId, name, type, destination);
