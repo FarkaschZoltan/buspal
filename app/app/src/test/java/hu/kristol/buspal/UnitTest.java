@@ -11,11 +11,7 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
+public class UnitTest {
 
     @Test
     public void isInsideRadiusTestTrue() {
@@ -25,5 +21,14 @@ public class ExampleUnitTest {
     @Test
     public void isInsideRadiusTestFalse() {
         assertFalse(Coordinates.isInsideRadius(new Coordinates(47.530207,19.007196), new Coordinates(47.530185, 20.008280), 500));
+    }
+
+    @Test
+    public void checkDistanceCalculation(){
+        Coordinates p1 = new Coordinates(47.611002, 19.103699); //Budapest's northest point
+        Coordinates p2 = new Coordinates(47.376773, 19.101796); //Budapest's southest point
+        int distance = (int)Math.floor(Coordinates.getDistance(p1, p2) / 1000) * 1000;
+        System.out.println(distance);
+        assertEquals( 26000, distance);
     }
 }
