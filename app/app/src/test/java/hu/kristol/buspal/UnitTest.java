@@ -2,7 +2,17 @@ package hu.kristol.buspal;
 
 import org.junit.Test;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
+import hu.farkasch.buspalbackend.objects.BusRoute;
+import hu.thepocok.interfaces.RoutesInterface;
+import hu.thepocok.statements.Statements;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static org.junit.Assert.*;
 
