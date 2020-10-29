@@ -1,12 +1,21 @@
 package hu.farkasch.buspalbackend.objects;
 
+import com.google.gson.annotations.SerializedName;
+
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
 
 public class BusStop implements Comparable<BusStop>{
     private Coordinates cords;
+    @SerializedName("stop_name")
     private String stopName;
+    @SerializedName("stop_id")
     private int stopId;
     private int stopSequencePlace;
+    @SerializedName("stop_lat")
+    private  double stopLat;
+    @SerializedName("stop_lon")
+    private double stopLon;
+    @SerializedName("distance")
     private double distanceFromPosition;
     private Departures departures;
 
@@ -34,6 +43,18 @@ public class BusStop implements Comparable<BusStop>{
         this.cords = cords;
         this.stopSequencePlace = -1;
         this.distanceFromPosition = distanceFromPosition * 1000;
+        this.departures = new Departures();
+    }
+
+    public BusStop(String stopId, String stopName, String stopLat, String stopLon, String distanceFromPosition){
+        this.stopId = Integer.parseInt(stopId);
+        this.stopName = stopName;
+        this.stopLat = Double.parseDouble(stopLat);
+        this.stopLon = Double.parseDouble(stopLon);
+        Coordinates c = new Coordinates(this.stopLat, this.stopLon);
+        this.cords = c;
+        this.stopSequencePlace = -1;
+        this.distanceFromPosition = Integer.parseInt(distanceFromPosition) * 1000;
         this.departures = new Departures();
     }
 

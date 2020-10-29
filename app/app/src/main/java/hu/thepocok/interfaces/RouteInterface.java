@@ -7,7 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface RoutesInterface {
+public interface RouteInterface {
     public static String BASE_URL = "http://80.98.90.176:9876/";
 
     @GET("index.php?")

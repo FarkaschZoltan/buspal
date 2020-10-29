@@ -54,7 +54,7 @@ public class Routes extends AppCompatActivity {
         Intent i = this.getIntent();
         String stop = i.getStringExtra("stop");
 
-        loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getRoutesByStop(stop));
+        loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getRoutesByStop(stop, "budapest"));
         Log.d("Routes", mRequestQueue.getCache().get(url).toString());
 
     }
