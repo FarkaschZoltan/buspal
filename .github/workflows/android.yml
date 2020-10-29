@@ -1,10 +1,10 @@
-name: Android CI
+name: Continuous Integration
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -17,5 +17,18 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: Make gradlew executable
+      working-directory: ./app
+      run: chmod +x ./gradlew
+      
+    - name: See gradlew tasks
+      working-directory: ./app
+      run: ./gradlew tasks
+      
     - name: Build with Gradle
-      run: ./gradlew build
+      working-directory: ./app
+      run: ./gradlew clean build
+      
+    - name: Unit tests
+      working-directory: ./app
+      run: ./gradlew test
