@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.kristol.buspal.R;
 

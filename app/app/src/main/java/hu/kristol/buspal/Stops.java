@@ -9,14 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -33,13 +30,10 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
-import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.farkasch.buspalbackend.objects.BusStop;
-import hu.thepocok.adapters.RouteAdapter;
 import hu.thepocok.adapters.StopsAdapter;
 import hu.thepocok.statements.Statements;
 

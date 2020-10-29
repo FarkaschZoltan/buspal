@@ -1,5 +1,8 @@
 package hu.kristol.buspal;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.junit.Test;
 
 import java.io.IOException;
@@ -22,6 +25,7 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class UnitTest {
+    private String url = "http://80.98.90.176:9876/";
 
     @Test
     public void isInsideRadiusTestTrue() {
@@ -44,7 +48,6 @@ public class UnitTest {
 
     @Test
     public void linesStoppingAtBlahaLujzaTer() throws IOException {
-
         Retrofit retrofit = new Retrofit.Builder().baseUrl(RoutesInterface.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
         RoutesInterface api = retrofit.create(RoutesInterface.class);
         Call<List<BusRoute>> task = api.routeList("postgres", "buspal", "localhost", "budapest", Statements.getRoutesByStop("Blaha"));
@@ -85,7 +88,6 @@ public class UnitTest {
 
     @Test
     public void linesStoppingAtBorarosTer() throws IOException {
-
         Retrofit retrofit = new Retrofit.Builder().baseUrl(RoutesInterface.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
         RoutesInterface api = retrofit.create(RoutesInterface.class);
         Call<List<BusRoute>> task = api.routeList("postgres", "buspal", "localhost", "budapest", Statements.getRoutesByStop("Boráros"));
@@ -113,7 +115,6 @@ public class UnitTest {
 
     @Test
     public void linesStoppingAtVedgatUtca() throws IOException {
-
         Retrofit retrofit = new Retrofit.Builder().baseUrl(RoutesInterface.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
         RoutesInterface api = retrofit.create(RoutesInterface.class);
         Call<List<BusRoute>> task = api.routeList("postgres", "buspal", "localhost", "budapest", Statements.getRoutesByStop("Védgát"));

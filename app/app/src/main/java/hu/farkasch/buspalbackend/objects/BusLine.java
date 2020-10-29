@@ -1,6 +1,5 @@
 package hu.farkasch.buspalbackend.objects;
 
-import hu.farkasch.buspalbackend.datastructures.Coordinates;
 import hu.farkasch.buspalbackend.datastructures.Time;
 import java.util.ArrayList;
 

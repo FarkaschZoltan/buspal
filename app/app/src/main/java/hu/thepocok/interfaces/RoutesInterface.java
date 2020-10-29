@@ -1,8 +1,5 @@
 package hu.thepocok.interfaces;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.List;
 
 import hu.farkasch.buspalbackend.objects.BusRoute;
