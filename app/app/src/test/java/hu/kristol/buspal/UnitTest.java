@@ -3,13 +3,18 @@ package hu.kristol.buspal;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
+import hu.farkasch.buspalbackend.datastructures.Time;
 import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.farkasch.buspalbackend.objects.BusStop;
+import hu.farkasch.buspalbackend.objects.Departure;
 import hu.thepocok.interfaces.RouteInterface;
+import hu.thepocok.interfaces.StopDepartureInterface;
 import hu.thepocok.interfaces.StopInterface;
 import hu.thepocok.statements.Statements;
 import retrofit2.Call;
@@ -291,5 +296,79 @@ public class UnitTest {
         }
 
         assertTrue(stopNames.contains("Miskolctapolca Barlangfürdő"));
+    }
+
+    @Test
+    public void stopWithOnlyOneBus() throws IOException{
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(StopDepartureInterface.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        StopDepartureInterface api = retrofit.create(StopDepartureInterface.class);
+
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String currentDate = date.format(formatter);
+
+        Call<List<Departure>> task = api.departureList("postgres", "buspal", "localhost", "budapest", Statements.getDepartureFromStop(4246, Integer.parseInt(currentDate)));
+        List<Departure> departuresList = task.execute().body();
+        System.out.println(departuresList.get(0));
+
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(6, 3, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(6, 32, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(7, 2, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(7, 31, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(8, 2, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(8, 32, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(9, 22, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(10, 23, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(11, 23, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(12, 23, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(13, 23, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(14, 23, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(15, 3, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(15, 33, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(16, 2, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(16, 32, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(17, 42, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(18, 23, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(19, 23, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "65", "Kolosy tér", new Time(20, 23, 0))));
+    }
+
+    @Test
+    public void stopWithManyBuses() throws IOException {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(StopDepartureInterface.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        StopDepartureInterface api = retrofit.create(StopDepartureInterface.class);
+
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String currentDate = date.format(formatter);
+
+        Call<List<Departure>> task = api.departureList("postgres", "buspal", "localhost", "budapest", Statements.getDepartureFromStop(832, 20201106));
+        List<Departure> departuresList = task.execute().body();
+        System.out.println(departuresList.get(0));
+
+        assertTrue(departuresList.contains(new Departure(0, "19", "Kelenföld vasútállomás M", new Time(4, 8, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "19", "Kelenföld vasútállomás M", new Time(23, 47, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "19", "Kelenföld vasútállomás M", new Time(24, 7, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "49", "Kelenföld vasútállomás M", new Time(4, 54, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "49", "Kelenföld vasútállomás M", new Time(13, 34, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "49", "Kelenföld vasútállomás M", new Time(23, 54, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "7", "Albertfalva vasútállomás", new Time(4, 49, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "7", "Albertfalva vasútállomás", new Time(23, 49, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "7", "Albertfalva vasútállomás", new Time(11, 49, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "114", "Baross Gábor-telep, Ispiláng utca", new Time(4, 50, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "114", "Baross Gábor-telep, Ispiláng utca", new Time(18, 32, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "114", "Baross Gábor-telep, Ispiláng utca", new Time(23, 50, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "213", "Donát-hegy", new Time(5, 10, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "213", "Donát-hegy", new Time(12, 18, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "213", "Donát-hegy", new Time(23, 40, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "214", "Baross Gábor-telep, Ispiláng utca", new Time(5, 30, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "214", "Baross Gábor-telep, Ispiláng utca", new Time(14, 8, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "214", "Baross Gábor-telep, Ispiláng utca", new Time(17, 8, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "907", "Kelenföld vasútállomás M", new Time(24, 0, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "907", "Kelenföld vasútállomás M", new Time(26, 23, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "907", "Kelenföld vasútállomás M", new Time(28, 23, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "918", "Kelenföld vasútállomás M", new Time(24, 31, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "918", "Kelenföld vasútállomás M", new Time(26, 31, 0))));
+        assertTrue(departuresList.contains(new Departure(0, "918", "Kelenföld vasútállomás M", new Time(27, 1, 0))));
     }
 }
