@@ -1,6 +1,6 @@
 package hu.farkasch.buspalbackend.datastructures;
 
-public class Time{
+public class Time implements Comparable<Time>{
     private int hour;
     private int minute;
     private int second;
@@ -21,7 +21,10 @@ public class Time{
         String[] timeArray = timeData.split(":");
         hour = Integer.parseInt(timeArray[0]);
         minute = Integer.parseInt(timeArray[1]);
-        second = Integer.parseInt(timeArray[2]);
+        if(timeArray.length > 2){ //for when timeData is only hh:mm
+            second = Integer.parseInt(timeArray[2]);
+        }
+
     }
 
     //basic getters and setters
@@ -93,4 +96,44 @@ public class Time{
         //return String.format(hour + ":" + minute + ":" + second);
     }
 
+    @Override
+    public int compareTo(Time t) {
+        if(hour > t.hour){
+            return 1;
+        }
+        else if (hour < t.hour){
+            return -1;
+        }
+        else {
+            if(minute > t.minute){
+                return 1;
+            }
+            if (minute < t.minute){
+                return -1;
+            }
+            else {
+                return 0;
+            }
+        }
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+
+        if(!(o instanceof Time)){
+            return false;
+        }
+
+        Time t = (Time) o;
+
+        if(hour == t.hour && minute == t.minute){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
