@@ -1,32 +1,32 @@
 package hu.farkasch.buspalbackend.objects;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
-import hu.farkasch.buspalbackend.datastructures.Time;
-import java.util.ArrayList;
 
-public class BusStop implements Comparable<BusStop>{
+import java.io.Serializable;
+
+public class BusStop implements Comparable<BusStop>, Serializable {
     private Coordinates cords;
     private String stopName;
     private int stopId;
     private int stopSequencePlace;
     private double distanceFromPosition;
-    private Departures departures;
+    private Departure departure;
 
     public BusStop(){
         cords = new Coordinates();
         stopName = "";
         stopId = -1; //no id = -1
         stopSequencePlace = -1; //not in a sequence
-        departures = new Departures();
+        departure = new Departure();
     }
 
-    public BusStop(int stopId, String stopName, Coordinates cords, int stopSequencePlace, Departures departures){
+    public BusStop(int stopId, String stopName, Coordinates cords, int stopSequencePlace, Departure departure){
         this.stopId = stopId;
         this.stopName = stopName;
         this.cords = cords;
         this.stopSequencePlace = stopSequencePlace;
         this.distanceFromPosition = 999;
-        this.departures = departures;
+        this.departure = departure;
 
     }
 
@@ -36,7 +36,7 @@ public class BusStop implements Comparable<BusStop>{
         this.cords = cords;
         this.stopSequencePlace = -1;
         this.distanceFromPosition = distanceFromPosition * 1000;
-        this.departures = new Departures();
+        this.departure = new Departure();
     }
 
     public BusStop(String stopName, int stopId){
@@ -45,7 +45,7 @@ public class BusStop implements Comparable<BusStop>{
         this.cords = new Coordinates();
         this.stopSequencePlace = -1;
         this.distanceFromPosition = 999;
-        this.departures = new Departures();
+        this.departure = new Departure();
     }
 
     public Coordinates getCords() {
@@ -88,12 +88,12 @@ public class BusStop implements Comparable<BusStop>{
         this.distanceFromPosition = distanceFromPosition;
     }
 
-    public Departures getDepartures() {
-        return departures;
+    public Departure getDeparture() {
+        return departure;
     }
 
-    public void setDepartures(Departures departures) {
-        this.departures = departures;
+    public void setDeparture(Departure departure) {
+        this.departure = departure;
     }
 
     public int getDistance(){
@@ -102,7 +102,7 @@ public class BusStop implements Comparable<BusStop>{
 
     @Override
     public String toString(){ //not finished yet(?)
-        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition + ", " + departures);
+        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition + ", " + departure);
     }
 
     @Override

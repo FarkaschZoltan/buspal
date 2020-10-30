@@ -1,6 +1,8 @@
 package hu.farkasch.buspalbackend.datastructures;
 
-public class Coordinates {
+import java.io.Serializable;
+
+public class Coordinates implements Serializable {
     private static final int EARTH_RADIUS = 6_371_000; //in metres
     private double lat; //latitude of the coordinate
     private double lon; //longitude of the coordinate

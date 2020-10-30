@@ -69,7 +69,28 @@ public class Time{
 
     @Override
     public String toString(){
-        return String.format(hour + ":" + minute + ":" + second);
+        String time = "";
+
+        if(hour < 10){
+            time += "0" + hour;
+        }
+        else if(hour > 24){
+            time += "0" + (hour-24);
+        }
+        else{
+            time += hour;
+        }
+
+        time += ":";
+        if(minute < 10){
+            time += "0" + minute;
+        }
+        else{
+            time += minute;
+        }
+
+        return time;
+        //return String.format(hour + ":" + minute + ":" + second);
     }
 
 }

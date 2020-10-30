@@ -45,7 +45,7 @@ import hu.thepocok.statements.Statements;
 
 public class Stops extends AppCompatActivity implements LocationListener {
     private RequestQueue mRequestQueue;
-    String url = "http://192.168.0.164/index.php";
+    String url = "http://80.98.90.176:9876/";
 
     List<Stops> stopsList;
     LocationManager locationManager;
@@ -101,7 +101,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
                             }
 
                             //creating adapter object and setting it to recyclerview
-                            StopsAdapter adapter = new StopsAdapter(Stops.this, resultArray);
+                            StopsAdapter adapter = new StopsAdapter(Stops.this, resultArray, recyclerView);
                             recyclerView.setAdapter(adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -156,7 +156,6 @@ public class Stops extends AppCompatActivity implements LocationListener {
     public void onLocationChanged(Location location) {
         if(locationFound == false){
             loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getNearbyStops(location.getLatitude(), location.getLongitude(), 0.5));
-            Log.d("Routes", mRequestQueue.getCache().get(url).toString());
             locationFound = true;
         }
 

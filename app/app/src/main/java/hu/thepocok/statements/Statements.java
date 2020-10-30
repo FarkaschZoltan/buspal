@@ -83,13 +83,13 @@ public class Statements {
     }
 
     public static String getDepartureFromStop(int stop_id, int date){
-        String statement = "SELECT stop_times.departure_time, routes.route_short_name\n" +
+        String statement = "SELECT trips.trip_id, stop_times.departure_time, routes.route_short_name, trips.trip_headsign \n" +
                 "FROM routes\n" +
                 "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
                 "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
                 "INNER JOIN calendar_dates ON calendar_dates.service_id = trips.service_id\n" +
                 "WHERE stop_times.stop_id = " + stop_id + " AND calendar_dates.date = "+ date + "\n" +
-                "GROUP BY stop_times.departure_time, routes.route_short_name\n" +
+                "GROUP BY trips.trip_id, trips.trip_headsign, stop_times.departure_time, routes.route_short_name\n" +
                 "ORDER BY departure_time";
         return statement;
     }
