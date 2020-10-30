@@ -4,7 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
 
-public class BusStop implements Comparable<BusStop>{
+import java.io.Serializable;
+
+public class BusStop implements Comparable<BusStop>, Serializable {
     private Coordinates cords;
     @SerializedName("stop_name")
     private String stopName;
