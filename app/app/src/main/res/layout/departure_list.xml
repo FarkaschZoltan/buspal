@@ -1,0 +1,38 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:stretchColumns="*"
+    android:background="@drawable/border">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+
+
+        <TextView
+            android:id="@+id/route_name"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="4"
+            android:gravity="center_vertical|center_horizontal"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/destination"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Széll Kálmán tér"
+            android:gravity="center_vertical|center_horizontal"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/departure_time"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="12:15"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+    </TableRow>
+</TableLayout>
