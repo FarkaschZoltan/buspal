@@ -131,4 +131,11 @@ public class Statements {
                 "ORDER BY distance";
         return statement;
     }
+
+    public static String getStopsByName(String stopName){
+        String statement = "SELECT stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon\n" +
+                "FROM stops\n" +
+                "WHERE stops.stop_name LIKE '" + stopName + "%' AND stops.parent_station = ''";
+        return statement;
+    }
 }

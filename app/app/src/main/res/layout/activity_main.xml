@@ -51,6 +51,12 @@
             android:layout_height="wrap_content"
             android:text="Nearby stops" />
 
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search stop" />
+
     </LinearLayout>
 
 </RelativeLayout>

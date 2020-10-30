@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.button);
         Button button2 = findViewById(R.id.button2);
+        Button button3 = findViewById(R.id.button3);
 
         checkPermission(Manifest.permission.ACCESS_NETWORK_STATE, 100);
         checkPermission(Manifest.permission.INTERNET,101);
@@ -54,6 +55,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(c, Stops.class);
+                c.startActivity(i);
+            }
+        });
+
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText in = findViewById(R.id.in);
+                Intent i = new Intent(c, Stops.class);
+                i.putExtra("stopName", in.getText().toString());
                 c.startActivity(i);
             }
         });

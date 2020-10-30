@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -45,6 +46,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
     LocationManager locationManager;
     boolean locationFound = false;
 
+    String stopName = null;
 
     RecyclerView recyclerView;
 
@@ -58,6 +60,13 @@ public class Stops extends AppCompatActivity implements LocationListener {
         recyclerView = findViewById(R.id.stops_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        Intent i = this.getIntent();
+        stopName = i.getStringExtra("stopName");
+
+        if(stopName != null){
+            loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getStopsByName(stopName));
+        }
 
         if(ActivityCompat.checkSelfPermission(Stops.this,
         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -85,7 +94,12 @@ public class Stops extends AppCompatActivity implements LocationListener {
                                 String name = jsonArray.getJSONObject(i).get("stop_name").toString();
                                 double lat = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lat").toString());
                                 double lon = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lon").toString());
-                                double distance = Double.parseDouble(jsonArray.getJSONObject(i).get("distance").toString());
+                                double distance;
+                                try {
+                                    distance = Double.parseDouble(jsonArray.getJSONObject(i).get("distance").toString());
+                                } catch(JSONException e){
+                                    distance = -1;
+                                }
 
                                 Coordinates c = new Coordinates(lat, lon);
 
@@ -148,7 +162,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        if(locationFound == false){
+        if(locationFound == false && stopName == null){
             loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getNearbyStops(location.getLatitude(), location.getLongitude(), 0.5));
             locationFound = true;
         }

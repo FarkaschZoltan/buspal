@@ -53,7 +53,12 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
         BusStop stop = stopsList.get(position);
 
         holder.stopName.setText(stop.getStopName());
-        holder.stopDistance.setText(stop.getDistance() + " m");
+        if(stop.getDistance() < 0){
+            holder.stopDistance.setText(" ");
+        }
+        else{
+            holder.stopDistance.setText(stop.getDistance() + " m");
+        }
     }
 
     @Override
