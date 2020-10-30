@@ -9,7 +9,7 @@ import hu.farkasch.buspalbackend.datastructures.Time;
 public class Departure implements Serializable { //everything is public for easier access
     @SerializedName("trip_id")
     public int tripId;
-    @SerializedName("route_name")
+    @SerializedName("route_short_name")
     public String routeName;
     @SerializedName("trip_headsign")
     public String destination;
@@ -49,14 +49,21 @@ public class Departure implements Serializable { //everything is public for easi
 
         Departure d = (Departure) o;
 
-        System.out.println(routeName + " =? " + d.routeName);
-        System.out.println(destination + " =? " + d.destination);
-        System.out.println(departureTime + " =? " + d.departureTime);
-
         Time departureTimeDT = new Time(d.departureTime);
         Time departureTimeT = new Time(departureTime);
 
-        if(routeName == d.routeName && destination == d.destination && departureTimeT.equals(departureTimeDT)){
+        /*
+        System.out.print(routeName + " =? " + d.routeName + " "); // for debugging purposes
+        System.out.println(routeName.equals(d.routeName));
+        System.out.print(destination + " =? " + d.destination + " ");
+        System.out.println(destination.equals(d.destination));
+        System.out.print(departureTimeT + " =? " + departureTimeDT + " ");
+        System.out.println(departureTimeT.equals(departureTimeDT));
+        System.out.println("----------------------------------------");
+        */
+
+
+        if(routeName.equals(d.routeName) && destination.equals(d.destination) && departureTimeT.equals(departureTimeDT)){
             return true;
         }
         else {

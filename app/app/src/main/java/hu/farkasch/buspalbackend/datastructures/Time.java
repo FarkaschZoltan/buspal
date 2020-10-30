@@ -77,9 +77,6 @@ public class Time implements Comparable<Time>{
         if(hour < 10){
             time += "0" + hour;
         }
-        else if(hour > 24){
-            time += "0" + (hour-24);
-        }
         else{
             time += hour;
         }
@@ -94,6 +91,29 @@ public class Time implements Comparable<Time>{
 
         return time;
         //return String.format(hour + ":" + minute + ":" + second);
+    }
+
+    public String toString(boolean a){
+            String time = "";
+
+            if(hour < 10){
+                time += "0" + hour;
+            }
+            else if(hour > 24){
+                time += "0" + (hour-24);
+            }
+            else{
+                time += hour;
+            }
+
+            time += ":";
+            if(minute < 10){
+                time += "0" + minute;
+            }
+            else{
+                time += minute;
+            }
+            return time;
     }
 
     @Override
