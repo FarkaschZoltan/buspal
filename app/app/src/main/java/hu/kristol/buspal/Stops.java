@@ -28,12 +28,14 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
+import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.thepocok.adapters.StopsAdapter;
 import hu.thepocok.statements.Statements;
@@ -42,7 +44,6 @@ public class Stops extends AppCompatActivity implements LocationListener {
     private RequestQueue mRequestQueue;
     String url = "http://80.98.90.176:9876/";
 
-    List<Stops> stopsList;
     LocationManager locationManager;
     boolean locationFound = false;
 
@@ -65,7 +66,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
         stopName = i.getStringExtra("stopName");
 
         if(stopName != null){
-            loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getStopsByName(stopName));
+            loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getStopsByNameWithRoutes(stopName));
         }
 
         if(ActivityCompat.checkSelfPermission(Stops.this,
@@ -88,24 +89,57 @@ public class Stops extends AppCompatActivity implements LocationListener {
                             //converting the string to json array object
                             JSONArray jsonArray = new JSONArray(response);
                             ArrayList<BusStop> resultArray = new ArrayList<>();
+                            ArrayList<BusRoute> busRoutes = new ArrayList<>();
+                            int lastStopId = -1;
+                            String name = null;
+                            double lat = 0;
+                            double lon = 0;
+                            double distance = 999;
+                            Coordinates c = null;
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 int stopId = Integer.parseInt(jsonArray.getJSONObject(i).get("stop_id").toString());
-                                String name = jsonArray.getJSONObject(i).get("stop_name").toString();
-                                double lat = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lat").toString());
-                                double lon = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lon").toString());
-                                double distance;
-                                try {
-                                    distance = Double.parseDouble(jsonArray.getJSONObject(i).get("distance").toString());
-                                } catch(JSONException e){
-                                    distance = -1;
+
+                                if(lastStopId == stopId){
+                                    String routeName = jsonArray.getJSONObject(i).get("route_short_name").toString();
+                                    String routeType = jsonArray.getJSONObject(i).get("route_type").toString();
+                                    BusRoute r = new BusRoute(routeName, routeType);
+                                    busRoutes.add(r);
+                                    Log.d("RoutesArray", busRoutes.toString());
+                                    continue;
                                 }
+                                else {
+                                    if(i != 0) {
+                                        BusStop b = new BusStop(stopId, name, c, distance, busRoutes);
+                                        resultArray.add(b);
+                                        Log.d("Result", b.toString());
+                                    }
 
-                                Coordinates c = new Coordinates(lat, lon);
+                                    lastStopId = stopId;
+                                    busRoutes = new ArrayList<>();
+                                    name = jsonArray.getJSONObject(i).get("stop_name").toString();
+                                    lat = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lat").toString());
+                                    lon = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lon").toString());
+                                    try {
+                                        distance = Double.parseDouble(jsonArray.getJSONObject(i).get("distance").toString());
+                                    } catch (JSONException e) {
+                                        distance = -1;
+                                    }
 
-                                BusStop b = new BusStop(stopId, name, c, distance);
-                                resultArray.add(b);
-                                Log.d("Result", b.toString());
+                                    String routeName = jsonArray.getJSONObject(i).get("route_short_name").toString();
+                                    String routeType = jsonArray.getJSONObject(i).get("route_type").toString();
+                                    BusRoute r = new BusRoute(routeName, routeType);
+                                    busRoutes.add(r);
+
+                                    c = new Coordinates(lat, lon);
+
+                                    if(i == jsonArray.length()-1){
+                                        BusStop b = new BusStop(stopId, name, c, distance, busRoutes);
+                                        resultArray.add(b);
+                                        Log.d("Result", b.toString());
+                                    }
+                                }
+                                Log.d("RoutesArray", busRoutes.toString());
                             }
 
                             //creating adapter object and setting it to recyclerview

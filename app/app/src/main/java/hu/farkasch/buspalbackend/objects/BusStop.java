@@ -6,6 +6,7 @@ import hu.farkasch.buspalbackend.datastructures.Coordinates;
 import hu.farkasch.buspalbackend.datastructures.Time;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class BusStop implements Comparable<BusStop>, Serializable {
     private Coordinates cords;
@@ -23,6 +24,7 @@ public class BusStop implements Comparable<BusStop>, Serializable {
     @SerializedName("departure_time")
     private String testDepartureTime;
     private Time departureTime;
+    public ArrayList<BusRoute> stoppingRoutes;
 
     public BusStop(){
         cords = new Coordinates();
@@ -48,13 +50,14 @@ public class BusStop implements Comparable<BusStop>, Serializable {
 
     }
 
-    public BusStop(int stopId, String stopName, Coordinates cords, double distanceFromPosition){
+    public BusStop(int stopId, String stopName, Coordinates cords, double distanceFromPosition, ArrayList<BusRoute> routes){
         this.stopId = stopId;
         this.stopName = stopName;
         this.cords = cords;
         this.stopSequencePlace = -1;
         this.distanceFromPosition = distanceFromPosition * 1000;
         this.departureTime = new Time();
+        this.stoppingRoutes = routes;
     }
 
     public BusStop(String stopId, String stopName, String stopLat, String stopLon, String distanceFromPosition){

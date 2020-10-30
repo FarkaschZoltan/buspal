@@ -48,6 +48,16 @@ public class Statements {
         return statement;
     }
 
+    public static String getRoutesByStopId(int stopId){
+        String statement = "SELECT DISTINCT routes.route_id, routes.route_short_name, routes.route_type FROM routes " +
+                "INNER JOIN trips on routes.route_id = trips.route_id " +
+                "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
+                "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
+                "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id " +
+                "WHERE stops.stop_id = " + stopId + " ORDER BY routes.route_short_name";
+        return statement;
+    }
+
     /*PRO TIPP: If a bus with the same name has multiple types of trips, it will list the stops in the following way:
         trip1 - stop1
         trip2 - stop1
@@ -136,6 +146,18 @@ public class Statements {
         String statement = "SELECT stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon\n" +
                 "FROM stops\n" +
                 "WHERE stops.stop_name LIKE '" + stopName + "%' AND stops.parent_station = ''";
+        return statement;
+    }
+
+    public static String getStopsByNameWithRoutes(String stopName){
+        String statement = "SELECT stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, routes.route_short_name, routes.route_type\n" +
+                "FROM routes\n" +
+                "INNER JOIN trips on routes.route_id = trips.route_id \n" +
+                "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id \n" +
+                "INNER JOIN stops on stops.stop_id = stop_times.stop_id \n" +
+                "WHERE stops.stop_name LIKE '" + stopName + "%'\n" +
+                "GROUP BY stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, routes.route_short_name, routes.route_type\n" +
+                "ORDER BY stops.stop_id";
         return statement;
     }
 }
