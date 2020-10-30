@@ -1,0 +1,38 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="35dp"
+    android:stretchColumns="*"
+    android:background="@drawable/border">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+
+
+        <TextView
+            android:id="@+id/stop_num"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="stop_num"
+            android:gravity="center_vertical|center_horizontal"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/destination_stop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="stop_name"
+            android:gravity="center_vertical|center_horizontal"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/dep_time"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="time"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+    </TableRow>
+</TableLayout>
