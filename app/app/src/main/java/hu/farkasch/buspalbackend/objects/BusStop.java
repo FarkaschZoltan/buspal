@@ -3,6 +3,7 @@ package hu.farkasch.buspalbackend.objects;
 import com.google.gson.annotations.SerializedName;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
+import hu.farkasch.buspalbackend.datastructures.Time;
 
 import java.io.Serializable;
 
@@ -19,23 +20,23 @@ public class BusStop implements Comparable<BusStop>, Serializable {
     private double stopLon;
     @SerializedName("distance")
     private double distanceFromPosition;
-    private Departure departure;
+    private Time departureTime;
 
     public BusStop(){
         cords = new Coordinates();
         stopName = "";
         stopId = -1; //no id = -1
         stopSequencePlace = -1; //not in a sequence
-        departure = new Departure();
+        departureTime = new Time();
     }
 
-    public BusStop(int stopId, String stopName, Coordinates cords, int stopSequencePlace, Departure departure){
+    public BusStop(int stopId, String stopName, Coordinates cords, int stopSequencePlace, Time departureTime){
         this.stopId = stopId;
         this.stopName = stopName;
         this.cords = cords;
         this.stopSequencePlace = stopSequencePlace;
         this.distanceFromPosition = 999;
-        this.departure = departure;
+        this.departureTime = departureTime;
 
     }
 
@@ -45,7 +46,7 @@ public class BusStop implements Comparable<BusStop>, Serializable {
         this.cords = cords;
         this.stopSequencePlace = -1;
         this.distanceFromPosition = distanceFromPosition * 1000;
-        this.departure = new Departure();
+        this.departureTime = new Time();
     }
 
     public BusStop(String stopId, String stopName, String stopLat, String stopLon, String distanceFromPosition){
@@ -57,7 +58,7 @@ public class BusStop implements Comparable<BusStop>, Serializable {
         this.cords = c;
         this.stopSequencePlace = -1;
         this.distanceFromPosition = Integer.parseInt(distanceFromPosition) * 1000;
-        this.departure = new Departure();
+        this.departureTime = new Time();
     }
 
     public BusStop(String stopName, int stopId){
@@ -66,7 +67,7 @@ public class BusStop implements Comparable<BusStop>, Serializable {
         this.cords = new Coordinates();
         this.stopSequencePlace = -1;
         this.distanceFromPosition = 999;
-        this.departure = new Departure();
+        this.departureTime = new Time();
     }
 
     public Coordinates getCords() {
@@ -109,12 +110,12 @@ public class BusStop implements Comparable<BusStop>, Serializable {
         this.distanceFromPosition = distanceFromPosition;
     }
 
-    public Departure getDeparture() {
-        return departure;
+    public Time getDeparture() {
+        return departureTime;
     }
 
-    public void setDeparture(Departure departure) {
-        this.departure = departure;
+    public void setDeparture(Time departure) {
+        this.departureTime = departure;
     }
 
     public int getDistance(){
@@ -123,7 +124,7 @@ public class BusStop implements Comparable<BusStop>, Serializable {
 
     @Override
     public String toString(){ //not finished yet(?)
-        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition + ", " + departure);
+        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition + ", " + departureTime);
     }
 
     @Override

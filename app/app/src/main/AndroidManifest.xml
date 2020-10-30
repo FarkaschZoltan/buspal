@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StopDepartures"></activity>
+        <activity android:name=".RouteStops"></activity>
+        <activity android:name=".StopDepartures" />
         <activity android:name=".Stops" />
         <activity
             android:name=".Routes"

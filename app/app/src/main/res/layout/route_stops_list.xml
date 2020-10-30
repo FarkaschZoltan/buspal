@@ -9,8 +9,9 @@
         android:layout_height="35dp">
 
 
+
         <TextView
-            android:id="@+id/stop_num"
+            android:id="@+id/stop_sequence"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:text="stop_num"
@@ -19,7 +20,7 @@
             android:textColor="#000000" />
 
         <TextView
-            android:id="@+id/destination_stop_name"
+            android:id="@+id/stop_name"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:text="stop_name"
@@ -28,7 +29,7 @@
             android:textColor="#000000" />
 
         <TextView
-            android:id="@+id/dep_time"
+            android:id="@+id/departure_time"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:gravity="center_vertical|center_horizontal"

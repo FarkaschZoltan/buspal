@@ -3,14 +3,20 @@
 package hu.farkasch.buspalbackend.objects;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BusTrip{
-    private ArrayList<BusStop> busStopList;
+    private List<BusStop> busStopList;
     private int tripId;
 
     public BusTrip(){
         busStopList = new ArrayList<BusStop>();
         tripId = -1; //no trip id
+    }
+
+    public BusTrip(int tripId){
+        busStopList = new ArrayList<BusStop>();
+        this.tripId = tripId;
     }
 
     public BusTrip(int tripId, ArrayList<BusStop> busStopList){
@@ -20,7 +26,7 @@ public class BusTrip{
 
     //basic getters and setters
 
-    public ArrayList<BusStop> getBusStopList(){
+    public List<BusStop> getBusStopList(){
         return busStopList;
     }    
 

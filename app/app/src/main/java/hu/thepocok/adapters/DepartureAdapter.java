@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.farkasch.buspalbackend.objects.Departure;
 import hu.kristol.buspal.R;
-import hu.kristol.buspal.Stops;
+import hu.kristol.buspal.RouteStops;
 
 public class DepartureAdapter extends RecyclerView.Adapter<DepartureAdapter.DepartureViewHolder>{
     private Context mCtx;
@@ -37,9 +36,10 @@ public class DepartureAdapter extends RecyclerView.Adapter<DepartureAdapter.Depa
                 int itemPosition = recyclerView.getChildLayoutPosition(view);
                 Departure item = departureList.get(itemPosition);
 
-                /*Intent i = new Intent(mCtx, Stops.class);
-                i.putExtra("stop", item);
-                mCtx.startActivity(i);*/
+                Intent i = new Intent(mCtx, RouteStops.class);
+                i.putExtra("tripId", item.tripId);
+                i.putExtra("routeName", item.routeName);
+                mCtx.startActivity(i);
             }
         });
         return new DepartureAdapter.DepartureViewHolder(view);

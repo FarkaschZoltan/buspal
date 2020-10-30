@@ -14,15 +14,15 @@ public class Statements {
         return statement;
     }
 
-    public static String getScheduleByRoute(String route, String direction, String date) {
-        String statement = "SELECT stop_times.departure_time FROM routes " +
-                "INNER JOIN trips on routes.route_id = trips.route_id " +
-                "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
-                "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
-                "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id " +
-                "WHERE routes.route_short_name = '" + route + "' AND stop_times.stop_sequence = '1' " +
-                "' AND trips.direction_id ='" + direction + "' AND calendar_dates.date = '" + date +
-                "' ORDER BY stop_times.departure_time";
+    public static String getScheduleByTripId(int tripId) {
+        String statement = "SELECT stop_times.trip_id, stop_times.departure_time, stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence FROM routes \n" +
+                "INNER JOIN trips on routes.route_id = trips.route_id \n" +
+                "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id \n" +
+                "INNER JOIN stops on stops.stop_id = stop_times.stop_id \n" +
+                "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id\n" +
+                "WHERE trips.trip_id = " + tripId +"\n" +
+                "GROUP BY stop_times.trip_id, stop_times.departure_time, stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence\n" +
+                "ORDER BY stop_times.stop_sequence";
 
         return statement;
     }
