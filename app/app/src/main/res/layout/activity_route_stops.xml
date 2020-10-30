@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme.AppBarOverlay"/>
 
     <TextView
-        android:id="@+id/stop_sequence_name"
+        android:id="@+id/route_name"
         android:layout_width="match_parent"
         android:layout_height="38dp"
         android:textSize="28dp"
@@ -24,6 +24,6 @@
         android:id="@+id/dep_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/stop_sequence_name" />
+        android:layout_below="@id/route_name" />
 
 </RelativeLayout>
