@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import hu.farkasch.buspalbackend.datastructures.Time;
 import hu.farkasch.buspalbackend.objects.Departure;
 import hu.kristol.buspal.R;
 import hu.kristol.buspal.RouteStops;
@@ -51,7 +54,8 @@ public class DepartureAdapter extends RecyclerView.Adapter<DepartureAdapter.Depa
 
         holder.routeName.setText(departure.routeName);
         holder.destination.setText(departure.destination);
-        holder.departureTime.setText(departure.departureTime.toString());
+        holder.departureTime.setText(new Time(departure.departureTime).toString(true));
+
     }
 
     @Override

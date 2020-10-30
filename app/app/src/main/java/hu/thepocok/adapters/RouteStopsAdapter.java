@@ -15,6 +15,7 @@ import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.farkasch.buspalbackend.objects.Departure;
 import hu.kristol.buspal.R;
 import hu.kristol.buspal.RouteStops;
+import hu.kristol.buspal.StopDepartures;
 
 public class RouteStopsAdapter extends RecyclerView.Adapter<RouteStopsAdapter.RouteStopViewHolder>{
     private Context mCtx;
@@ -37,10 +38,10 @@ public class RouteStopsAdapter extends RecyclerView.Adapter<RouteStopsAdapter.Ro
                 int itemPosition = recyclerView.getChildLayoutPosition(view);
                 BusStop item = routeStopsList.get(itemPosition);
 
-                /*Intent i = new Intent(mCtx, RouteStops.class);
-                i.putExtra("tripId", item.tripId);
-                i.putExtra("routeName", item.routeName);
-                mCtx.startActivity(i);*/
+                Intent i = new Intent(mCtx, StopDepartures.class);
+                i.putExtra("stop", item.getStopId());
+                i.putExtra("stopName", item.getStopName());
+                mCtx.startActivity(i);
             }
         });
         return new RouteStopsAdapter.RouteStopViewHolder(view);

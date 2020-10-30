@@ -70,6 +70,34 @@ public class Time implements Comparable<Time>{
         hour = newHour;
     }
 
+    public Time subtract(Time timeToSubtract){
+        int seconds = this.second - timeToSubtract.second;
+        int minutes = 0;
+        int hours = 0;
+
+        if(seconds < 0){
+            seconds += 60;
+            minutes -= 1;
+        }
+
+        minutes += this.minute - timeToSubtract.minute;
+
+        if(minutes < 0){
+            minutes += 60;
+            hours -= 1;
+        }
+
+        hours += this.hour - timeToSubtract.hour;
+
+        return new Time(hours, minutes, seconds);
+    }
+
+    public boolean isInsideInterval(Time that, int hours){
+        Time difference = that.subtract(this);
+
+        return difference.hour > 0 && difference.hour < hours;
+    }
+
     @Override
     public String toString(){
         String time = "";
@@ -99,7 +127,7 @@ public class Time implements Comparable<Time>{
             if(hour < 10){
                 time += "0" + hour;
             }
-            else if(hour > 24){
+            else if(hour >= 24){
                 time += "0" + (hour-24);
             }
             else{

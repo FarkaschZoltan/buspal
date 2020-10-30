@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,10 +82,15 @@ public class StopDepartures extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.d("Departures", response);
                         try {
+                            LocalDateTime date = LocalDateTime.now();
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                            String currentTimeString = date.format(formatter);
+                            Time currentTime = new Time(currentTimeString);
+                            Log.d("Time", currentTime.toString());
+
                             //converting the string to json array object
                             JSONArray jsonArray = new JSONArray(response);
                             ArrayList<Departure> resultArray = new ArrayList<>();
-                            //TODO befejezni
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 int tripId = Integer.parseInt(jsonArray.getJSONObject(i).get("trip_id").toString());
                                 String name = jsonArray.getJSONObject(i).get("route_short_name").toString();
@@ -92,8 +98,11 @@ public class StopDepartures extends AppCompatActivity {
                                 String destination = jsonArray.getJSONObject(i).get("trip_headsign").toString();
 
                                 Departure d = new Departure(tripId, name, destination, departureTime);
-                                resultArray.add(d);
-                                Log.d("Result", d.toString());
+
+                                if(currentTime.isInsideInterval(new Time(d.departureTime), 3)) {
+                                    resultArray.add(d);
+                                    Log.d("Result", d.toString());
+                                }
                             }
 
                             //creating adapter object and setting it to recyclerview
