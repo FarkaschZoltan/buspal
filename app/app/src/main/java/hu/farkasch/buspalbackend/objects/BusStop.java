@@ -20,6 +20,8 @@ public class BusStop implements Comparable<BusStop>, Serializable {
     private double stopLon;
     @SerializedName("distance")
     private double distanceFromPosition;
+    @SerializedName("departure_time")
+    private String testDepartureTime;
     private Time departureTime;
 
     public BusStop(){
@@ -27,8 +29,14 @@ public class BusStop implements Comparable<BusStop>, Serializable {
         stopName = "";
         stopId = -1; //no id = -1
         stopSequencePlace = -1; //not in a sequence
-        departureTime = new Time();
+        departureTime = null;
+        }
+
+    public BusStop(String stopName, Time departureTime){
+        this.stopName = stopName;
+        this.departureTime = departureTime;
     }
+
 
     public BusStop(int stopId, String stopName, Coordinates cords, int stopSequencePlace, Time departureTime){
         this.stopId = stopId;
@@ -124,7 +132,7 @@ public class BusStop implements Comparable<BusStop>, Serializable {
 
     @Override
     public String toString(){ //not finished yet(?)
-        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition + ", " + departureTime);
+        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition + ", " + testDepartureTime + ", " + departureTime);
     }
 
     @Override
@@ -132,4 +140,23 @@ public class BusStop implements Comparable<BusStop>, Serializable {
         return Integer.compare(this.stopSequencePlace, bs.stopSequencePlace);
     }
 
+    @Override
+    public boolean equals(Object that){
+        if (that == this){
+            return true;
+        }
+
+        if(!(that instanceof BusStop)){
+            return false;
+        }
+
+        if(departureTime == null){
+            this.departureTime = new Time(testDepartureTime);
+        }
+        BusStop bs = (BusStop) that;
+        if(bs.departureTime == null){
+            bs.departureTime = new Time(bs.testDepartureTime);
+        }
+        return (this.stopName.equals(bs.stopName) && this.departureTime.equals(bs.departureTime));
+    }
 }

@@ -14,6 +14,7 @@ import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.farkasch.buspalbackend.objects.Departure;
 import hu.thepocok.interfaces.RouteInterface;
+import hu.thepocok.interfaces.RouteStopsInterface;
 import hu.thepocok.interfaces.StopDepartureInterface;
 import hu.thepocok.interfaces.StopInterface;
 import hu.thepocok.statements.Statements;
@@ -383,7 +384,7 @@ public class UnitTest {
     }
 
     @Test
-    public void multipleKindOfVehichlesInBudapest() throws IOException {
+    public void multipleKindOfVehiclesInBudapest() throws IOException {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(StopDepartureInterface.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
         StopDepartureInterface api = retrofit.create(StopDepartureInterface.class);
 
@@ -416,5 +417,107 @@ public class UnitTest {
         assertTrue(departuresList.contains(new Departure(0, "979", "Újpalota, Nyírpalota út", new Time(28, 21, 0))));
 
     }
-    
+
+    @Test
+    public void tram1DepartureAt19_35() throws IOException {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(RouteStopsInterface.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        RouteStopsInterface api = retrofit.create(RouteStopsInterface.class);
+
+        Call<List<BusStop>> task = api.routeStopsList("postgres", "buspal", "localhost", "budapest", Statements.getScheduleByTripId(39404));
+        List<BusStop> routeStopsList = task.execute().body();
+
+        System.out.println(routeStopsList.toString());
+        System.out.println(new BusStop("Bécsi út / Vörösvári út", new Time(19, 35, 0)).toString());
+        assertTrue(routeStopsList.contains(new BusStop("Bécsi út / Vörösvári út", new Time(19, 35, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Óbudai rendelőintézet", new Time(19, 37, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Flórián tér", new Time(19, 38, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Szentlélek tér H", new Time(19, 39, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Népfürdő utca / Árpád híd", new Time(19, 41, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Göncz Árpád városközpont M", new Time(19, 42, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Honvédkórház", new Time(19, 43, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Lehel utca / Róbert Károly körút", new Time(19, 45, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Vágány utca / Róbert Károly körút", new Time(19, 46, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Kacsóh Pongrác út", new Time(19, 48, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Erzsébet királyné útja, aluljáró", new Time(19, 49, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Ajtósi Dürer sor", new Time(19, 51, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Zugló vasútállomás", new Time(19, 52, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Egressy út / Hungária körút", new Time(19, 54, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Puskás Ferenc Stadion M", new Time(19, 57, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Hős utca", new Time(19, 58, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Hidegkuti Nándor Stadion", new Time(20, 00, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Kőbányai út / Könyves Kálmán körút", new Time(20, 02, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Vajda Péter utca", new Time(20, 3, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Népliget M", new Time(20, 5, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Albert Flórián út", new Time(20, 6, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Ferencváros vá. - Málenkij Robot Eh.", new Time(20, 8, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Mester utca / Könyves Kálmán körút", new Time(20, 10, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Közvágóhíd H", new Time(20, 12, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Infopark", new Time(20, 14, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Budafoki út / Dombóvári út", new Time(20, 15, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Hauszmann Alajos utca / Szerémi út", new Time(20, 17, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Hengermalom út / Szerémi út", new Time(20, 19, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Etele út / Fehérvári út", new Time(20, 21, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Bikás park M", new Time(20, 23, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Bártfai utca", new Time(20, 24, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Kelenföld vasútállomás M", new Time(20, 26, 0))));
+    }
+
+    @Test
+    public void bus5DepartureAt20_04() throws IOException {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(RouteStopsInterface.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+        RouteStopsInterface api = retrofit.create(RouteStopsInterface.class);
+
+        Call<List<BusStop>> task = api.routeStopsList("postgres", "buspal", "localhost", "budapest", Statements.getScheduleByTripId(252150));
+        List<BusStop> routeStopsList = task.execute().body();
+
+        assertTrue(routeStopsList.contains(new BusStop("Pasaréti tér", new Time(20, 4, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Harangvirág utca", new Time(20, 4, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Virág árok", new Time(20, 5, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Gábor Áron utca / Pasaréti út", new Time(20, 6, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Júlia utca", new Time(20, 7, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Vasas sportpálya", new Time(20, 8, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Városmajor", new Time(20, 9, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Nyúl utca", new Time(20, 10, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Széll Kálmán tér M (Csaba utca)", new Time(20, 11, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Körmöci utca", new Time(20, 13, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Korlát utca", new Time(20, 14, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Mikó utca", new Time(20, 15, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Alagút utca", new Time(20, 16, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Dózsa György tér", new Time(20, 18, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Döbrentei tér", new Time(20, 19, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Március 15. tér", new Time(20, 20, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Ferenciek tere M", new Time(20, 23, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Astoria M", new Time(20, 25, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Uránia", new Time(20, 26, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Blaha Lujza tér M", new Time(20, 28, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Huszár utca", new Time(20, 29, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Keleti pályaudvar M", new Time(20, 31, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Reiner Frigyes park", new Time(20, 33, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Cházár András utca", new Time(20, 34, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Stefánia út / Thököly út", new Time(20, 35, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Zugló vasútállomás", new Time(20, 37, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Korong utca", new Time(20, 39, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Erzsébet királyné útja, aluljáró", new Time(20, 40, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Laky Adolf utca", new Time(20, 41, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Nagy Lajos király útja / Czobor utca", new Time(20, 42, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Fűrész utca", new Time(20, 44, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Rákospatak utca", new Time(20, 45, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Miskolci utca", new Time(20, 46, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Öv utca", new Time(20, 47, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Tóth István utca", new Time(20, 48, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Vág utca", new Time(20, 49, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Opál utca", new Time(20, 50, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Széchenyi út", new Time(20, 51, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Szent Korona útja", new Time(20, 52, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Wesselényi utca", new Time(20, 53, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Szerencs utca", new Time(20, 54, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Rákos úti szakrendelő", new Time(20, 55, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Illyés Gyula utca", new Time(20, 56, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Epres sor", new Time(20, 58, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Juhos utca", new Time(20, 59, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Kossuth utca, lakótelep", new Time(21, 0, 0))));
+        assertTrue(routeStopsList.contains(new BusStop("Rákospalota, Kossuth utca", new Time(21, 1, 0))));
+
+    }
+
 }
