@@ -1,5 +1,6 @@
 package hu.kristol.buspal;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -30,6 +31,11 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class UnitTest {
+
+    @Before
+    public void init(){
+        System.setProperty("java.net.preferIPv6Addresses", "true");
+    }
     @Test
     public void isInsideRadiusTestTrue() {
         assertTrue(Coordinates.isInsideRadius(new Coordinates(47.530207, 19.007196), new Coordinates(47.530185, 19.008280), 500));
