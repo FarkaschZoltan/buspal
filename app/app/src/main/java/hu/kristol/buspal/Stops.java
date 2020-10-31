@@ -42,7 +42,7 @@ import hu.thepocok.statements.Statements;
 
 public class Stops extends AppCompatActivity implements LocationListener {
     private RequestQueue mRequestQueue;
-    String url = "http://80.98.90.176:9876/";
+    String url = "http://[2a02:ab88:2bbb:aa80:78a6:c7e2:86b2:6f10]:9876/";
 
     LocationManager locationManager;
     boolean locationFound = false;
@@ -90,6 +90,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
                             JSONArray jsonArray = new JSONArray(response);
                             ArrayList<BusStop> resultArray = new ArrayList<>();
                             ArrayList<BusRoute> busRoutes = new ArrayList<>();
+                            int stopId = -1;
                             int lastStopId = -1;
                             String name = null;
                             double lat = 0;
@@ -98,7 +99,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
                             Coordinates c = null;
 
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                int stopId = Integer.parseInt(jsonArray.getJSONObject(i).get("stop_id").toString());
+                                stopId = Integer.parseInt(jsonArray.getJSONObject(i).get("stop_id").toString());
 
                                 if(lastStopId == stopId){
                                     String routeName = jsonArray.getJSONObject(i).get("route_short_name").toString();
@@ -110,7 +111,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
                                 }
                                 else {
                                     if(i != 0) {
-                                        BusStop b = new BusStop(stopId, name, c, distance, busRoutes);
+                                        BusStop b = new BusStop(lastStopId, name, c, distance, busRoutes);
                                         resultArray.add(b);
                                         Log.d("Result", b.toString());
                                     }
@@ -132,15 +133,13 @@ public class Stops extends AppCompatActivity implements LocationListener {
                                     busRoutes.add(r);
 
                                     c = new Coordinates(lat, lon);
-
-                                    if(i == jsonArray.length()-1){
-                                        BusStop b = new BusStop(stopId, name, c, distance, busRoutes);
-                                        resultArray.add(b);
-                                        Log.d("Result", b.toString());
-                                    }
                                 }
                                 Log.d("RoutesArray", busRoutes.toString());
                             }
+
+                            BusStop b = new BusStop(stopId, name, c, distance, busRoutes);
+                            resultArray.add(b);
+                            Log.d("Result", b.toString());
 
                             //creating adapter object and setting it to recyclerview
                             StopsAdapter adapter = new StopsAdapter(Stops.this, resultArray, recyclerView);

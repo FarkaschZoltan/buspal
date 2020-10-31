@@ -30,8 +30,6 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class UnitTest {
-    private String url = "http://80.98.90.176:9876/";
-
     @Test
     public void isInsideRadiusTestTrue() {
         assertTrue(Coordinates.isInsideRadius(new Coordinates(47.530207, 19.007196), new Coordinates(47.530185, 19.008280), 500));

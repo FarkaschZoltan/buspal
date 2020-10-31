@@ -10,20 +10,12 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
 import java.util.List;
 
-import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.farkasch.buspalbackend.objects.RouteType;
 import hu.kristol.buspal.R;
 import hu.kristol.buspal.StopDepartures;
-import hu.kristol.buspal.Stops;
-import hu.thepocok.interfaces.RouteInterface;
-import hu.thepocok.statements.Statements;
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHolder>{
     private Context mCtx;

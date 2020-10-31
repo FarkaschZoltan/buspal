@@ -39,7 +39,7 @@ import hu.thepocok.statements.Statements;
 
 public class StopDepartures extends AppCompatActivity {
     private RequestQueue mRequestQueue;
-    String url = "http://80.98.90.176:9876/";
+    String url = "http://[2a02:ab88:2bbb:aa80:78a6:c7e2:86b2:6f10]:9876/";
 
     List<BusRoute> routesList;
 

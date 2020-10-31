@@ -32,7 +32,7 @@ import hu.thepocok.statements.Statements;
 
 public class Routes extends AppCompatActivity {
     private RequestQueue mRequestQueue;
-    String url = "http://192.168.0.164/index.php";
+    String url = "http://[2a02:ab88:2bbb:aa80:78a6:c7e2:86b2:6f10]:9876/";
 
     List<Routes> routesList;
 
