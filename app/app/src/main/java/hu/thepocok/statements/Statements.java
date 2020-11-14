@@ -117,7 +117,7 @@ public class Statements {
 
     public static String getNearbyStops(double lat, double lon, double distance){
         String statement = "SELECT\n" +
-                "stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, \n" +
+                "stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, routes.route_short_name, routes.route_type, \n" +
                 "(\n" +
                 "  6371 * acos (\n" +
                 "      cos ( radians(" + lat + ") )\n" +
@@ -127,8 +127,11 @@ public class Statements {
                 "      * sin( radians( stops.stop_lat::float ) )\n" +
                 "  )\n" +
                 ") AS distance\n" +
-                "FROM stops\n" +
-                "GROUP BY stops.stop_id, stops.stop_name\n" +
+                "FROM routes\n" +
+                "INNER JOIN trips on routes.route_id = trips.route_id \n" +
+                "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id \n" +
+                "INNER JOIN stops on stops.stop_id = stop_times.stop_id \n" +
+                "GROUP BY stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, routes.route_short_name, routes.route_type\n" +
                 "HAVING (\n" +
                 "  6371 * acos (\n" +
                 "      cos ( radians(" + lat + ") )\n" +
@@ -145,7 +148,7 @@ public class Statements {
     public static String getStopsByName(String stopName){
         String statement = "SELECT stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon\n" +
                 "FROM stops\n" +
-                "WHERE stops.stop_name LIKE '" + stopName + "%' AND stops.parent_station = ''";
+                "WHERE LOWER(stops.stop_name) LIKE '" + stopName + "%' AND stops.parent_station = ''";
         return statement;
     }
 
@@ -155,7 +158,7 @@ public class Statements {
                 "INNER JOIN trips on routes.route_id = trips.route_id \n" +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id \n" +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id \n" +
-                "WHERE stops.stop_name LIKE '" + stopName + "%'\n" +
+                "WHERE LOWER(stops.stop_name) LIKE '" + stopName + "%'\n" +
                 "GROUP BY stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, routes.route_short_name, routes.route_type\n" +
                 "ORDER BY stops.stop_id";
         return statement;

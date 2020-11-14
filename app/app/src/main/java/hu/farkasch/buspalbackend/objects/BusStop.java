@@ -162,4 +162,12 @@ public class BusStop implements Comparable<BusStop>, Serializable {
         }
         return (this.stopName.equals(bs.stopName) && this.departureTime.equals(bs.departureTime));
     }
+
+    public double getStopLat() {
+        return stopLat;
+    }
+
+    public double getStopLon() {
+        return stopLon;
+    }
 }

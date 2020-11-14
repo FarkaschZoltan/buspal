@@ -34,9 +34,11 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.button);
         Button button2 = findViewById(R.id.button2);
         Button button3 = findViewById(R.id.button3);
+        Button button4 = findViewById(R.id.button4);
 
         checkPermission(Manifest.permission.ACCESS_NETWORK_STATE, 100);
         checkPermission(Manifest.permission.INTERNET,101);
+        checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 102);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +67,14 @@ public class MainActivity extends AppCompatActivity {
                 EditText in = findViewById(R.id.in);
                 Intent i = new Intent(c, Stops.class);
                 i.putExtra("stopName", in.getText().toString());
+                c.startActivity(i);
+            }
+        });
+
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(c, Map.class);
                 c.startActivity(i);
             }
         });
@@ -138,6 +148,21 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         else if (requestCode == 100) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(MainActivity.this,
+                        "Storage Permission Granted",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+            else {
+                Toast.makeText(MainActivity.this,
+                        "Storage Permission Denied",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+        else if (requestCode == 102) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(MainActivity.this,

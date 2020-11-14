@@ -40,6 +40,7 @@ public class Time implements Comparable<Time>{
     public int getSecond(){
         return second;
     }
+    
 
     public void setHour(int hour){
         this.hour = hour;

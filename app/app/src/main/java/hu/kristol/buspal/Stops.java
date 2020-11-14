@@ -66,7 +66,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
         stopName = i.getStringExtra("stopName");
 
         if(stopName != null){
-            loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getStopsByNameWithRoutes(stopName));
+            loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getStopsByNameWithRoutes(stopName.toLowerCase()));
         }
 
         if(ActivityCompat.checkSelfPermission(Stops.this,

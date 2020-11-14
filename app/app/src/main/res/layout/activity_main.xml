@@ -57,6 +57,12 @@
             android:layout_height="wrap_content"
             android:text="Search stop" />
 
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Open map" />
+
     </LinearLayout>
 
 </RelativeLayout>

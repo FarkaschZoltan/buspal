@@ -8,5 +8,5 @@ public enum RouteType implements Serializable {
     TROLLEY,
     METRO,
     SUBURBAN_RAILWAY,
-    FERRY
+    FERRY;
 }
