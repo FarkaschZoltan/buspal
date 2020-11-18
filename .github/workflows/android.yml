@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: Checkstyle-report
-        path: /home/runner/work/new_test/new_test/app/app/build/reports/checkstyle/checkstyle.html
+        path: /home/runner/work/buspal/buspal/app/app/build/reports/checkstyle/checkstyle.html
     
     - name: "Adding Checkstyle annotations"
       uses: jwgmeligmeyling/checkstyle-github-action@master
@@ -47,9 +47,9 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: Lint-report
-        path: /home/runner/work/new_test/new_test/app/app/build/reports/lint-results.html
+        path: /home/runner/work/buspal/buspal/app/app/build/reports/lint-results.html
 
     - name: Adding Lint annotations
       uses: yutailang0119/action-android-lint@v1.0.2
       with:
-        xml_path: /home/runner/work/new_test/new_test/app/app/build/reports/lint-results.xml
+        xml_path: /home/runner/work/buspal/buspal/app/app/build/reports/lint-results.xml
