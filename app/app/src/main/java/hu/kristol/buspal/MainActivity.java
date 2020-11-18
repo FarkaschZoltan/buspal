@@ -103,8 +103,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkPermission(String permission, int requestCode)
-    {
+    public void checkPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(MainActivity.this, permission)
                 == PackageManager.PERMISSION_DENIED) {
 
@@ -112,8 +111,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[] { permission },
                     requestCode);
-        }
-        else {
+        } else {
             Toast.makeText(MainActivity.this,
                     "Permission already granted",
                     Toast.LENGTH_SHORT)
@@ -125,10 +123,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
-                                           @NonNull int[] grantResults)
-    {
-        super
-                .onRequestPermissionsResult(requestCode,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,
                         permissions,
                         grantResults);
 
@@ -139,38 +135,33 @@ public class MainActivity extends AppCompatActivity {
                         "Camera Permission Granted",
                         Toast.LENGTH_SHORT)
                         .show();
-            }
-            else {
+            } else {
                 Toast.makeText(MainActivity.this,
                         "Camera Permission Denied",
                         Toast.LENGTH_SHORT)
                         .show();
             }
-        }
-        else if (requestCode == 100) {
+        } else if (requestCode == 100) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(MainActivity.this,
                         "Storage Permission Granted",
                         Toast.LENGTH_SHORT)
                         .show();
-            }
-            else {
+            } else {
                 Toast.makeText(MainActivity.this,
                         "Storage Permission Denied",
                         Toast.LENGTH_SHORT)
                         .show();
             }
-        }
-        else if (requestCode == 102) {
+        } else if (requestCode == 102) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(MainActivity.this,
                         "Storage Permission Granted",
                         Toast.LENGTH_SHORT)
                         .show();
-            }
-            else {
+            } else {
                 Toast.makeText(MainActivity.this,
                         "Storage Permission Denied",
                         Toast.LENGTH_SHORT)

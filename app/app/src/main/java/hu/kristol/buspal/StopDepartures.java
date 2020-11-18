@@ -39,7 +39,7 @@ import hu.thepocok.statements.Statements;
 
 public class StopDepartures extends AppCompatActivity {
     private RequestQueue mRequestQueue;
-    String url = "http://[2a02:ab88:2bbb:aa80:78a6:c7e2:86b2:6f10]:9876/";
+    String url = hu.thepocok.serverlocation.ServerLocation.URL;
 
     List<BusRoute> routesList;
 
@@ -71,7 +71,8 @@ public class StopDepartures extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getDepartureFromStop(stopId, Integer.parseInt(currentDate)));
+        loadResources(url, "localhost", "postgres", "buspal", "budapest",
+                Statements.getDepartureFromStop(stopId, Integer.parseInt(currentDate)));
         //Log.d("Routes", mRequestQueue.getCache().get(url).toString());
     }
 
@@ -94,7 +95,8 @@ public class StopDepartures extends AppCompatActivity {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 int tripId = Integer.parseInt(jsonArray.getJSONObject(i).get("trip_id").toString());
                                 String name = jsonArray.getJSONObject(i).get("route_short_name").toString();
-                                Time departureTime = new Time(jsonArray.getJSONObject(i).get("departure_time").toString());
+                                Time departureTime = new Time(jsonArray.getJSONObject(i)
+                                        .get("departure_time").toString());
                                 String destination = jsonArray.getJSONObject(i).get("trip_headsign").toString();
 
                                 Departure d = new Departure(tripId, name, destination, departureTime);
@@ -106,7 +108,8 @@ public class StopDepartures extends AppCompatActivity {
                             }
 
                             //creating adapter object and setting it to recyclerview
-                            DepartureAdapter adapter = new DepartureAdapter(StopDepartures.this, resultArray, recyclerView);
+                            DepartureAdapter adapter = new DepartureAdapter(StopDepartures.this,
+                                    resultArray, recyclerView);
                             recyclerView.setAdapter(adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -118,8 +121,7 @@ public class StopDepartures extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.e("HttpClient", "error: " + error.toString());
                     }
-                })
-        {
+                }) {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
@@ -132,7 +134,8 @@ public class StopDepartures extends AppCompatActivity {
             }
         };
         int socketTimeout = 10000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         sr.setRetryPolicy(policy);
         mRequestQueue.add(sr);
     }

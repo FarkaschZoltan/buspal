@@ -42,7 +42,7 @@ import hu.thepocok.statements.Statements;
 
 public class Stops extends AppCompatActivity implements LocationListener {
     private RequestQueue mRequestQueue;
-    String url = "http://[2a02:ab88:2bbb:aa80:78a6:c7e2:86b2:6f10]:9876/";
+    String url = hu.thepocok.serverlocation.ServerLocation.URL;
 
     LocationManager locationManager;
     boolean locationFound = false;
@@ -66,14 +66,14 @@ public class Stops extends AppCompatActivity implements LocationListener {
         stopName = i.getStringExtra("stopName");
 
         if(stopName != null){
-            loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getStopsByNameWithRoutes(stopName.toLowerCase()));
+            loadResources(url, "localhost", "postgres", "buspal", "budapest",
+                    Statements.getStopsByNameWithRoutes(stopName.toLowerCase()));
         }
 
         if(ActivityCompat.checkSelfPermission(Stops.this,
         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             getLocation();
-        }
-        else{
+        } else{
             ActivityCompat.requestPermissions(Stops.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
@@ -108,8 +108,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
                                     busRoutes.add(r);
                                     Log.d("RoutesArray", busRoutes.toString());
                                     continue;
-                                }
-                                else {
+                                } else {
                                     if(i != 0) {
                                         BusStop b = new BusStop(lastStopId, name, c, distance, busRoutes);
                                         resultArray.add(b);
@@ -122,7 +121,8 @@ public class Stops extends AppCompatActivity implements LocationListener {
                                     lat = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lat").toString());
                                     lon = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lon").toString());
                                     try {
-                                        distance = Double.parseDouble(jsonArray.getJSONObject(i).get("distance").toString());
+                                        distance = Double.parseDouble(jsonArray.getJSONObject(i)
+                                                .get("distance").toString());
                                     } catch (JSONException e) {
                                         distance = -1;
                                     }
@@ -154,8 +154,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
                     public void onErrorResponse(VolleyError error) {
                         Log.e("HttpClient", "error: " + error.toString());
                     }
-                })
-        {
+                }) {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
@@ -168,13 +167,15 @@ public class Stops extends AppCompatActivity implements LocationListener {
             }
         };
         int socketTimeout = 10000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         sr.setRetryPolicy(policy);
         mRequestQueue.add(sr);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         if(requestCode == 44){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 getLocation();
@@ -187,7 +188,11 @@ public class Stops extends AppCompatActivity implements LocationListener {
         try {
             locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,Stops.this);
-        }catch (Exception e){
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }catch (SecurityException e){
+            e.printStackTrace();
+        }catch (RuntimeException e){
             e.printStackTrace();
         }
 
@@ -195,8 +200,9 @@ public class Stops extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        if(locationFound == false && stopName == null){
-            loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getNearbyStops(location.getLatitude(), location.getLongitude(), 0.5));
+        if(!locationFound && stopName == null){
+            loadResources(url, "localhost", "postgres", "buspal", "budapest",
+                    Statements.getNearbyStops(location.getLatitude(), location.getLongitude(), 0.5));
             locationFound = true;
         }
 

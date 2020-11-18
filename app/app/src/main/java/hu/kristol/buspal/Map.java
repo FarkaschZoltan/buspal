@@ -1,13 +1,9 @@
 package hu.kristol.buspal;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
-import hu.farkasch.buspalbackend.datastructures.Time;
 import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.thepocok.statements.Statements;
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,28 +31,23 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.osmdroid.config.Configuration;
 
-import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
-import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import hu.thepocok.statements.Statements;
 
 public class Map extends AppCompatActivity implements LocationListener {
+    private String url = hu.thepocok.serverlocation.ServerLocation.URL;
+
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     public static final GeoPoint MISKOLC = new GeoPoint(48.10367, 20.79933);
     public static final GeoPoint BUDAPEST = new GeoPoint(47.497913, 19.040236);
@@ -70,10 +61,13 @@ public class Map extends AppCompatActivity implements LocationListener {
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
-            if(locationFound == false){
+            if(!locationFound){
                 map.getOverlays().clear();
                 mapController.setCenter(new GeoPoint(location.getLatitude(), location.getLongitude()));
-                loadResources(hu.thepocok.serverlocation.ServerLocation.URL, "localhost", "postgres", "buspal", "budapest", Statements.getNearbyStops(location.getLatitude(), location.getLongitude(), 1));
+                loadResources(url,
+                        "localhost", "postgres", "buspal", "budapest",
+                        Statements.getNearbyStops(location.getLatitude(), location.getLongitude(),
+                                1));
                 locationFound = true;
             }
         }
@@ -118,13 +112,17 @@ public class Map extends AppCompatActivity implements LocationListener {
 
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, mLocationListener);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1,
+                1, mLocationListener);
     }
 
-    private void loadResources(String url, String host, String username, String password, String db, String statement){
+    private void loadResources(String url, String host, String username, String password,
+                               String db, String statement){
         StringRequest sr = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -153,8 +151,7 @@ public class Map extends AppCompatActivity implements LocationListener {
                                     busRoutes.add(r);
                                     Log.d("RoutesArray", busRoutes.toString());
                                     continue;
-                                }
-                                else {
+                                } else {
                                     if(i != 0) {
                                         BusStop b = new BusStop(lastStopId, name, c, distance, busRoutes);
                                         resultArray.add(b);
@@ -167,7 +164,8 @@ public class Map extends AppCompatActivity implements LocationListener {
                                     lat = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lat").toString());
                                     lon = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lon").toString());
                                     try {
-                                        distance = Double.parseDouble(jsonArray.getJSONObject(i).get("distance").toString());
+                                        distance = Double.parseDouble(jsonArray.getJSONObject(i)
+                                                .get("distance").toString());
                                     } catch (JSONException e) {
                                         distance = -1;
                                     }
@@ -189,12 +187,14 @@ public class Map extends AppCompatActivity implements LocationListener {
 
                             for(BusStop s : resultArray){
                                 Log.d("Stop", s.toString());
-                                OverlayItem olItem = new OverlayItem(s.getStopName(), "Buszmegálló", new GeoPoint(s.getCords().getLat(), s.getCords().getLon()));
+                                OverlayItem olItem = new OverlayItem(s.getStopName(), "Buszmegálló",
+                                        new GeoPoint(s.getCords().getLat(), s.getCords().getLon()));
                                 Log.d("Point", olItem.getPoint().toString());
                                 stopsOnMap.add(olItem);
                             }
 
-                            ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(stopsOnMap,
+                            ItemizedOverlayWithFocus<OverlayItem> mOverlay =
+                                    new ItemizedOverlayWithFocus<OverlayItem>(stopsOnMap,
                                     mCtx.getResources().getDrawable(R.drawable.bus_stop_icon),
                                     mCtx.getResources().getDrawable(R.drawable.bus_stop_icon),
                                     0,  new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
@@ -222,8 +222,7 @@ public class Map extends AppCompatActivity implements LocationListener {
                     public void onErrorResponse(VolleyError error) {
                         Log.e("HttpClient", "error: " + error.toString());
                     }
-                })
-        {
+                }) {
             @Override
             protected java.util.Map<String,String> getParams(){
                 java.util.Map<String,String> params = new HashMap<String, String>();
@@ -236,7 +235,8 @@ public class Map extends AppCompatActivity implements LocationListener {
             }
         };
         int socketTimeout = 10000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         sr.setRetryPolicy(policy);
         mRequestQueue.add(sr);
     }
@@ -294,8 +294,10 @@ public class Map extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        if(locationFound == false){
-            loadResources(hu.thepocok.serverlocation.ServerLocation.URL, "localhost", "postgres", "buspal", "budapest", Statements.getNearbyStops(location.getLatitude(), location.getLongitude(), 1));
+        if(!locationFound){
+            loadResources(url, "localhost", "postgres",
+                    "buspal", "budapest", Statements.getNearbyStops(location.getLatitude(),
+                            location.getLongitude(), 1));
             locationFound = true;
         }
     }

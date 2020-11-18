@@ -30,19 +30,16 @@ import hu.farkasch.buspalbackend.datastructures.Time;
 import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.farkasch.buspalbackend.objects.BusTrip;
 import hu.farkasch.buspalbackend.objects.Departure;
-import hu.thepocok.adapters.DepartureAdapter;
 import hu.thepocok.adapters.RouteStopsAdapter;
 import hu.thepocok.statements.Statements;
-import okhttp3.Route;
 
 public class RouteStops extends AppCompatActivity {
     private RequestQueue mRequestQueue;
-    String url = "http://[2a02:ab88:2bbb:aa80:78a6:c7e2:86b2:6f10]:9876/";
+    private String url = hu.thepocok.serverlocation.ServerLocation.URL;
 
-    BusTrip trip;
+    private BusTrip trip;
 
-    //the recyclerview
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,22 +77,28 @@ public class RouteStops extends AppCompatActivity {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 int tripId = Integer.parseInt(jsonArray.getJSONObject(i).get("trip_id").toString());
                                 int stopId = Integer.parseInt(jsonArray.getJSONObject(i).get("stop_id").toString());
-                                double stopLat = Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lat").toString());
-                                double stopLon= Double.parseDouble(jsonArray.getJSONObject(i).get("stop_lon").toString());
+                                double stopLat = Double.parseDouble(jsonArray.getJSONObject(i)
+                                        .get("stop_lat").toString());
+                                double stopLon= Double.parseDouble(jsonArray.getJSONObject(i)
+                                        .get("stop_lon").toString());
                                 String stopName = jsonArray.getJSONObject(i).get("stop_name").toString();
-                                Time departureTime = new Time(jsonArray.getJSONObject(i).get("departure_time").toString());
-                                int stop_sequence = Integer.parseInt(jsonArray.getJSONObject(i).get("stop_sequence").toString());
+                                Time departureTime = new Time(jsonArray.getJSONObject(i)
+                                        .get("departure_time").toString());
+                                int stop_sequence = Integer.parseInt(jsonArray.getJSONObject(i)
+                                        .get("stop_sequence").toString());
 
                                 if(i == 0){
                                     trip = new BusTrip(tripId);
                                 }
-                                BusStop bs = new BusStop(stopId, stopName, new Coordinates(stopLat, stopLon), stop_sequence, departureTime);
+                                BusStop bs = new BusStop(stopId, stopName, new Coordinates(stopLat, stopLon),
+                                        stop_sequence, departureTime);
                                 Log.d("Result", bs.toString());
                                 trip.addBusStop(bs);
                             }
 
                             //creating adapter object and setting it to recyclerview
-                            RouteStopsAdapter adapter = new RouteStopsAdapter(RouteStops.this, trip.getBusStopList(), recyclerView);
+                            RouteStopsAdapter adapter = new RouteStopsAdapter(RouteStops.this,
+                                    trip.getBusStopList(), recyclerView);
                             recyclerView.setAdapter(adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -107,8 +110,7 @@ public class RouteStops extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.e("HttpClient", "error: " + error.toString());
                     }
-                })
-        {
+                }) {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
@@ -121,7 +123,8 @@ public class RouteStops extends AppCompatActivity {
             }
         };
         int socketTimeout = 10000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         sr.setRetryPolicy(policy);
         mRequestQueue.add(sr);
     }

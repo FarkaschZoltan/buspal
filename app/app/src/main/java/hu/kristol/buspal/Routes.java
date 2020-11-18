@@ -32,12 +32,11 @@ import hu.thepocok.statements.Statements;
 
 public class Routes extends AppCompatActivity {
     private RequestQueue mRequestQueue;
-    String url = "http://[2a02:ab88:2bbb:aa80:78a6:c7e2:86b2:6f10]:9876/";
+    private String url = hu.thepocok.serverlocation.ServerLocation.URL;
 
-    List<Routes> routesList;
+    private List<Routes> routesList;
 
-    //the recyclerview
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +93,7 @@ public class Routes extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.e("HttpClient", "error: " + error.toString());
                     }
-                })
-        {
+                }) {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
@@ -108,7 +106,8 @@ public class Routes extends AppCompatActivity {
             }
         };
         int socketTimeout = 10000;
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         sr.setRetryPolicy(policy);
         mRequestQueue.add(sr);
     }
