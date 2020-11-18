@@ -29,8 +29,8 @@
                 
         <!-- Checks for imports -->
         <module name="AvoidStarImport"/>
-        <module name="UnusedImports"/>
         <module name="RedundantImport"/>
+        <module name="UnusedImports"/>
 
         <!-- Checks for coding -->
         <module name="NestedForDepth">
@@ -45,10 +45,6 @@
         <module name="ParameterNumber">
             <property name="max" value="6"/>
         </module>
-        <module name="LineLength">
-            <property name="max" value="120"/>
-        </module>
-        
 
         <!-- Checks for code logic problems -->
         <module name="AvoidDoubleBraceInitialization"/>
@@ -64,5 +60,9 @@
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
+    </module>
+
+    <module name="LineLength">
+            <property name="max" value="120"/>
     </module>
 </module>
