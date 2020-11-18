@@ -18,7 +18,9 @@ public class BusLine{
         currentStopTimes = new ArrayList<Time>();
     }
 
-    public BusLine(String lineName, BusStop currentStop, int direction, ArrayList<BusStop> busStops, ArrayList<Time> currentStopTimes) { //busStops will already be sorted with the help of getStopsByRouteShortName statement
+    public BusLine(String lineName, BusStop currentStop, int direction, ArrayList<BusStop> busStops,
+                   ArrayList<Time> currentStopTimes) {
+        //busStops will already be sorted with the help of getStopsByRouteShortName statement
         this.lineName = lineName;
         this.currentStop = currentStop;
         this.direction = direction;

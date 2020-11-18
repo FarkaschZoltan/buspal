@@ -17,7 +17,8 @@ public class Time implements Comparable<Time>{
         this.second = second;
     }
 
-    public Time(String timeData){ //constructing with the help of a string, delimited with ":", assuming only correct values
+    public Time(String timeData){
+        //constructing with the help of a string, delimited with ":", assuming only correct values
         String[] timeArray = timeData.split(":");
         hour = Integer.parseInt(timeArray[0]);
         minute = Integer.parseInt(timeArray[1]);
@@ -65,7 +66,8 @@ public class Time implements Comparable<Time>{
     public void add(Time timeToAdd){ //adding two Time-s together
         int newSecond = (second + timeToAdd.getSecond()) % 60;
         int newMinute = (minute + timeToAdd.getMinute() + (second + timeToAdd.getSecond()) / 60) % 60;
-        int newHour = (hour + timeToAdd.getHour() + (minute + timeToAdd.getMinute() + (second + timeToAdd.getSecond()) / 60) / 60) % 24;
+        int newHour = (hour + timeToAdd.getHour() + (minute + timeToAdd.getMinute() +
+                (second + timeToAdd.getSecond()) / 60) / 60) % 24;
         second = newSecond;
         minute = newMinute;
         hour = newHour;
@@ -105,16 +107,14 @@ public class Time implements Comparable<Time>{
 
         if(hour < 10){
             time += "0" + hour;
-        }
-        else{
+        } else{
             time += hour;
         }
 
         time += ":";
         if(minute < 10){
             time += "0" + minute;
-        }
-        else{
+        } else{
             time += minute;
         }
 
@@ -127,19 +127,16 @@ public class Time implements Comparable<Time>{
 
             if(hour < 10){
                 time += "0" + hour;
-            }
-            else if(hour >= 24){
+            } else if(hour >= 24){
                 time += "0" + (hour-24);
-            }
-            else{
+            } else{
                 time += hour;
             }
 
             time += ":";
             if(minute < 10){
                 time += "0" + minute;
-            }
-            else{
+            } else{
                 time += minute;
             }
             return time;
@@ -149,18 +146,16 @@ public class Time implements Comparable<Time>{
     public int compareTo(Time t) {
         if(hour > t.hour){
             return 1;
-        }
-        else if (hour < t.hour){
+        } else if (hour < t.hour){
             return -1;
-        }
-        else {
+        } else {
             if(minute > t.minute){
                 return 1;
             }
+
             if (minute < t.minute){
                 return -1;
-            }
-            else {
+            } else {
                 return 0;
             }
         }
@@ -178,11 +173,6 @@ public class Time implements Comparable<Time>{
 
         Time t = (Time) o;
 
-        if(hour == t.hour && minute == t.minute){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return hour == t.hour && minute == t.minute;
     }
 }

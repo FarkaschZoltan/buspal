@@ -62,17 +62,13 @@ public class Departure implements Serializable { //everything is public for easi
         System.out.println("----------------------------------------");
         */
 
-
-        if(routeName.equals(d.routeName) && destination.equals(d.destination) && departureTimeT.equals(departureTimeDT)){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return routeName.equals(d.routeName) && destination.equals(d.destination)
+                && departureTimeT.equals(departureTimeDT);
     }
 
     @Override
     public String toString(){
-        return String.format("trip id: " + tripId + ", route name: " + routeName + ", destination: " + destination + ", departure time: " + departureTime );
+        return String.format("trip id: " + tripId + ", route name: " + routeName
+                + ", destination: " + destination + ", departure time: " + departureTime );
     }
 }

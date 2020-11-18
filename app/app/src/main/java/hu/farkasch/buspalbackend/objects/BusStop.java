@@ -50,7 +50,8 @@ public class BusStop implements Comparable<BusStop>, Serializable {
 
     }
 
-    public BusStop(int stopId, String stopName, Coordinates cords, double distanceFromPosition, ArrayList<BusRoute> routes){
+    public BusStop(int stopId, String stopName, Coordinates cords, double distanceFromPosition,
+                   ArrayList<BusRoute> routes){
         this.stopId = stopId;
         this.stopName = stopName;
         this.cords = cords;
@@ -135,7 +136,9 @@ public class BusStop implements Comparable<BusStop>, Serializable {
 
     @Override
     public String toString(){ //not finished yet(?)
-        return String.format("id: " + stopId + ", name: " + stopName + ", coordinates: " + cords + ", distance: " + distanceFromPosition + ", " + testDepartureTime + ", " + departureTime);
+        return String.format("id: " + stopId + ", name: " + stopName
+                + ", coordinates: " + cords + ", distance: " + distanceFromPosition
+                + ", " + testDepartureTime + ", " + departureTime);
     }
 
     @Override

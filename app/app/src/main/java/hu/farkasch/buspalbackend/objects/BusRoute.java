@@ -54,6 +54,9 @@ public class BusRoute implements Serializable {
             case 800:
                 this.type = RouteType.TROLLEY;
                 break;
+            default:
+                this.type = null;
+                break;
         }
         this.destinations = "";
     }
@@ -84,6 +87,9 @@ public class BusRoute implements Serializable {
             case 800:
                 this.type = RouteType.TROLLEY;
                 break;
+            default:
+                this.type = null;
+                break;
         }
         this.destinations = destinations;
     }
@@ -112,6 +118,9 @@ public class BusRoute implements Serializable {
                 break;
             case 800:
                 this.type = RouteType.TROLLEY;
+                break;
+            default:
+                this.type = null;
                 break;
         }
     }
