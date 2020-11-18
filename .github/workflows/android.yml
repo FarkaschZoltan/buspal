@@ -30,7 +30,7 @@ jobs:
 
     - name: Running Checkstyle
       working-directory: ./app
-      run: ./gradlew checkstyle
+      run: ./gradlew checkstyle --stacktrace
 
     - name: Attach Checkstyle reports
       uses: actions/upload-artifact@v1
