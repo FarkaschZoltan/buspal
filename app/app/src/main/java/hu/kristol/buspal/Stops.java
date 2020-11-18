@@ -28,10 +28,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
@@ -190,9 +188,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,Stops.this);
         }catch (IllegalArgumentException e){
             e.printStackTrace();
-        }catch (SecurityException e){
-            e.printStackTrace();
-        }catch (RuntimeException e){
+        }catch (SecurityException e) {
             e.printStackTrace();
         }
 

@@ -12,6 +12,8 @@ import retrofit2.http.Query;
 
 public interface StopDepartureInterface {
     @GET("index.php?")
-    Call<List<Departure>> departureList(@Query("username") String username, @Query("password") String password, @Query("host") String host, @Query("database") String db_name, @Query("statement") String statement);
+    Call<List<Departure>> departureList(@Query("username") String username, @Query("password") String password,
+                                        @Query("host") String host, @Query("database") String databaseName,
+                                        @Query("statement") String statement);
 
 }

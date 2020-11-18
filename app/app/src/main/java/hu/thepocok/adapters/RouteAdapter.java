@@ -67,6 +67,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
                 }else if(route.getName().equals("H8") || route.getName().equals("H9")){
                     holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_8));
                 }
+            default:
+                holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));
+                break;
         }
     }
 

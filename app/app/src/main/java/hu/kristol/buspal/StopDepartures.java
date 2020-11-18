@@ -31,10 +31,8 @@ import java.util.Map;
 
 import hu.farkasch.buspalbackend.datastructures.Time;
 import hu.farkasch.buspalbackend.objects.BusRoute;
-import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.farkasch.buspalbackend.objects.Departure;
 import hu.thepocok.adapters.DepartureAdapter;
-import hu.thepocok.adapters.RouteAdapter;
 import hu.thepocok.statements.Statements;
 
 public class StopDepartures extends AppCompatActivity {

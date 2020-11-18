@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import hu.farkasch.buspalbackend.objects.BusStop;
-import hu.farkasch.buspalbackend.objects.Departure;
 import hu.kristol.buspal.R;
-import hu.kristol.buspal.RouteStops;
 import hu.kristol.buspal.StopDepartures;
 
 public class RouteStopsAdapter extends RecyclerView.Adapter<RouteStopsAdapter.RouteStopViewHolder>{

@@ -15,29 +15,31 @@ public class Statements {
     }
 
     public static String getScheduleByTripId(int tripId) {
-        String statement = "SELECT stop_times.trip_id, stop_times.departure_time, stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence FROM routes \n" +
+        String statement = "SELECT stop_times.trip_id, stop_times.departure_time, stops.stop_id, " +
+                "stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence FROM routes \n" +
                 "INNER JOIN trips on routes.route_id = trips.route_id \n" +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id \n" +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id \n" +
                 "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id\n" +
                 "WHERE trips.trip_id = " + tripId +"\n" +
-                "GROUP BY stop_times.trip_id, stop_times.departure_time, stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence\n" +
+                "GROUP BY stop_times.trip_id, stop_times.departure_time, " +
+                "stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence\n" +
                 "ORDER BY stop_times.stop_sequence";
 
         return statement;
     }
 
-    public static String getRoutesByStop(String stop, String db_name) {
+    public static String getRoutesByStop(String stop, String databaseName) {
         String statement = "";
-        if(db_name.equals("Budapest")){
-            statement = "SELECT DISTINCT routes.route_id, routes.route_short_name, routes.route_type, routes.route_desc FROM routes " +
+        if(databaseName.equals("Budapest")){
+            statement = "SELECT DISTINCT routes.route_id, routes.route_short_name, " +
+                    "routes.route_type, routes.route_desc FROM routes " +
                     "INNER JOIN trips on routes.route_id = trips.route_id " +
                     "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
                     "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
                     "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id " +
                     "WHERE stops.stop_name LIKE '" + stop + "%' ORDER BY routes.route_short_name";
-        }
-        else{
+        } else{
             statement = "SELECT DISTINCT routes.route_id, routes.route_short_name, routes.route_type FROM routes " +
                     "INNER JOIN trips on routes.route_id = trips.route_id " +
                     "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
@@ -65,7 +67,8 @@ public class Statements {
         trip2 - stop2
         ...
     */
-    public static String getStopsByRouteShortName(String routeShortName, int direction){ //this statement sorts the stops in ascending order according to stop_sequence
+    public static String getStopsByRouteShortName(String routeShortName, int direction){
+        //this statement sorts the stops in ascending order according to stop_sequence
         String statement = "SELECT DISTINCT stops.stop_name, stop_times.stop_sequence FROM routes " +
                 "INNER JOIN trips ON routes.route_id = trips.route_id " +
                 "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id " +
@@ -75,41 +78,42 @@ public class Statements {
         return statement;
     }
 
-    public static String getRouteDeparturesFromStop(int stop_id){
+    public static String getRouteDeparturesFromStop(int stopId){
         String statement = "SELECT stop_times.departure_time, routes.route_short_name\n" +
                 "FROM routes\n" +
                 "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
                 "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
-                "WHERE stop_times.stop_id = " + stop_id + "\n" +
+                "WHERE stop_times.stop_id = " + stopId + "\n" +
                 "GROUP BY stop_times.departure_time, routes.route_short_name\n" +
                 "ORDER BY departure_time";
         return statement;
     }
 
-    public static String routeFirstStop(int trip_id){
+    public static String routeFirstStop(int tripId){
         String statement = "SELECT stops.stop_name\n" +
                 "FROM stops\n" +
                 "INNER JOIN stop_times on stop_times.stop_id = stops.stop_id\n" +
-                "WHERE stop_times.stop_sequence = 0 AND stop_times.trip_id = " + trip_id;
+                "WHERE stop_times.stop_sequence = 0 AND stop_times.trip_id = " + tripId;
         return statement;
     }
 
-    public static String routeLastStop(int trip_id){
+    public static String routeLastStop(int tripId){
         String statement = "SELECT stops.stop_name\n" +
                 "FROM stops\n" +
                 "INNER JOIN stop_times on stop_times.stop_id = stops.stop_id\n" +
                 "WHERE stop_times.stop_sequence IN (SELECT trip_lengths.line_length FROM trip_lengths " +
-                "WHERE trip_lengths.trip_id = " + trip_id + ") AND stop_times.trip_id = " + trip_id;
+                "WHERE trip_lengths.trip_id = " + tripId + ") AND stop_times.trip_id = " + tripId;
         return statement;
     }
 
-    public static String getDepartureFromStop(int stop_id, int date){
-        String statement = "SELECT trips.trip_id, stop_times.departure_time, routes.route_short_name, trips.trip_headsign \n" +
+    public static String getDepartureFromStop(int stopId, int date){
+        String statement = "SELECT trips.trip_id, stop_times.departure_time, routes.route_short_name, " +
+                "trips.trip_headsign \n" +
                 "FROM routes\n" +
                 "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
                 "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
                 "INNER JOIN calendar_dates ON calendar_dates.service_id = trips.service_id\n" +
-                "WHERE stop_times.stop_id = " + stop_id + " AND calendar_dates.date = "+ date + "\n" +
+                "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = "+ date + "\n" +
                 "GROUP BY trips.trip_id, trips.trip_headsign, stop_times.departure_time, routes.route_short_name\n" +
                 "ORDER BY departure_time";
         return statement;
@@ -117,7 +121,8 @@ public class Statements {
 
     public static String getNearbyStops(double lat, double lon, double distance){
         String statement = "SELECT\n" +
-                "stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, routes.route_short_name, routes.route_type, \n" +
+                "stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, " +
+                "routes.route_short_name, routes.route_type, \n" +
                 "(\n" +
                 "  6371 * acos (\n" +
                 "      cos ( radians(" + lat + ") )\n" +
@@ -131,7 +136,8 @@ public class Statements {
                 "INNER JOIN trips on routes.route_id = trips.route_id \n" +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id \n" +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id \n" +
-                "GROUP BY stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, routes.route_short_name, routes.route_type\n" +
+                "GROUP BY stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, " +
+                "routes.route_short_name, routes.route_type\n" +
                 "HAVING (\n" +
                 "  6371 * acos (\n" +
                 "      cos ( radians(" + lat + ") )\n" +
@@ -153,13 +159,15 @@ public class Statements {
     }
 
     public static String getStopsByNameWithRoutes(String stopName){
-        String statement = "SELECT stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, routes.route_short_name, routes.route_type\n" +
+        String statement = "SELECT stops.stop_id, stops.stop_name, stops.stop_lat, " +
+                "stops.stop_lon, routes.route_short_name, routes.route_type\n" +
                 "FROM routes\n" +
                 "INNER JOIN trips on routes.route_id = trips.route_id \n" +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id \n" +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id \n" +
                 "WHERE LOWER(stops.stop_name) LIKE '" + stopName + "%'\n" +
-                "GROUP BY stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, routes.route_short_name, routes.route_type\n" +
+                "GROUP BY stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, " +
+                "routes.route_short_name, routes.route_type\n" +
                 "ORDER BY stops.stop_id";
         return statement;
     }

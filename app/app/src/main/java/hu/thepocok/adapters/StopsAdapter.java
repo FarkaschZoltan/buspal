@@ -55,8 +55,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
         holder.stopName.setText(stop.getStopName());
         if(stop.getDistance() < 0){
             holder.stopDistance.setText(" ");
-        }
-        else{
+        } else{
             holder.stopDistance.setText(stop.getDistance() + " m");
         }
 
@@ -64,22 +63,30 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
             if(i <= stop.stoppingRoutes.size()) {
                 switch (i) {
                     case 1:
-                        setProperties(holder.route1, stop.stoppingRoutes.get(0).getType(), stop.stoppingRoutes.get(0).getName());
+                        setProperties(holder.route1, stop.stoppingRoutes.get(0).getType(),
+                                stop.stoppingRoutes.get(0).getName());
                         break;
                     case 2:
-                        setProperties(holder.route2, stop.stoppingRoutes.get(1).getType(), stop.stoppingRoutes.get(1).getName());
+                        setProperties(holder.route2, stop.stoppingRoutes.get(1).getType(),
+                                stop.stoppingRoutes.get(1).getName());
                         break;
                     case 3:
-                        setProperties(holder.route3, stop.stoppingRoutes.get(2).getType(), stop.stoppingRoutes.get(2).getName());
+                        setProperties(holder.route3, stop.stoppingRoutes.get(2).getType(),
+                                stop.stoppingRoutes.get(2).getName());
                         break;
                     case 4:
-                        setProperties(holder.route4, stop.stoppingRoutes.get(3).getType(), stop.stoppingRoutes.get(3).getName());
+                        setProperties(holder.route4, stop.stoppingRoutes.get(3).getType(),
+                                stop.stoppingRoutes.get(3).getName());
                         break;
                     case 5:
-                        setProperties(holder.route5, stop.stoppingRoutes.get(4).getType(), stop.stoppingRoutes.get(4).getName());
+                        setProperties(holder.route5, stop.stoppingRoutes.get(4).getType(),
+                                stop.stoppingRoutes.get(4).getName());
                         break;
                     case 6:
-                        setProperties(holder.route6, stop.stoppingRoutes.get(5).getType(), stop.stoppingRoutes.get(5).getName());
+                        setProperties(holder.route6, stop.stoppingRoutes.get(5).getType(),
+                                stop.stoppingRoutes.get(5).getName());
+                        break;
+                    default:
                         break;
                 }
             }
@@ -90,7 +97,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
         tv.setText(name);
         switch (type){
             case BUS:
-               tv.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));
+                tv.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));
                 break;
             case TRAM:
                 tv.setBackgroundColor(mCtx.getResources().getColor(R.color.tram));
@@ -119,6 +126,9 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
                 }else if(name.equals("H8") || name.equals("H9")){
                     tv.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_8));
                 }
+            default:
+                tv.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));
+                break;
         }
     }
 
