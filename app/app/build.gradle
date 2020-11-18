@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'checkstyle'
 
 android {
 
@@ -46,4 +47,16 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+}
+
+task checkstyle(type: Checkstyle) {
+    group "verification"
+    configFile file("$project.rootDir/tools/checkstyle.xml")
+    source "src"
+    classpath = files()
+    ignoreFailures = true
+    reports{
+        xml.enabled true
+        html.enabled true
+    }
 }

@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -28,3 +27,18 @@ jobs:
     - name: Unit tests
       working-directory: ./app
       run: ./gradlew test
+
+    - name: Running Checkstyle
+      working-directory: ./app
+      run: ./gradlew checkstyle
+
+    - name: Attach Checkstyle reports
+      uses: actions/upload-artifact@v1
+      with:
+        name: Checkstyle-report
+        path: /home/runner/work/new_test/new_test/app/app/build/reports/checkstyle/checkstyle.html
+    
+    - name: "Adding Checkstyle annotations"
+      uses: jwgmeligmeyling/checkstyle-github-action@master
+      with:
+        path: '**/checkstyle.xml'
