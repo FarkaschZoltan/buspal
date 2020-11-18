@@ -6,7 +6,7 @@
     <module name="FileTabCharacter"/>
     <module name="TreeWalker">
         <!-- Checks for naming conventions -->
-        <module name="AbbreviationsAsWordInName"/>
+        <module name="AbbreviationAsWordInName"/>
         <module name="ConstantName"/>
         <module name="MethodName"/>
         <module name="PackageName"/>
