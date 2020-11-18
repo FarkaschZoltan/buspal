@@ -1,5 +1,6 @@
 package hu.thepocok.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -31,7 +32,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
     @Override
     public StopsAdapter.StopsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mCtx);
-        View view = inflater.inflate(R.layout.stops_list, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.stops_list, null);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

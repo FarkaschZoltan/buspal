@@ -1,5 +1,6 @@
 package hu.thepocok.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -30,7 +31,7 @@ public class DepartureAdapter extends RecyclerView.Adapter<DepartureAdapter.Depa
     @Override
     public DepartureAdapter.DepartureViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mCtx);
-        View view = inflater.inflate(R.layout.departure_list, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.departure_list, null);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

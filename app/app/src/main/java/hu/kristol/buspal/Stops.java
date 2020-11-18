@@ -30,6 +30,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
@@ -65,7 +66,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
 
         if(stopName != null){
             loadResources(url, "localhost", "postgres", "buspal", "budapest",
-                    Statements.getStopsByNameWithRoutes(stopName.toLowerCase()));
+                    Statements.getStopsByNameWithRoutes(stopName.toLowerCase(Locale.getDefault())));
         }
 
         if(ActivityCompat.checkSelfPermission(Stops.this,
