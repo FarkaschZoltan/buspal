@@ -42,3 +42,14 @@ jobs:
       uses: jwgmeligmeyling/checkstyle-github-action@master
       with:
         path: '**/checkstyle.xml'
+
+    - name: Attach Lint reports
+      uses: actions/upload-artifact@v1
+      with:
+        name: Lint-report
+        path: /home/runner/work/new_test/new_test/app/app/build/reports/lint-results.html
+
+    - name: Adding Lint annotations
+      uses: yutailang0119/action-android-lint@v1.0.2
+      with:
+        xml_path: /home/runner/work/new_test/new_test/app/app/build/reports/lint-results.xml
