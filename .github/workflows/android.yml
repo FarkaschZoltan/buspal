@@ -43,6 +43,10 @@ jobs:
       with:
         path: '**/checkstyle.xml'
 
+    - name: Running Lint
+      working-directory: ./app
+      run: ./gradlew lint
+
     - name: Attach Lint reports
       uses: actions/upload-artifact@v1
       with:
