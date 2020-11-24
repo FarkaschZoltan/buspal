@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -72,7 +73,7 @@ public class Map extends AppCompatActivity implements LocationListener {
                 loadResources(url,
                         "localhost", "postgres", "buspal", "budapest",
                         Statements.getNearbyStops(location.getLatitude(), location.getLongitude(),
-                                1));
+                                3));
                 locationFound = true;
             }
             currentLat = location.getLatitude();
@@ -135,6 +136,15 @@ public class Map extends AppCompatActivity implements LocationListener {
                 mCtx.startActivity(i);*/
                 mapController.setCenter(new GeoPoint(currentLat, currentLon));
                 mapController.setZoom(16.0);
+            }
+        });
+
+        FloatingActionButton nearbyStopsList = findViewById(R.id.nearby_stops_list);
+        nearbyStopsList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mCtx, Stops.class);
+                mCtx.startActivity(i);
             }
         });
     }
@@ -213,8 +223,8 @@ public class Map extends AppCompatActivity implements LocationListener {
 
                             ItemizedOverlayWithFocus<OverlayItem> mOverlay =
                                     new ItemizedOverlayWithFocus<OverlayItem>(stopsOnMap,
-                                    mCtx.getResources().getDrawable(R.drawable.bus_stop_icon),
-                                    mCtx.getResources().getDrawable(R.drawable.bus_stop_icon),
+                                    mCtx.getResources().getDrawable(R.drawable.bus_stop),
+                                    mCtx.getResources().getDrawable(R.drawable.bus_stop),
                                     0,  new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                                 @Override
                                 public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
@@ -315,7 +325,7 @@ public class Map extends AppCompatActivity implements LocationListener {
         if(!locationFound){
             loadResources(url, "localhost", "postgres",
                     "buspal", "budapest", Statements.getNearbyStops(location.getLatitude(),
-                            location.getLongitude(), 1));
+                            location.getLongitude(), 3));
             locationFound = true;
         }
     }

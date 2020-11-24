@@ -16,6 +16,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/nearby_stops_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_menu_offline"
+        app:layout_constraintCircle="@+id/my_location"
+        app:layout_constraintCircleAngle="270"
+        app:layout_constraintCircleRadius="70dp"
+        tools:ignore="MissingConstraints" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
