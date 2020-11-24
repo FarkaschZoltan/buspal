@@ -32,7 +32,6 @@ import hu.farkasch.buspalbackend.datastructures.Time;
 import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.farkasch.buspalbackend.objects.BusTrip;
 import hu.farkasch.buspalbackend.objects.Departure;
-import hu.farkasch.buspalbackend.objects.RouteType;
 import hu.thepocok.adapters.RouteStopsAdapter;
 import hu.thepocok.statements.Statements;
 

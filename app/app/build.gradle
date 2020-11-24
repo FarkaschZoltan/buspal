@@ -66,7 +66,7 @@ task checkstyle(type: Checkstyle) {
     configFile file("$project.rootDir/tools/checkstyle.xml")
     source "src"
     classpath = files()
-    ignoreFailures = false
+    ignoreFailures = true
     reports{
         xml.enabled true
         html.enabled true
