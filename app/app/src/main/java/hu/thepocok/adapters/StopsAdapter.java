@@ -9,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import hu.farkasch.buspalbackend.objects.BusStop;
-import hu.farkasch.buspalbackend.objects.RouteType;
 import hu.kristol.buspal.R;
 import hu.kristol.buspal.StopDepartures;
 
@@ -52,6 +52,8 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
     @Override
     public void onBindViewHolder(StopsAdapter.StopsViewHolder holder, int position) {
         BusStop stop = stopsList.get(position);
+        Log.d("OnBind", stop.toString());
+        Log.d("OnBind", stop.stoppingRoutes.toString());
 
         holder.stopName.setText(stop.getStopName());
         if(stop.getDistance() < 0){
@@ -60,78 +62,11 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
             holder.stopDistance.setText(stop.getDistance() + " m");
         }
 
-        for(int i = 1; i < 7; i++){
-            if(i <= stop.stoppingRoutes.size()) {
-                switch (i) {
-                    case 1:
-                        setProperties(holder.route1, stop.stoppingRoutes.get(0).getType(),
-                                stop.stoppingRoutes.get(0).getName());
-                        break;
-                    case 2:
-                        setProperties(holder.route2, stop.stoppingRoutes.get(1).getType(),
-                                stop.stoppingRoutes.get(1).getName());
-                        break;
-                    case 3:
-                        setProperties(holder.route3, stop.stoppingRoutes.get(2).getType(),
-                                stop.stoppingRoutes.get(2).getName());
-                        break;
-                    case 4:
-                        setProperties(holder.route4, stop.stoppingRoutes.get(3).getType(),
-                                stop.stoppingRoutes.get(3).getName());
-                        break;
-                    case 5:
-                        setProperties(holder.route5, stop.stoppingRoutes.get(4).getType(),
-                                stop.stoppingRoutes.get(4).getName());
-                        break;
-                    case 6:
-                        setProperties(holder.route6, stop.stoppingRoutes.get(5).getType(),
-                                stop.stoppingRoutes.get(5).getName());
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
+        StoppingRoutesAdapter adapter = new StoppingRoutesAdapter(mCtx,
+                stop.stoppingRoutes, holder.stoppingRoutes, stop.getStopId(), stop.getStopName());
+        holder.stoppingRoutes.setLayoutManager(new LinearLayoutManager(mCtx, LinearLayoutManager.HORIZONTAL, false));
 
-    public void setProperties(TextView tv, RouteType type, String name){
-        tv.setText(name);
-        Log.d("routeType", type.toString());
-        switch (type){
-            case BUS:
-                tv.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));
-                break;
-            case TRAM:
-                tv.setBackgroundColor(mCtx.getResources().getColor(R.color.tram));
-                break;
-            case TROLLEY:
-                tv.setBackgroundColor(mCtx.getResources().getColor(R.color.trolley));
-                break;
-            case METRO:
-                if(name.equals("M1")){
-                    tv.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_1));
-                }else if(name.equals("M2")){
-                    tv.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_2));
-                }else if(name.equals("M3")){
-                    tv.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_3));
-                }else if(name.equals("M4")){
-                    tv.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_4));
-                }
-                break;
-            case SUBURBAN_RAILWAY:
-                if(name.equals("H5")){
-                    tv.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_5));
-                }else if(name.equals("H6")){
-                    tv.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_6));
-                }else if(name.equals("H7")){
-                    tv.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_7));
-                }else if(name.equals("H8") || name.equals("H9")){
-                    tv.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_8));
-                }
-            default:
-                tv.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));
-                break;
-        }
+        holder.stoppingRoutes.setAdapter(adapter);
     }
 
     @Override
@@ -142,7 +77,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
     class StopsViewHolder extends RecyclerView.ViewHolder {
 
         TextView stopName, stopDistance;
-        TextView route1, route2, route3, route4, route5, route6;
+        RecyclerView stoppingRoutes;
 
         public StopsViewHolder(View itemView) {
             super(itemView);
@@ -150,12 +85,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
             stopName = itemView.findViewById(R.id.stop_name);
             stopDistance = itemView.findViewById(R.id.stop_distance);
 
-            route1 = itemView.findViewById(R.id.route1);
-            route2 = itemView.findViewById(R.id.route2);
-            route3 = itemView.findViewById(R.id.route3);
-            route4 = itemView.findViewById(R.id.route4);
-            route5 = itemView.findViewById(R.id.route5);
-            route6 = itemView.findViewById(R.id.route6);
+            stoppingRoutes = itemView.findViewById(R.id.stopping_routes);
         }
     }
 }

@@ -70,49 +70,56 @@ public class RouteStops extends AppCompatActivity {
         switch (routeType){
             case 0:
                 toolbar.setBackgroundColor(this.getResources().getColor(R.color.tram));
-                window.setStatusBarColor(this.getResources().getColor(R.color.tramDark));
+                window.setStatusBarColor(this.getResources().getColor(R.color.tram_dark));
                 break;
             case 1:
                 if(routeName.equals("M1")){
                     toolbar.setBackgroundColor(this.getResources().getColor(R.color.metro_1));
-                    window.setStatusBarColor(this.getResources().getColor(R.color.metro_1Dark));
+                    window.setStatusBarColor(this.getResources().getColor(R.color.metro_1_dark));
                 }else if(routeName.equals("M2")){
                     toolbar.setBackgroundColor(this.getResources().getColor(R.color.metro_2));
-                    window.setStatusBarColor(this.getResources().getColor(R.color.metro_2Dark));
+                    window.setStatusBarColor(this.getResources().getColor(R.color.metro_2_dark));
                 }else if(routeName.equals("M3")){
                     toolbar.setBackgroundColor(this.getResources().getColor(R.color.metro_3));
-                    window.setStatusBarColor(this.getResources().getColor(R.color.metro_3Dark));
+                    window.setStatusBarColor(this.getResources().getColor(R.color.metro_3_dark));
                 }else if(routeName.equals("M4")){
                     toolbar.setBackgroundColor(this.getResources().getColor(R.color.metro_4));
-                    window.setStatusBarColor(this.getResources().getColor(R.color.metro_4Dark));
+                    window.setStatusBarColor(this.getResources().getColor(R.color.metro_4_dark));
                 }
                 break;
             case 3:
-                toolbar.setBackgroundColor(this.getResources().getColor(R.color.bus));
-                window.setStatusBarColor(this.getResources().getColor(R.color.busDark));
+                if(routeName.charAt(0) == '9' && routeName.length() >= 3){
+                    toolbar.setBackgroundColor(this.getResources().getColor(R.color.night_bus));
+                    window.setStatusBarColor(this.getResources().getColor(R.color.night_bus_dark));
+                } else{
+                    toolbar.setBackgroundColor(this.getResources().getColor(R.color.bus));
+                    window.setStatusBarColor(this.getResources().getColor(R.color.bus_dark));
+                }
+
                 break;
             case 11:
             case 800:
                 toolbar.setBackgroundColor(this.getResources().getColor(R.color.trolley));
-                window.setStatusBarColor(this.getResources().getColor(R.color.trolleyDark));
+                window.setStatusBarColor(this.getResources().getColor(R.color.trolley_dark));
                 break;
             case 109:
                 if(routeName.equals("H5")){
                     toolbar.setBackgroundColor(this.getResources().getColor(R.color.suburban_5));
-                    window.setStatusBarColor(this.getResources().getColor(R.color.suburban_5Dark));
+                    window.setStatusBarColor(this.getResources().getColor(R.color.suburban_5_dark));
                 }else if(routeName.equals("H6")){
                     toolbar.setBackgroundColor(this.getResources().getColor(R.color.suburban_6));
-                    window.setStatusBarColor(this.getResources().getColor(R.color.suburban_6Dark));
+                    window.setStatusBarColor(this.getResources().getColor(R.color.suburban_6_dark));
                 }else if(routeName.equals("H7")){
                     toolbar.setBackgroundColor(this.getResources().getColor(R.color.suburban_7));
-                    window.setStatusBarColor(this.getResources().getColor(R.color.suburban_7Dark));
+                    window.setStatusBarColor(this.getResources().getColor(R.color.suburban_7_dark));
                 }else if(routeName.equals("H8") || routeName.equals("H9")){
                     toolbar.setBackgroundColor(this.getResources().getColor(R.color.suburban_8));
-                    window.setStatusBarColor(this.getResources().getColor(R.color.suburban_8Dark));
+                    window.setStatusBarColor(this.getResources().getColor(R.color.suburban_8_dark));
                 }
                 break;
             default:
                 toolbar.setBackgroundColor(this.getResources().getColor(R.color.bus));
+                window.setStatusBarColor(this.getResources().getColor(R.color.bus_dark));
                 break;
         }
 

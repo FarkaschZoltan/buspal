@@ -120,6 +120,21 @@ public class Statements {
         return statement;
     }
 
+    public static String getDepartureFromStopByRouteName(int stopId, String routeName, int date){
+        String statement = "SELECT trips.trip_id, stop_times.departure_time, routes.route_short_name," +
+                " routes.route_type, trips.trip_headsign \n" +
+                "FROM routes\n" +
+                "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
+                "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
+                "INNER JOIN calendar_dates ON calendar_dates.service_id = trips.service_id\n" +
+                "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = "+ date +
+                "AND route_short_name = '"+ routeName + "'\n" +
+                "GROUP BY trips.trip_id, trips.trip_headsign, stop_times.departure_time, " +
+                "routes.route_short_name, routes.route_type\n" +
+                "ORDER BY departure_time";
+        return statement;
+    }
+
     public static String getNearbyStops(double lat, double lon, double distance){
         String statement = "SELECT\n" +
                 "stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, " +

@@ -143,6 +143,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
                             //creating adapter object and setting it to recyclerview
                             StopsAdapter adapter = new StopsAdapter(Stops.this, resultArray, recyclerView);
                             recyclerView.setAdapter(adapter);
+                            recyclerView.setNestedScrollingEnabled(false);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

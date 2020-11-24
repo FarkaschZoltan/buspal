@@ -8,22 +8,26 @@
 
         <TextView
             android:id="@+id/stop_name"
-            android:layout_width="360dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:text="Boráros tér H"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/stop_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:text="500 m"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textSize="16sp"/>
     </TableRow>
 
     <TableLayout
@@ -34,59 +38,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/route1"
-                android:layout_width="50dp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/stopping_routes"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:gravity="center"
-                android:background="@drawable/rounded_corner"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/route2"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:gravity="center"
-                android:background="@drawable/rounded_corner"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/route3"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:gravity="center"
-                android:background="@drawable/rounded_corner"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/route4"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:gravity="center"
-                android:background="@drawable/rounded_corner"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/route5"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:gravity="center"
-                android:background="@drawable/rounded_corner"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/route6"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:gravity="center"
-                android:background="@drawable/rounded_corner"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+                android:orientation="horizontal"
+                android:layout_below="@id/tb" />
 
         </TableRow>
     </TableLayout>

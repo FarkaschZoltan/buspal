@@ -68,10 +68,17 @@ public class StopDepartures extends AppCompatActivity {
         String currentDate = date.format(formatter);
 
         mRequestQueue = Volley.newRequestQueue(this);
+        String routeName = i.getStringExtra("route_name");
 
-        loadResources(url, "localhost", "postgres", "buspal", "budapest",
-                Statements.getDepartureFromStop(stopId, Integer.parseInt(currentDate)));
-        //Log.d("Routes", mRequestQueue.getCache().get(url).toString());
+        if(routeName == null){
+            loadResources(url, "localhost", "postgres", "buspal", "budapest",
+                    Statements.getDepartureFromStop(stopId, Integer.parseInt(currentDate)));
+        } else{
+            loadResources(url, "localhost", "postgres", "buspal", "budapest",
+                    Statements.getDepartureFromStopByRouteName(stopId, routeName, Integer.parseInt(currentDate)));
+        }
+
+
     }
 
     private void loadResources(String url, String host, String username, String password, String db, String statement){

@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#99AA00</color>
     <color name="colorAccent">#ffff6e</color>
     <color name="bus">#009FE3</color>
+    <color name="night_bus">#000000</color>
     <color name="tram">#FFD800</color>
     <color name="trolley">#FF1609</color>
     <color name="metro_1">#FFD800</color>
@@ -14,15 +15,17 @@
     <color name="suburban_6">#824B00</color>
     <color name="suburban_7">#EE7203</color>
     <color name="suburban_8">#ED677E</color>
-    <color name="busDark">#0071B1</color>
-    <color name="tramDark">#C7A700</color>
-    <color name="trolleyDark">#C20000</color>
-    <color name="metro_1Dark">#C7A700</color>
-    <color name="metro_2Dark">#A90000</color>
-    <color name="metro_3Dark">#003376</color>
-    <color name="metro_4Dark">#0D7200</color>
-    <color name="suburban_5Dark">#51003B</color>
-    <color name="suburban_6Dark">#522200</color>
-    <color name="suburban_7Dark">#B54300</color>
-    <color name="suburban_8Dark">#B63552</color>
+    <color name="bus_dark">#0071B1</color>
+    <color name="night_bus_dark">#000000</color>
+    <color name="tram_dark">#C7A700</color>
+    <color name="trolley_dark">#C20000</color>
+    <color name="metro_1_dark">#C7A700</color>
+    <color name="metro_2_dark">#A90000</color>
+    <color name="metro_3_dark">#003376</color>
+    <color name="metro_4_dark">#0D7200</color>
+    <color name="suburban_5_dark">#51003B</color>
+    <color name="suburban_6_dark">#522200</color>
+    <color name="suburban_7_dark">#B54300</color>
+    <color name="suburban_8_dark">#B63552</color>
+    <color name="white">#FFFFFF</color>
 </resources>
