@@ -7,10 +7,19 @@
     tools:context=".Stops">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/toolbar"
+        android:id="@+id/tb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"/>
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
         android:id="@+id/route_name"
@@ -18,7 +27,8 @@
         android:layout_height="38dp"
         android:textSize="28dp"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="TextView"
+        android:layout_below="@id/tb"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/route_stops_list"

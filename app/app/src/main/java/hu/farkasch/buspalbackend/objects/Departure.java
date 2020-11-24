@@ -15,6 +15,7 @@ public class Departure implements Serializable { //everything is public for easi
     public String destination;
     @SerializedName("departure_time")
     public String departureTime;
+    public int routeType;
 
     public Departure(){
         tripId = -1;
@@ -28,13 +29,15 @@ public class Departure implements Serializable { //everything is public for easi
         this.routeName = routeName;
         this.destination = destination;
         this.departureTime = departureTime;
+        this.routeType = 3;
     }
 
-    public Departure(int tripId, String routeName, String destination, Time departureTime){
+    public Departure(int tripId, String routeName, String destination, Time departureTime, int routeType){
         this.tripId = tripId;
         this.routeName = routeName;
         this.destination = destination;
         this.departureTime = departureTime.toString();
+        this.routeType = routeType;
     }
 
     @Override

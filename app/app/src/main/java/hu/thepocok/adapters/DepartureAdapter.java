@@ -41,6 +41,7 @@ public class DepartureAdapter extends RecyclerView.Adapter<DepartureAdapter.Depa
                 Intent i = new Intent(mCtx, RouteStops.class);
                 i.putExtra("tripId", item.tripId);
                 i.putExtra("routeName", item.routeName);
+                i.putExtra("routeType", item.routeType);
                 mCtx.startActivity(i);
             }
         });

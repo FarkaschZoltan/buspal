@@ -96,6 +96,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopsViewHol
 
     public void setProperties(TextView tv, RouteType type, String name){
         tv.setText(name);
+        Log.d("routeType", type.toString());
         switch (type){
             case BUS:
                 tv.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));

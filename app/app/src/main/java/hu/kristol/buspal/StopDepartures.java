@@ -96,8 +96,10 @@ public class StopDepartures extends AppCompatActivity {
                                 Time departureTime = new Time(jsonArray.getJSONObject(i)
                                         .get("departure_time").toString());
                                 String destination = jsonArray.getJSONObject(i).get("trip_headsign").toString();
+                                int routeType = Integer.parseInt(jsonArray.getJSONObject(i)
+                                        .get("route_type").toString());
 
-                                Departure d = new Departure(tripId, name, destination, departureTime);
+                                Departure d = new Departure(tripId, name, destination, departureTime, routeType);
 
                                 if(currentTime.isInsideInterval(new Time(d.departureTime), 3)) {
                                     resultArray.add(d);

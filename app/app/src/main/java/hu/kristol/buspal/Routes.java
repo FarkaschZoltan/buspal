@@ -13,6 +13,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,8 +42,8 @@ public class Routes extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
-        /*AppBarLayout toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mRequestQueue = Volley.newRequestQueue(this);
 
@@ -53,8 +54,10 @@ public class Routes extends AppCompatActivity {
         Intent i = this.getIntent();
         String stop = i.getStringExtra("stop");
 
+        String title = "Routes stopping at \"" + stop + "\"";
+        toolbar.setTitle(title);
+
         loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getRoutesByStop(stop, "budapest"));
-        Log.d("Routes", mRequestQueue.getCache().get(url).toString());
 
     }
 

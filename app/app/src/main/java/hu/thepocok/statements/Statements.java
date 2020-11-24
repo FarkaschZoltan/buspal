@@ -31,7 +31,7 @@ public class Statements {
 
     public static String getRoutesByStop(String stop, String databaseName) {
         String statement = "";
-        if(databaseName.equals("Budapest")){
+        if(databaseName.equals("budapest")){
             statement = "SELECT DISTINCT routes.route_id, routes.route_short_name, " +
                     "routes.route_type, routes.route_desc FROM routes " +
                     "INNER JOIN trips on routes.route_id = trips.route_id " +
@@ -107,14 +107,15 @@ public class Statements {
     }
 
     public static String getDepartureFromStop(int stopId, int date){
-        String statement = "SELECT trips.trip_id, stop_times.departure_time, routes.route_short_name, " +
-                "trips.trip_headsign \n" +
+        String statement = "SELECT trips.trip_id, stop_times.departure_time, routes.route_short_name," +
+                " routes.route_type, trips.trip_headsign \n" +
                 "FROM routes\n" +
                 "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
                 "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
                 "INNER JOIN calendar_dates ON calendar_dates.service_id = trips.service_id\n" +
                 "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = "+ date + "\n" +
-                "GROUP BY trips.trip_id, trips.trip_headsign, stop_times.departure_time, routes.route_short_name\n" +
+                "GROUP BY trips.trip_id, trips.trip_headsign, stop_times.departure_time, " +
+                "routes.route_short_name, routes.route_type\n" +
                 "ORDER BY departure_time";
         return statement;
     }
