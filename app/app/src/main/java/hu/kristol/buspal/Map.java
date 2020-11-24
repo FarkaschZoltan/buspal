@@ -37,6 +37,10 @@ import org.json.JSONException;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.api.IMapController;
+import org.osmdroid.events.DelayedMapListener;
+import org.osmdroid.events.MapListener;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -63,6 +67,7 @@ public class Map extends AppCompatActivity implements LocationListener {
     private IMapController mapController = null;
     private double currentLat = 0;
     private double currentLon = 0;
+    ItemizedOverlayWithFocus<OverlayItem> mOverlay;
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
@@ -147,6 +152,22 @@ public class Map extends AppCompatActivity implements LocationListener {
                 mCtx.startActivity(i);
             }
         });
+
+        map.setMapListener(new DelayedMapListener(new MapListener() {
+            public boolean onZoom(final ZoomEvent e) {
+                if(e.getZoomLevel() < 16){
+                    map.getOverlays().clear();
+                } else{
+                    map.getOverlays().add(mOverlay);
+                }
+                return true;
+            }
+
+            public boolean onScroll(final ScrollEvent e) {
+                Log.i("zoom", e.toString());
+                return true;
+            }
+        }, 1000 ));
     }
 
     private void loadResources(String url, String host, String username, String password,
@@ -221,7 +242,7 @@ public class Map extends AppCompatActivity implements LocationListener {
                                 stopsOnMap.add(olItem);
                             }
 
-                            ItemizedOverlayWithFocus<OverlayItem> mOverlay =
+                            mOverlay =
                                     new ItemizedOverlayWithFocus<OverlayItem>(stopsOnMap,
                                     mCtx.getResources().getDrawable(R.drawable.bus_stop),
                                     mCtx.getResources().getDrawable(R.drawable.bus_stop),
