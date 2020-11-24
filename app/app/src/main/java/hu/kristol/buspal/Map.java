@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,6 +20,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -28,6 +30,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +61,9 @@ public class Map extends AppCompatActivity implements LocationListener {
     private boolean locationFound = false;
     private LocationManager mLocationManager;
     private IMapController mapController = null;
+    private double currentLat = 0;
+    private double currentLon = 0;
+
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
@@ -70,6 +76,8 @@ public class Map extends AppCompatActivity implements LocationListener {
                                 1));
                 locationFound = true;
             }
+            currentLat = location.getLatitude();
+            currentLon = location.getLongitude();
         }
 
         @Override
@@ -119,6 +127,17 @@ public class Map extends AppCompatActivity implements LocationListener {
         }
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1,
                 1, mLocationListener);
+
+        FloatingActionButton myLocation = findViewById(R.id.my_location);
+        myLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*Intent i = new Intent(mCtx, MainActivity.class);
+                mCtx.startActivity(i);*/
+                mapController.setCenter(new GeoPoint(currentLat, currentLon));
+                mapController.setZoom(16.0);
+            }
+        });
     }
 
     private void loadResources(String url, String host, String username, String password,
