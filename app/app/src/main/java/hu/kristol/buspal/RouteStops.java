@@ -5,10 +5,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -40,6 +43,10 @@ public class RouteStops extends AppCompatActivity {
     private String url = hu.thepocok.serverlocation.ServerLocation.URL;
 
     private BusTrip trip;
+    private JSONArray jsonArray;
+    private int routeType;
+    String routeName;
+    private Context context = RouteStops.this;
 
     private RecyclerView recyclerView;
 
@@ -50,22 +57,23 @@ public class RouteStops extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.route_stops_list);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(RouteStops.this));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Window window = this.getWindow();
+        Log.d("Context", context.toString());
 
         Intent i = this.getIntent();
         Log.d("tripId", String.valueOf(i.getIntExtra("tripId", 0)));
         int tripId = (int)i.getIntExtra("tripId", 0);
 
-        String routeName = i.getStringExtra("routeName");
+        routeName = i.getStringExtra("routeName");
         TextView stopNameContainer = findViewById(R.id.route_name);
         stopNameContainer.setText(routeName);
 
-        int routeType = (int)i.getIntExtra("routeType", -1);
+        routeType = (int)i.getIntExtra("routeType", -1);
         Log.d("routeType", String.valueOf(routeType));
         switch (routeType){
             case 0:
@@ -136,7 +144,7 @@ public class RouteStops extends AppCompatActivity {
                         Log.d("RouteStops", response);
                         try {
                             //converting the string to json array object
-                            JSONArray jsonArray = new JSONArray(response);
+                            jsonArray = new JSONArray(response);
                             ArrayList<Departure> resultArray = new ArrayList<>();
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 int tripId = Integer.parseInt(jsonArray.getJSONObject(i).get("trip_id").toString());
@@ -153,6 +161,21 @@ public class RouteStops extends AppCompatActivity {
 
                                 if(i == 0){
                                     trip = new BusTrip(tripId);
+                                    Button showOnMap = findViewById(R.id.show_on_map);
+                                    showOnMap.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent i = new Intent(context, hu.kristol.buspal.Map.class);
+                                            try{
+                                                i.putExtra("shapeId", Integer.parseInt(jsonArray.getJSONObject(0).get("shape_id").toString()));
+                                            } catch (JSONException e){
+                                                Log.d("ShapeIdNotFound", e.getLocalizedMessage());
+                                            }
+                                            i.putExtra("routeType", routeType);
+                                            i.putExtra("routeName", routeName);
+                                            context.startActivity(i);
+                                        }
+                                    });
                                 }
                                 BusStop bs = new BusStop(stopId, stopName, new Coordinates(stopLat, stopLon),
                                         stop_sequence, departureTime);

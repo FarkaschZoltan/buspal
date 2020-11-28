@@ -14,6 +14,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -47,6 +49,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,10 +72,14 @@ public class Map extends AppCompatActivity implements LocationListener {
     private double currentLon = 0;
     ItemizedOverlayWithFocus<OverlayItem> mOverlay;
 
+    private int routeType;
+    private String routeName;
+    private boolean showingPath;
+
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
-            if(!locationFound){
+            if(!locationFound && !showingPath){
                 map.getOverlays().clear();
                 mapController.setCenter(new GeoPoint(location.getLatitude(), location.getLongitude()));
                 loadResources(url,
@@ -91,6 +98,7 @@ public class Map extends AppCompatActivity implements LocationListener {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,20 +116,12 @@ public class Map extends AppCompatActivity implements LocationListener {
 
         mapController = map.getController();
         mapController.setZoom(16.0);
-        //GeoPoint startPoint = new GeoPoint( 47.497913, 19.040236);
         mapController.setCenter(BUDAPEST);
 
-        /*this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()),map);
-        this.mLocationOverlay.enableMyLocation();
-        map.getOverlays().add(this.mLocationOverlay);*/
-
-        /*Marker marker = new Marker(map);
-        marker.setPosition(busStop);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-        map.getOverlays().clear();
-        map.getOverlays().add(marker);
-        map.invalidate();*/
+        Intent i = this.getIntent();
+        int shapeId = i.getIntExtra("shapeId", -1);
+        routeType = i.getIntExtra("routeType", -1);
+        routeName = i.getStringExtra("routeName");
 
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -168,6 +168,122 @@ public class Map extends AppCompatActivity implements LocationListener {
                 return true;
             }
         }, 1000 ));
+
+        if(shapeId != -1){
+            loadRouteShape(url,
+                    "localhost", "postgres", "buspal", "budapest",
+                    Statements.getShape(shapeId));
+        }
+    }
+
+    private void loadRouteShape(String url, String host, String username, String password,
+                                String db, String statement){
+        StringRequest sr = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Stops", response);
+                        try {
+                            //converting the string to json array object
+                            JSONArray jsonArray = new JSONArray(response);
+                            ArrayList<GeoPoint> shapePoints = new ArrayList<>();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                shapePoints.add(new GeoPoint(0, 0));
+                            }
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                double lat = Double.parseDouble(jsonArray.getJSONObject(i).get("shape_pt_lat").toString());
+                                double lon = Double.parseDouble(jsonArray.getJSONObject(i).get("shape_pt_lon").toString());
+                                int sequencePlace = Integer.parseInt(jsonArray.getJSONObject(i).get("shape_pt_sequence").toString());
+                                shapePoints.set(sequencePlace, new GeoPoint(lat, lon));
+                            }
+
+                            int c = 0;
+                            switch (routeType){
+                                case 0:
+                                    c = mCtx.getResources().getColor(R.color.tram);
+                                    break;
+                                case 1:
+                                    if(routeName.equals("M1")){
+                                        c = mCtx.getResources().getColor(R.color.metro_1);
+                                    }else if(routeName.equals("M2")){
+                                        c = mCtx.getResources().getColor(R.color.metro_2);
+                                    }else if(routeName.equals("M3")){
+                                        c = mCtx.getResources().getColor(R.color.metro_3);
+                                    }else if(routeName.equals("M4")){
+                                        c = mCtx.getResources().getColor(R.color.metro_4);
+                                    }
+                                    break;
+                                case 3:
+                                    if(routeName.charAt(0) == '9' && routeName.length() >= 3){
+                                        c = mCtx.getResources().getColor(R.color.night_bus);
+                                    } else{
+                                        c = mCtx.getResources().getColor(R.color.bus);
+                                    }
+
+                                    break;
+                                case 11:
+                                case 800:
+                                    c = mCtx.getResources().getColor(R.color.trolley);
+                                    break;
+                                case 109:
+                                    if(routeName.equals("H5")){
+                                        c = mCtx.getResources().getColor(R.color.suburban_5);
+                                    }else if(routeName.equals("H6")){
+                                        c = mCtx.getResources().getColor(R.color.suburban_6);
+                                    }else if(routeName.equals("H7")){
+                                        c = mCtx.getResources().getColor(R.color.suburban_7);
+                                    }else if(routeName.equals("H8") || routeName.equals("H9")){
+                                        c = mCtx.getResources().getColor(R.color.suburban_8);
+                                    }
+                                    break;
+                                default:
+                                    c = mCtx.getResources().getColor(R.color.bus);
+                                    break;
+                            }
+
+                            Polyline shape = new Polyline();
+                            shape.setPoints(shapePoints);
+                            shape.setColor(c);
+                            shape.setWidth((float) 15.0);
+                            shape.setOnClickListener(new Polyline.OnClickListener() {
+                                @Override
+                                public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
+                                    return false;
+                                }
+                            });
+
+                            map.getOverlayManager().add(shape);
+                            showingPath = true;
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("HttpClient", "error: " + error.toString());
+                    }
+                }) {
+            @Override
+            protected java.util.Map<String,String> getParams(){
+                java.util.Map<String,String> params = new HashMap<String, String>();
+                params.put("host", host);
+                params.put("username", username);
+                params.put("password", password);
+                params.put("database", db);
+                params.put("statement", statement);
+                return params;
+            }
+        };
+        int socketTimeout = 10000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        sr.setRetryPolicy(policy);
+        mRequestQueue.add(sr);
     }
 
     private void loadResources(String url, String host, String username, String password,
@@ -343,7 +459,7 @@ public class Map extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        if(!locationFound){
+        if(!locationFound && !showingPath){
             loadResources(url, "localhost", "postgres",
                     "buspal", "budapest", Statements.getNearbyStops(location.getLatitude(),
                             location.getLongitude(), 3));

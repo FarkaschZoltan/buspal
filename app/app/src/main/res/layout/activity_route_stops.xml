@@ -28,12 +28,21 @@
         android:textSize="28dp"
         android:gravity="center"
         android:text="TextView"
-        android:layout_below="@id/tb"/>
+        android:layout_below="@id/show_on_map"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/route_stops_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/route_name" />
+
+    <Button
+        android:id="@+id/show_on_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tb"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Show on map" />
 
 </RelativeLayout>

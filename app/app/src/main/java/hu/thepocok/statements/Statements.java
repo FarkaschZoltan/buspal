@@ -16,13 +16,13 @@ public class Statements {
 
     public static String getScheduleByTripId(int tripId) {
         String statement = "SELECT stop_times.trip_id, stop_times.departure_time, stops.stop_id, " +
-                "stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence FROM routes \n" +
+                "stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence, trips.shape_id FROM routes \n" +
                 "INNER JOIN trips on routes.route_id = trips.route_id \n" +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id \n" +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id \n" +
                 "INNER JOIN calendar_dates on calendar_dates.service_id = trips.service_id\n" +
                 "WHERE trips.trip_id = " + tripId +"\n" +
-                "GROUP BY stop_times.trip_id, stop_times.departure_time, " +
+                "GROUP BY trips.shape_id, stop_times.trip_id, stop_times.departure_time, " +
                 "stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence\n" +
                 "ORDER BY stop_times.stop_sequence";
 
@@ -185,6 +185,12 @@ public class Statements {
                 "GROUP BY stops.stop_id, stops.stop_name, stops.stop_lat, stops.stop_lon, " +
                 "routes.route_short_name, routes.route_type\n" +
                 "ORDER BY stops.stop_id";
+        return statement;
+    }
+
+    public static String getShape(int shapeId){
+        String statement = "SELECT * FROM shapes WHERE shapes.shape_id = " + shapeId +
+                " ORDER BY shapes.shape_pt_sequence";
         return statement;
     }
 }

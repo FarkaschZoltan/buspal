@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Log.d("Context", c.toString());
     }
 
     @Override
