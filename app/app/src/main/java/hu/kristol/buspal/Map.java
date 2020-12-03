@@ -1,20 +1,6 @@
 package hu.kristol.buspal;
 
-/*
-Please note, that this package does not exists on github, you have to create it manually
-The structure is the following:
-
-hu/thepocok/serverlocation/ServerLocation.java
-
-this file should contain 4 static string fields:    URL: pointing to the public server
-                                                    HOST: the internal host in the server containing the database
-                                                    USER: username for the database
-                                                    PASS: password for the database
-*/
 import static hu.thepocok.serverlocation.ServerLocation.URL;
-import static hu.thepocok.serverlocation.ServerLocation.HOST;
-import static hu.thepocok.serverlocation.ServerLocation.USER;
-import static hu.thepocok.serverlocation.ServerLocation.PASS;
 
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
 import hu.farkasch.buspalbackend.objects.BusStop;
@@ -95,7 +81,7 @@ public class Map extends AppCompatActivity implements LocationListener {
             if(!locationFound && !showingPath){
                 map.getOverlays().clear();
                 mapController.setCenter(new GeoPoint(location.getLatitude(), location.getLongitude()));
-                loadResources(URL, HOST, USER, PASS, "budapest",
+                loadResources(URL, "budapest",
                         Statements.getNearbyStops(location.getLatitude(), location.getLongitude(),
                                 3));
                 locationFound = true;
@@ -182,13 +168,12 @@ public class Map extends AppCompatActivity implements LocationListener {
         }, 1000 ));
 
         if(shapeId != -1){
-            loadRouteShape(URL, HOST, USER, PASS, "budapest",
+            loadRouteShape(URL, "budapest",
                     Statements.getShape(shapeId));
         }
     }
 
-    private void loadRouteShape(String url, String host, String username, String password,
-                                String db, String statement){
+    private void loadRouteShape(String url, String db, String statement){
         StringRequest sr = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -282,9 +267,6 @@ public class Map extends AppCompatActivity implements LocationListener {
             @Override
             protected java.util.Map<String,String> getParams(){
                 java.util.Map<String,String> params = new HashMap<String, String>();
-                params.put("host", host);
-                params.put("username", username);
-                params.put("password", password);
                 params.put("database", db);
                 params.put("statement", statement);
                 return params;
@@ -297,8 +279,7 @@ public class Map extends AppCompatActivity implements LocationListener {
         mRequestQueue.add(sr);
     }
 
-    private void loadResources(String url, String host, String username, String password,
-                               String db, String statement){
+    private void loadResources(String url, String db, String statement){
         StringRequest sr = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -402,9 +383,6 @@ public class Map extends AppCompatActivity implements LocationListener {
             @Override
             protected java.util.Map<String,String> getParams(){
                 java.util.Map<String,String> params = new HashMap<String, String>();
-                params.put("host", host);
-                params.put("username", username);
-                params.put("password", password);
                 params.put("database", db);
                 params.put("statement", statement);
                 return params;
@@ -471,7 +449,7 @@ public class Map extends AppCompatActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         if(!locationFound && !showingPath){
-            loadResources(URL, HOST, USER, PASS, "budapest", Statements.getNearbyStops(location.getLatitude(),
+            loadResources(URL, "budapest", Statements.getNearbyStops(location.getLatitude(),
                             location.getLongitude(), 3));
             locationFound = true;
         }

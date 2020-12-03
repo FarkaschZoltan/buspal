@@ -1,20 +1,7 @@
 package hu.kristol.buspal;
 
-/*
-Please note, that this package does not exists on github, you have to create it manually
-The structure is the following:
 
-hu/thepocok/serverlocation/ServerLocation.java
-
-this file should contain 4 static string fields:    URL: pointing to the public server
-                                                    HOST: the internal host in the server containing the database
-                                                    USER: username for the database
-                                                    PASS: password for the database
-*/
 import static hu.thepocok.serverlocation.ServerLocation.URL;
-import static hu.thepocok.serverlocation.ServerLocation.HOST;
-import static hu.thepocok.serverlocation.ServerLocation.USER;
-import static hu.thepocok.serverlocation.ServerLocation.PASS;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -72,11 +59,11 @@ public class Routes extends AppCompatActivity {
         String title = "Routes stopping at \"" + stop + "\"";
         toolbar.setTitle(title);
 
-        loadResources(URL, HOST, USER, PASS, "budapest", Statements.getRoutesByStop(stop, "budapest"));
+        loadResources(URL,"budapest", Statements.getRoutesByStop(stop, "budapest"));
 
     }
 
-    private void loadResources(String url, String host, String username, String password, String db, String statement){
+    private void loadResources(String url, String db, String statement){
         StringRequest sr = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -115,9 +102,6 @@ public class Routes extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("host", host);
-                params.put("username", username);
-                params.put("password", password);
                 params.put("database", db);
                 params.put("statement", statement);
                 return params;
