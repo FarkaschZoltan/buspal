@@ -1,5 +1,21 @@
 package hu.kristol.buspal;
 
+/*
+Please note, that this package does not exists on github, you have to create it manually
+The structure is the following:
+
+hu/thepocok/serverlocation/ServerLocation.java
+
+this file should contain 4 static string fields:    URL: pointing to the public server
+                                                    HOST: the internal host in the server containing the database
+                                                    USER: username for the database
+                                                    PASS: password for the database
+*/
+import static hu.thepocok.serverlocation.ServerLocation.URL;
+import static hu.thepocok.serverlocation.ServerLocation.HOST;
+import static hu.thepocok.serverlocation.ServerLocation.USER;
+import static hu.thepocok.serverlocation.ServerLocation.PASS;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -41,7 +57,6 @@ import hu.thepocok.statements.Statements;
 
 public class Stops extends AppCompatActivity implements LocationListener {
     private RequestQueue mRequestQueue;
-    String url = hu.thepocok.serverlocation.ServerLocation.URL;
 
     LocationManager locationManager;
     boolean locationFound = false;
@@ -65,7 +80,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
         stopName = i.getStringExtra("stopName");
 
         if(stopName != null){
-            loadResources(url, "localhost", "postgres", "buspal", "budapest",
+            loadResources(URL, HOST, USER, PASS, "budapest",
                     Statements.getStopsByNameWithRoutes(stopName.toLowerCase(Locale.getDefault())));
         }
 
@@ -199,7 +214,7 @@ public class Stops extends AppCompatActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         if(!locationFound && stopName == null){
-            loadResources(url, "localhost", "postgres", "buspal", "budapest",
+            loadResources(URL, HOST, USER, PASS, "budapest",
                     Statements.getNearbyStops(location.getLatitude(), location.getLongitude(), 0.5));
             locationFound = true;
         }

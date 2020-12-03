@@ -1,5 +1,21 @@
 package hu.kristol.buspal;
 
+/*
+Please note, that this package does not exists on github, you have to create it manually
+The structure is the following:
+
+hu/thepocok/serverlocation/ServerLocation.java
+
+this file should contain 4 static string fields:    URL: pointing to the public server
+                                                    HOST: the internal host in the server containing the database
+                                                    USER: username for the database
+                                                    PASS: password for the database
+*/
+import static hu.thepocok.serverlocation.ServerLocation.URL;
+import static hu.thepocok.serverlocation.ServerLocation.HOST;
+import static hu.thepocok.serverlocation.ServerLocation.USER;
+import static hu.thepocok.serverlocation.ServerLocation.PASS;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,9 +51,9 @@ import hu.farkasch.buspalbackend.objects.Departure;
 import hu.thepocok.adapters.DepartureAdapter;
 import hu.thepocok.statements.Statements;
 
+
 public class StopDepartures extends AppCompatActivity {
     private RequestQueue mRequestQueue;
-    String url = hu.thepocok.serverlocation.ServerLocation.URL;
 
     List<BusRoute> routesList;
 
@@ -71,10 +87,10 @@ public class StopDepartures extends AppCompatActivity {
         String routeName = i.getStringExtra("route_name");
 
         if(routeName == null){
-            loadResources(url, "localhost", "postgres", "buspal", "budapest",
+            loadResources(URL, HOST, USER, PASS, "budapest",
                     Statements.getDepartureFromStop(stopId, Integer.parseInt(currentDate)));
         } else{
-            loadResources(url, "localhost", "postgres", "buspal", "budapest",
+            loadResources(URL, HOST, USER, PASS, "budapest",
                     Statements.getDepartureFromStopByRouteName(stopId, routeName, Integer.parseInt(currentDate)));
         }
 

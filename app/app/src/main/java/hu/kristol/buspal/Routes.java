@@ -1,5 +1,21 @@
 package hu.kristol.buspal;
 
+/*
+Please note, that this package does not exists on github, you have to create it manually
+The structure is the following:
+
+hu/thepocok/serverlocation/ServerLocation.java
+
+this file should contain 4 static string fields:    URL: pointing to the public server
+                                                    HOST: the internal host in the server containing the database
+                                                    USER: username for the database
+                                                    PASS: password for the database
+*/
+import static hu.thepocok.serverlocation.ServerLocation.URL;
+import static hu.thepocok.serverlocation.ServerLocation.HOST;
+import static hu.thepocok.serverlocation.ServerLocation.USER;
+import static hu.thepocok.serverlocation.ServerLocation.PASS;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -33,7 +49,6 @@ import hu.thepocok.statements.Statements;
 
 public class Routes extends AppCompatActivity {
     private RequestQueue mRequestQueue;
-    private String url = hu.thepocok.serverlocation.ServerLocation.URL;
 
     private List<Routes> routesList;
 
@@ -57,7 +72,7 @@ public class Routes extends AppCompatActivity {
         String title = "Routes stopping at \"" + stop + "\"";
         toolbar.setTitle(title);
 
-        loadResources(url, "localhost", "postgres", "buspal", "budapest", Statements.getRoutesByStop(stop, "budapest"));
+        loadResources(URL, HOST, USER, PASS, "budapest", Statements.getRoutesByStop(stop, "budapest"));
 
     }
 

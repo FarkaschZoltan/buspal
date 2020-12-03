@@ -1,5 +1,21 @@
 package hu.kristol.buspal;
 
+/*
+Please note, that this package does not exists on github, you have to create it manually
+The structure is the following:
+
+hu/thepocok/serverlocation/ServerLocation.java
+
+this file should contain 4 static string fields:    URL: pointing to the public server
+                                                    HOST: the internal host in the server containing the database
+                                                    USER: username for the database
+                                                    PASS: password for the database
+*/
+import static hu.thepocok.serverlocation.ServerLocation.URL;
+import static hu.thepocok.serverlocation.ServerLocation.HOST;
+import static hu.thepocok.serverlocation.ServerLocation.USER;
+import static hu.thepocok.serverlocation.ServerLocation.PASS;
+
 import hu.farkasch.buspalbackend.datastructures.Coordinates;
 import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.farkasch.buspalbackend.objects.BusRoute;
@@ -14,8 +30,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -56,7 +70,6 @@ import java.util.HashMap;
 
 
 public class Map extends AppCompatActivity implements LocationListener {
-    private String url = hu.thepocok.serverlocation.ServerLocation.URL;
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     public static final GeoPoint MISKOLC = new GeoPoint(48.10367, 20.79933);
@@ -82,8 +95,7 @@ public class Map extends AppCompatActivity implements LocationListener {
             if(!locationFound && !showingPath){
                 map.getOverlays().clear();
                 mapController.setCenter(new GeoPoint(location.getLatitude(), location.getLongitude()));
-                loadResources(url,
-                        "localhost", "postgres", "buspal", "budapest",
+                loadResources(URL, HOST, USER, PASS, "budapest",
                         Statements.getNearbyStops(location.getLatitude(), location.getLongitude(),
                                 3));
                 locationFound = true;
@@ -170,8 +182,7 @@ public class Map extends AppCompatActivity implements LocationListener {
         }, 1000 ));
 
         if(shapeId != -1){
-            loadRouteShape(url,
-                    "localhost", "postgres", "buspal", "budapest",
+            loadRouteShape(URL, HOST, USER, PASS, "budapest",
                     Statements.getShape(shapeId));
         }
     }
@@ -460,8 +471,7 @@ public class Map extends AppCompatActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         if(!locationFound && !showingPath){
-            loadResources(url, "localhost", "postgres",
-                    "buspal", "budapest", Statements.getNearbyStops(location.getLatitude(),
+            loadResources(URL, HOST, USER, PASS, "budapest", Statements.getNearbyStops(location.getLatitude(),
                             location.getLongitude(), 3));
             locationFound = true;
         }

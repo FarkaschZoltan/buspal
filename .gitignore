@@ -17,3 +17,4 @@ app/.externalNativeBuild
 app/.cxx
 app/.idea
 app/.idea/misc.xml
+app/app/src/main/java/hu/thepocok/serverlocation/ServerLocation.java
