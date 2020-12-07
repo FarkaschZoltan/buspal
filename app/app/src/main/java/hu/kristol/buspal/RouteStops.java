@@ -168,7 +168,8 @@ public class RouteStops extends AppCompatActivity {
                                         public void onClick(View v) {
                                             Intent i = new Intent(context, hu.kristol.buspal.Map.class);
                                             try{
-                                                i.putExtra("shapeId", Integer.parseInt(jsonArray.getJSONObject(0).get("shape_id").toString()));
+                                                i.putExtra("shapeId", Integer.parseInt(jsonArray.getJSONObject(0)
+                                                        .get("shape_id").toString()));
                                             } catch (JSONException e){
                                                 Log.d("ShapeIdNotFound", e.getLocalizedMessage());
                                             }

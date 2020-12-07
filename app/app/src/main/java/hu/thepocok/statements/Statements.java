@@ -16,7 +16,8 @@ public class Statements {
 
     public static String getScheduleByTripId(int tripId) {
         String statement = "SELECT stop_times.trip_id, stop_times.departure_time, stops.stop_id, " +
-                "stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence, trips.shape_id FROM routes \n" +
+                "stops.stop_name, stops.stop_lat, stops.stop_lon, stop_times.stop_sequence, " +
+                "trips.shape_id FROM routes \n" +
                 "INNER JOIN trips on routes.route_id = trips.route_id \n" +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id \n" +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id \n" +
@@ -67,14 +68,15 @@ public class Statements {
         trip2 - stop2
         ...
     */
-    public static String getStopsByRouteShortName(String routeShortName, int direction){
+    public static String getStopsByRouteShortName(String routeShortName){
         //this statement sorts the stops in ascending order according to stop_sequence
-        String statement = "SELECT DISTINCT stops.stop_name, stop_times.stop_sequence FROM routes " +
+        String statement = "SELECT DISTINCT stops.stop_id, stops.stop_name, " +
+                "stop_times.stop_sequence, trips.direction_id FROM routes " +
                 "INNER JOIN trips ON routes.route_id = trips.route_id " +
                 "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id " +
                 "INNER JOIN stops ON stop_times.stop_id = stops.stop_id " +
-                "WHERE routes.route_short_name = " + routeShortName + " AND trips.direction_id = " + direction +
-                "ORDER BY CAST(stop_times.stop_sequence as int) ASC;";
+                "WHERE routes.route_short_name = '" + routeShortName + "' " +
+                "ORDER BY trips.direction_id ASC, CAST(stop_times.stop_sequence as int) ASC;";
         return statement;
     }
 

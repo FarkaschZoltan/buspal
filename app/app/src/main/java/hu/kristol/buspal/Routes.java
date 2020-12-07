@@ -80,13 +80,13 @@ public class Routes extends AppCompatActivity {
                                 String type = jsonArray.getJSONObject(i).get("route_type").toString();
                                 String destination = jsonArray.getJSONObject(i).get("route_desc").toString();
 
-                                BusRoute b = new BusRoute(routeId, name, type, destination);
+                                BusRoute b = new BusRoute(routeId, name, type, destination, Routes.this);
                                 resultArray.add(b);
                                 Log.d("Result", b.toString());
                             }
 
                             //creating adapter object and setting it to recyclerview
-                            RouteAdapter adapter = new RouteAdapter(Routes.this, resultArray);
+                            RouteAdapter adapter = new RouteAdapter(Routes.this, resultArray, recyclerView);
                             recyclerView.setAdapter(adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();

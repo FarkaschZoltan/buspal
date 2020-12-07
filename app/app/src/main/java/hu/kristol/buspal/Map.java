@@ -189,9 +189,12 @@ public class Map extends AppCompatActivity implements LocationListener {
                             }
 
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                double lat = Double.parseDouble(jsonArray.getJSONObject(i).get("shape_pt_lat").toString());
-                                double lon = Double.parseDouble(jsonArray.getJSONObject(i).get("shape_pt_lon").toString());
-                                int sequencePlace = Integer.parseInt(jsonArray.getJSONObject(i).get("shape_pt_sequence").toString());
+                                double lat = Double.parseDouble(jsonArray.getJSONObject(i).get("shape_pt_lat")
+                                        .toString());
+                                double lon = Double.parseDouble(jsonArray.getJSONObject(i).get("shape_pt_lon")
+                                        .toString());
+                                int sequencePlace = Integer.parseInt(jsonArray.getJSONObject(i).get("shape_pt_sequence")
+                                        .toString());
                                 shapePoints.set(sequencePlace, new GeoPoint(lat, lon));
                             }
 

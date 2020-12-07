@@ -2,10 +2,12 @@ package hu.thepocok.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,20 +15,42 @@ import java.util.List;
 
 import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.kristol.buspal.R;
+import hu.kristol.buspal.Timetable;
 
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHolder> {
     private Context mCtx;
     private List<BusRoute> routeList;
+    private RecyclerView recyclerView;
 
-    public RouteAdapter(Context mCtx, List<BusRoute> routeList) {
+    public RouteAdapter(Context mCtx, List<BusRoute> routeList, RecyclerView recyclerView) {
         this.mCtx = mCtx;
         this.routeList = routeList;
+        this.recyclerView = recyclerView;
     }
 
     @Override
     public RouteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mCtx);
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.routes_list, null);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int itemPosition = recyclerView.getChildLayoutPosition(view);
+                BusRoute item = routeList.get(itemPosition);
+                if(item.getStops() == null){
+                    Toast toast = Toast.makeText(mCtx,
+                            "Data is loading, please try again in a few seconds", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                }
+
+                Intent i = new Intent(mCtx, Timetable.class);
+                i.putExtra("stopsList", item.getStops());
+                i.putExtra("routeName", item.getName());
+                mCtx.startActivity(i);
+            }
+        });
+
         return new RouteViewHolder(view);
     }
 

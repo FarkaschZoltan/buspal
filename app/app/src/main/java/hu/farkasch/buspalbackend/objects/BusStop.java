@@ -25,6 +25,7 @@ public class BusStop implements Comparable<BusStop>, Serializable {
     private String testDepartureTime;
     private Time departureTime;
     public ArrayList<BusRoute> stoppingRoutes;
+    private int direction;
 
     public BusStop(){
         cords = new Coordinates();
@@ -80,6 +81,13 @@ public class BusStop implements Comparable<BusStop>, Serializable {
         this.stopSequencePlace = -1;
         this.distanceFromPosition = 999;
         this.departureTime = new Time();
+    }
+
+    public BusStop(int stopId, String stopName, int stopSequencePlace, int direction) {
+        this.stopName = stopName;
+        this.stopId = stopId;
+        this.stopSequencePlace = stopSequencePlace;
+        this.direction = direction;
     }
 
     public Coordinates getCords() {
@@ -172,5 +180,9 @@ public class BusStop implements Comparable<BusStop>, Serializable {
 
     public double getStopLon() {
         return stopLon;
+    }
+
+    public int getDirection() {
+        return direction;
     }
 }
