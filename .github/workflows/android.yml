@@ -60,17 +60,18 @@ jobs:
       with:
         xml_path: /home/runner/work/buspal/buspal/app/app/build/reports/lint-results.xml
 
-    - name: Check Branch
-      id: check-branch
+    - name: Check Tag
+      id: check-tag
       run: |
-        if [[ ${{ github.event.ref }} =~ ^refs/tags/*$ ]]; then
+        echo ${{ github.ref }}
+        if [[ ${{ github.ref }} =~ ^refs/tags/*$ ]]; then
             echo ::set-output name=match::true
             echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
         fi
 
     - uses: r0adkll/sign-android-release@v1
       name: Create signed APK
-      if: steps.check-branch.outputs.match == 'true'
+      if: steps.check-tag.outputs.match == 'true'
       id: sign_app
       with:
         releaseDirectory: app/app/build/outputs/apk/release
@@ -80,7 +81,7 @@ jobs:
         keyPassword: ${{ secrets.KEY_PASSWORD }}
 
     - name: Create Release
-      if: steps.check-branch.outputs.match == 'true'
+      if: steps.check-tag.outputs.match == 'true'
       id: create_release
       uses: actions/create-release@v1
       env:
@@ -94,7 +95,7 @@ jobs:
         prerelease: false
 
     - name: Upload Release Asset
-      if: steps.check-branch.outputs.match == 'true'
+      if: steps.check-tag.outputs.match == 'true'
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
       env:
