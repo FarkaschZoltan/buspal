@@ -64,7 +64,8 @@ jobs:
       id: check-tag
       run: |
         echo ${{ github.ref }}
-        if [[ ${{ github.ref }} =~ ^refs/tags/*$ ]]; then
+        echo ${{ GITHUB_REF#refs/tags/ }}
+        if [[ ${{ github.ref }} == refs/heads/release ]]; then
             echo ::set-output name=match::true
             echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
         fi
