@@ -2,9 +2,11 @@ name: Android CI
 
 on:
   push:
-    branches: [ master ]
+    branches: 
+      - '*'
   pull_request:
-    branches: [ master ]
+    branches:
+      - '*'
 
 jobs:
   build:
@@ -58,8 +60,16 @@ jobs:
       with:
         xml_path: /home/runner/work/buspal/buspal/app/app/build/reports/lint-results.xml
 
+    - name: Check Release Branch
+      id: check-branch
+      run: |
+        if [[ ${{ github.event.ref }} == "refs/heads/release" ]]; then
+            echo ::set-output name=match::true
+        fi
+
     - uses: r0adkll/sign-android-release@v1
       name: Create signed APK
+      if: steps.check-branch.outputs.match == 'true'
       id: sign_app
       with:
         releaseDirectory: app/app/build/outputs/apk/release
@@ -69,19 +79,21 @@ jobs:
         keyPassword: ${{ secrets.KEY_PASSWORD }}
 
     - name: Create Release
+      if: steps.check-branch.outputs.match == 'true'
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ github.event.head_commit.message }}
+        release_name: Release ${{ github.event.head_commit.message }}
         body: |
           First release
         draft: false
         prerelease: false
 
     - name: Upload Release Asset
+      if: steps.check-branch.outputs.match == 'true'
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
       env:
