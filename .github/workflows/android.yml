@@ -62,16 +62,13 @@ jobs:
       with:
         xml_path: /home/runner/work/buspal/buspal/app/app/build/reports/lint-results.xml
 
-    - name: Get tag
-      id: tag
-      uses: dawidd6/action-get-tag@v1
 
     - name: Check Tag
       id: check-tag
       run: |
         echo ${{ github.ref }}
         echo ${{steps.tag.outputs.tag}}
-        if [[ ${{ github.ref }} == refs/heads/release ]]; then
+        if [[ ${{ github.ref }} =~ ^refs/tags/*$ ]]; then
             echo ::set-output name=match::true
             echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
         fi
@@ -94,8 +91,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.tag.outputs.tag }}
-        release_name: Release ${{ steps.tag.outputs.tag }}
+        tag_name: ${{ steps.check-tag.outputs.SOURCE_TAG }}
+        release_name: Release ${{ steps.check-tag.outputs.SOURCE_TAG }}
         body: |
           First release
         draft: false
