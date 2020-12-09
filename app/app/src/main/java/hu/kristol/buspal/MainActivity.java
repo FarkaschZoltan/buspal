@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Button button = findViewById(R.id.button);
+        //Button button = findViewById(R.id.button);
         Button button2 = findViewById(R.id.button2);
         Button button3 = findViewById(R.id.button3);
         Button button4 = findViewById(R.id.button4);
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         checkPermission(Manifest.permission.INTERNET,101);
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 102);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TextView out = findViewById(R.id.out);
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 i.putExtra("stop", inText);
                 c.startActivity(i);
             }
-        });
+        });*/
 
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,10 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     new String[] { permission },
                     requestCode);
         } else {
-            Toast.makeText(MainActivity.this,
-                    "Permission already granted",
-                    Toast.LENGTH_SHORT)
-                    .show();
+            Log.d("Permission", "Permissions already granted");
         }
     }
 
@@ -134,12 +131,12 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(MainActivity.this,
-                        "Camera Permission Granted",
+                        "Network Permission Granted",
                         Toast.LENGTH_SHORT)
                         .show();
             } else {
                 Toast.makeText(MainActivity.this,
-                        "Camera Permission Denied",
+                        "Network Permission Denied",
                         Toast.LENGTH_SHORT)
                         .show();
             }

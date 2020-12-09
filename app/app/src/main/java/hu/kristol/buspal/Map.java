@@ -83,7 +83,7 @@ public class Map extends AppCompatActivity implements LocationListener {
                 mapController.setCenter(new GeoPoint(location.getLatitude(), location.getLongitude()));
                 loadResources(URL, "budapest",
                         Statements.getNearbyStops(location.getLatitude(), location.getLongitude(),
-                                3));
+                                1));
                 locationFound = true;
             }
             currentLat = location.getLatitude();
@@ -135,8 +135,6 @@ public class Map extends AppCompatActivity implements LocationListener {
         myLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent i = new Intent(mCtx, MainActivity.class);
-                mCtx.startActivity(i);*/
                 mapController.setCenter(new GeoPoint(currentLat, currentLon));
                 mapController.setZoom(16.0);
             }
@@ -360,13 +358,19 @@ public class Map extends AppCompatActivity implements LocationListener {
                                     0,  new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                                 @Override
                                 public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                                    // TODO dialog
+                                    Intent i = new Intent(mCtx, StopDepartures.class);
+                                    i.putExtra("stop", resultArray.get(index).getStopId());
+                                    i.putExtra("stopName", resultArray.get(index).getStopName());
+                                    mCtx.startActivity(i);
                                     return true;
                                 }
 
                                 @Override
                                 public boolean onItemLongPress(final int index, final OverlayItem item) {
-
+                                    Intent i = new Intent(mCtx, StopDepartures.class);
+                                    i.putExtra("stop", resultArray.get(index).getStopId());
+                                    i.putExtra("stopName", resultArray.get(index).getStopName());
+                                    mCtx.startActivity(i);
                                     return false;
                                 }
                             }, mCtx);
@@ -453,7 +457,7 @@ public class Map extends AppCompatActivity implements LocationListener {
     public void onLocationChanged(Location location) {
         if(!locationFound && !showingPath){
             loadResources(URL, "budapest", Statements.getNearbyStops(location.getLatitude(),
-                            location.getLongitude(), 3));
+                            location.getLongitude(), 1));
             locationFound = true;
         }
     }

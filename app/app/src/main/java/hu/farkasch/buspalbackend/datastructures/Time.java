@@ -97,8 +97,13 @@ public class Time implements Comparable<Time>{
 
     public boolean isInsideInterval(Time that, int hours){
         Time difference = that.subtract(this);
+        boolean l = true;
+        l = l && difference.hour >= 0 && difference.hour < hours;
+        if(difference.hour == 0){
+            l = l && difference.minute > 1;
+        }
 
-        return difference.hour > 0 && difference.hour < hours;
+        return l;
     }
 
     @Override

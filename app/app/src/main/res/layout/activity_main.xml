@@ -31,19 +31,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Blaha" />
+            android:inputType="text"
+            android:hint="Enter stop name" />
 
         <TextView
             android:id="@+id/out"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Find routes at this stop" />
 
         <Button
             android:id="@+id/button2"
@@ -55,13 +49,19 @@
             android:id="@+id/button3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search stop" />
+            android:text="Search for this stop" />
 
         <Button
             android:id="@+id/button4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Open map" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Please note, that due to server capacities, first query can be slow (e.g. 10-15 sec)" />
 
     </LinearLayout>
 
