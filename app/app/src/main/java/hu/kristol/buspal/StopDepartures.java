@@ -60,7 +60,7 @@ public class StopDepartures extends AppCompatActivity {
         int stopId = (int)i.getIntExtra("stop", 0);
 
         String stopName = i.getStringExtra("stopName");
-        Log.d("StopName", stopName);
+        //Log.d("StopName", stopName);
 
         TextView stopNameContainer = findViewById(R.id.stop_name);
         stopNameContainer.setText(stopName);

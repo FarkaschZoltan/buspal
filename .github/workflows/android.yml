@@ -93,7 +93,8 @@ jobs:
         tag_name: ${{ steps.check-tag.outputs.SOURCE_TAG }}
         release_name: Release ${{ steps.check-tag.outputs.SOURCE_TAG }}
         body: |
-          First release
+           Release ${{ steps.check-tag.outputs.SOURCE_TAG }}
+           ${{ github.event.head_commit.message }}
         draft: false
         prerelease: false
 

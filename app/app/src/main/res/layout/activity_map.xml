@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_menu_offline"
+        android:src="@drawable/bus_stop"
         app:layout_constraintCircle="@+id/my_location"
         app:layout_constraintCircleAngle="270"
         app:layout_constraintCircleRadius="70dp"
