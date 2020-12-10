@@ -3,12 +3,16 @@ package hu.thepocok.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -44,10 +48,13 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
                     return;
                 }
 
-                Intent i = new Intent(mCtx, Timetable.class);
+                Toast toast = Toast.makeText(mCtx,
+                        "Timetable is under development. Please check back later!", Toast.LENGTH_SHORT);
+                toast.show();
+                /*Intent i = new Intent(mCtx, Timetable.class);
                 i.putExtra("stopsList", item.getStops());
                 i.putExtra("routeName", item.getName());
-                mCtx.startActivity(i);
+                mCtx.startActivity(i);*/
             }
         });
 
@@ -59,41 +66,49 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
         BusRoute route = routeList.get(position);
 
         holder.routeName.setText(route.getName());
-        holder.routeDestination.setText(route.getDestinations());
+        holder.destination.setText(route.getDestinations());
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mCtx);
+        String city = sharedPreferences.getString("city", "budapest");
 
         switch (route.getType()){
             case BUS:
-                holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));
+                if(route.getName().charAt(0) == '9' && route.getName().length() >= 3 && !city.equals("szeged")){
+                    holder.cardView.setCardBackgroundColor(mCtx.getResources().getColor(R.color.night_bus));
+                    holder.routeName.setTextColor(Color.parseColor("#ffffff"));
+                } else{
+                    holder.cardView.setCardBackgroundColor(mCtx.getResources().getColor(R.color.bus));
+                }
                 break;
             case TRAM:
-                holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.tram));
+                holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.tram));
                 break;
             case TROLLEY:
-                holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.trolley));
+                holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.trolley));
                 break;
             case METRO:
                 if(route.getName().equals("M1")){
-                    holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_1));
+                    holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_1));
                 }else if(route.getName().equals("M2")){
-                    holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_2));
+                    holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_2));
                 }else if(route.getName().equals("M3")){
-                    holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_3));
+                    holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_3));
                 }else if(route.getName().equals("M4")){
-                    holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_4));
+                    holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.metro_4));
                 }
                 break;
             case SUBURBAN_RAILWAY:
                 if(route.getName().equals("H5")){
-                    holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_5));
+                    holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_5));
                 }else if(route.getName().equals("H6")){
-                    holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_6));
+                    holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_6));
                 }else if(route.getName().equals("H7")){
-                    holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_7));
+                    holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_7));
                 }else if(route.getName().equals("H8") || route.getName().equals("H9")){
-                    holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_8));
+                    holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.suburban_8));
                 }
             default:
-                holder.routeColor.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));
+                holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));
                 break;
         }
     }
@@ -105,14 +120,15 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
 
     class RouteViewHolder extends RecyclerView.ViewHolder {
 
-        TextView routeColor, routeDestination, routeName;
+        TextView routeName, destination;
+        CardView cardView;
 
         public RouteViewHolder(View itemView) {
             super(itemView);
 
-            routeColor = itemView.findViewById(R.id.route_color);
-            routeDestination = itemView.findViewById(R.id.route_destination);
             routeName = itemView.findViewById(R.id.route_name);
+            destination = itemView.findViewById(R.id.route_destination);
+            cardView = itemView.findViewById(R.id.route_name_color);
         }
     }
 }

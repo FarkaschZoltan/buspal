@@ -3,7 +3,9 @@ package hu.thepocok.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,9 +64,12 @@ public class StoppingRoutesAdapter extends RecyclerView.Adapter<StoppingRoutesAd
 
         holder.routeData.setText(route.getName());
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mCtx);
+        String city = sharedPreferences.getString("city", "budapest");
+
         switch (route.getType()){
             case BUS:
-                if(route.getName().charAt(0) == '9' && route.getName().length() >= 3){
+                if(route.getName().charAt(0) == '9' && route.getName().length() >= 3 && !city.equals("szeged")){
                     holder.cardView.setCardBackgroundColor(mCtx.getResources().getColor(R.color.night_bus));
                     holder.routeData.setTextColor(Color.parseColor("#ffffff"));
                 } else{
@@ -98,7 +103,7 @@ public class StoppingRoutesAdapter extends RecyclerView.Adapter<StoppingRoutesAd
                 }else if(route.getName().equals("H8") || route.getName().equals("H9")){
                     holder.cardView.setCardBackgroundColor(mCtx.getResources().getColor(R.color.suburban_8));
                 }else{
-                    Log.d("RouteType", "Egyik sem");
+                    Log.d("RouteType", "None of the above");
                 }
             default:
                 holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));

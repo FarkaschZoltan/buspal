@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Settings">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -27,54 +27,45 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/selected_city"
+            android:id="@+id/city_label"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:textSize="24dp"
-            android:layout_marginBottom="25dp" />
+            android:layout_marginBottom="15dp"
+            android:text="Select city"/>
+
+        <Spinner
+            android:id="@+id/city_selection"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
+
+        <TextView
+            android:id="@+id/radius_label"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:layout_marginBottom="15dp"
+            android:text="Radius in meter"/>
 
         <EditText
-            android:id="@+id/in"
-            android:layout_width="match_parent"
+            android:id="@+id/radius"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
             android:ems="10"
             android:inputType="text"
-            android:hint="Enter stop name" />
+            android:hint="Enter radius, in which stops are shown on the map" />
 
-        <TextView
-            android:id="@+id/out"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search for this line" />
+            android:text="Save" />
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Search for this stop" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nearby stops" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Open map" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Please note, that due to server capacities, first query can be slow (e.g. 10-15 sec)" />
 
     </LinearLayout>
 

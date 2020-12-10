@@ -3,6 +3,8 @@ package hu.farkasch.buspalbackend.objects;
 import static hu.thepocok.serverlocation.ServerLocation.URL;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -46,6 +48,7 @@ public class BusRoute implements Serializable {
     private String destinations;
     private String color;
     private ArrayList<BusStop> stops;
+    private int direction;
 
     private RequestQueue mRequestQueue;
 
@@ -84,9 +87,10 @@ public class BusRoute implements Serializable {
                 break;
         }
         this.destinations = "";
+        this.direction = 0;
     }
 
-    public BusRoute(String routeId, String name, String type, String destinations, Context c) {
+    public BusRoute(String routeId, String name, String type, int direction) {
         this.routeId = Integer.parseInt(routeId);
         this.name = name;
         int typeOf = Integer.parseInt(type);
@@ -116,10 +120,90 @@ public class BusRoute implements Serializable {
                 this.type = null;
                 break;
         }
+        this.destinations = "";
+        this.direction = direction;
+    }
+
+    public BusRoute(String routeId, String name, String type, String destinations, Context c) {
+        this.routeId = Integer.parseInt(routeId);
+        this.name = name;
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
+        String city = sharedPreferences.getString("city", "budapest");
+
+        int typeOf = Integer.parseInt(type);
+        switch (typeOf){
+            case 0:
+                this.type = RouteType.TRAM;
+                break;
+            case 1:
+                this.type = RouteType.METRO;
+                break;
+            case 3:
+                this.type = RouteType.BUS;
+                break;
+            case 4:
+                this.type = RouteType.FERRY;
+                break;
+            case 11:
+                this.type = RouteType.TROLLEY;
+                break;
+            case 109:
+                this.type = RouteType.SUBURBAN_RAILWAY;
+                break;
+            case 800:
+                this.type = RouteType.TROLLEY;
+                break;
+            default:
+                this.type = null;
+                break;
+        }
         this.destinations = destinations;
+        this.direction = 0;
         mRequestQueue = Volley.newRequestQueue(c);
         stops = null;
-        loadResources(URL, "budapest", Statements.getStopsByRouteShortName(name));
+        loadResources(URL, city, Statements.getStopsByRouteShortName(name));
+    }
+
+    public BusRoute(String routeId, String name, String type, String destinations, Context c, int direction) {
+        this.routeId = Integer.parseInt(routeId);
+        this.name = name;
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
+        String city = sharedPreferences.getString("city", "budapest");
+
+        int typeOf = Integer.parseInt(type);
+        switch (typeOf){
+            case 0:
+                this.type = RouteType.TRAM;
+                break;
+            case 1:
+                this.type = RouteType.METRO;
+                break;
+            case 3:
+                this.type = RouteType.BUS;
+                break;
+            case 4:
+                this.type = RouteType.FERRY;
+                break;
+            case 11:
+                this.type = RouteType.TROLLEY;
+                break;
+            case 109:
+                this.type = RouteType.SUBURBAN_RAILWAY;
+                break;
+            case 800:
+                this.type = RouteType.TROLLEY;
+                break;
+            default:
+                this.type = null;
+                break;
+        }
+        this.destinations = destinations;
+        this.direction = direction;
+        mRequestQueue = Volley.newRequestQueue(c);
+        stops = null;
+        loadResources(URL, city, Statements.getStopsByRouteShortNameWithDirection(name, direction));
     }
 
     public BusRoute(String name, String type){

@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -46,10 +48,13 @@ public class RouteStops extends AppCompatActivity {
     private BusTrip trip;
     private JSONArray jsonArray;
     private int routeType;
-    String routeName;
+    private String routeName;
     private Context context = RouteStops.this;
 
     private RecyclerView recyclerView;
+
+    private String city;
+    private float radius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,11 @@ public class RouteStops extends AppCompatActivity {
         recyclerView = findViewById(R.id.route_stops_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(RouteStops.this));
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        city = sharedPreferences.getString("city", "budapest");
+        radius = sharedPreferences.getFloat("radius", (float) 1.0);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -134,7 +144,7 @@ public class RouteStops extends AppCompatActivity {
 
         mRequestQueue = Volley.newRequestQueue(this);
 
-        loadResources(URL,"budapest", Statements.getScheduleByTripId(tripId));
+        loadResources(URL, city, Statements.getScheduleByTripId(tripId));
     }
 
     private void loadResources(String url, String db, String statement){
