@@ -3,7 +3,9 @@ package hu.thepocok.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +58,9 @@ public class DepartureAdapter extends RecyclerView.Adapter<DepartureAdapter.Depa
     public void onBindViewHolder(DepartureAdapter.DepartureViewHolder holder, int position) {
         Departure departure = departureList.get(position);
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mCtx);
+        String city = sharedPreferences.getString("city", "budapest");
+
         holder.routeName.setText(departure.routeName);
         holder.destination.setText(departure.destination);
         holder.departureTime.setText(new Time(departure.departureTime).toString(true));
@@ -91,7 +96,7 @@ public class DepartureAdapter extends RecyclerView.Adapter<DepartureAdapter.Depa
 
         switch (tr){
             case BUS:
-                if(departure.routeName.charAt(0) == '9' && departure.routeName.length() >= 3){
+                if(departure.routeName.charAt(0) == '9' && departure.routeName.length() >= 3 && !city.equals("szeged")){
                     holder.cardView.setCardBackgroundColor(mCtx.getResources().getColor(R.color.night_bus));
                     holder.routeName.setTextColor(Color.parseColor("#ffffff"));
                 } else{

@@ -53,7 +53,6 @@ public class RouteStopsAdapter extends RecyclerView.Adapter<RouteStopsAdapter.Ro
         BusStop bs = routeStopsList.get(position);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mCtx);
-
         String city = sharedPreferences.getString("city", "budapest");
 
         if(city.equals("budapest") || city.equals("pecs")){
