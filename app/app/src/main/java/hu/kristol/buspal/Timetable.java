@@ -124,8 +124,15 @@ public class Timetable extends AppCompatActivity {
                                 date.setText(year + ". " + monthWithPlaceholder + ". " + dayWithPlaceholder);
                                 selectedDate = year*10000 + (monthOfYear+1)*100 + dayOfMonth;
                                 Log.d("SelectedDate", String.valueOf(selectedDate));
+
+                                mRequestQueue.cancelAll(new RequestQueue.RequestFilter() {
+                                    @Override
+                                    public boolean apply(Request<?> request) {
+                                        return true;
+                                    }
+                                });
                                 loadResources(URL, "budapest", Statements
-                                        .getDepartureFromStopByRouteName(selectedStopId, selectedRoute, selectedDate));
+                                        .getDepartureFromStopByRouteName(selectedStopId, selectedRoute, selectedDate, "budapest"));
                             }
                         }, year, month, day);
                 picker.show();

@@ -3,6 +3,8 @@ package hu.thepocok.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +52,15 @@ public class RouteStopsAdapter extends RecyclerView.Adapter<RouteStopsAdapter.Ro
     public void onBindViewHolder(RouteStopsAdapter.RouteStopViewHolder holder, int position) {
         BusStop bs = routeStopsList.get(position);
 
-        holder.stopSequencePlace.setText(String.valueOf(bs.getStopSequencePlace() + 1));
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mCtx);
+
+        String city = sharedPreferences.getString("city", "budapest");
+
+        if(city.equals("budapest") || city.equals("pecs")){
+            holder.stopSequencePlace.setText(String.valueOf(bs.getStopSequencePlace() + 1));
+        } else{
+            holder.stopSequencePlace.setText(String.valueOf(bs.getStopSequencePlace()));
+        }
         holder.stopName.setText(bs.getStopName());
         holder.departureTime.setText(bs.getDeparture().toString());
     }

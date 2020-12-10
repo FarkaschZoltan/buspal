@@ -4,6 +4,7 @@ package hu.kristol.buspal;
 import static hu.thepocok.serverlocation.ServerLocation.URL;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -20,12 +21,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +40,8 @@ import hu.thepocok.statements.Statements;
 public class Routes extends AppCompatActivity {
     private RequestQueue mRequestQueue;
 
-    private List<Routes> routesList;
+    private String city;
+    private float radius;
 
     private RecyclerView recyclerView;
     @Override
@@ -53,13 +57,18 @@ public class Routes extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Intent i = this.getIntent();
-        String stop = i.getStringExtra("stop");
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        String title = "Routes stopping at \"" + stop + "\"";
+        city = sharedPreferences.getString("city", "budapest");
+        radius = sharedPreferences.getFloat("radius", (float) 1.0);
+
+        Intent i = this.getIntent();
+        String name = i.getStringExtra("name");
+
+        String title = "Routes stopping at \"" + name + "\"";
         toolbar.setTitle(title);
 
-        loadResources(URL,"budapest", Statements.getRoutesByStop(stop, "budapest"));
+        loadResources(URL, city, Statements.getRouteByName(name));
 
     }
 
@@ -78,11 +87,28 @@ public class Routes extends AppCompatActivity {
                                 String routeId = jsonArray.getJSONObject(i).get("route_id").toString();
                                 String name = jsonArray.getJSONObject(i).get("route_short_name").toString();
                                 String type = jsonArray.getJSONObject(i).get("route_type").toString();
-                                String destination = jsonArray.getJSONObject(i).get("route_desc").toString();
 
-                                BusRoute b = new BusRoute(routeId, name, type, destination, Routes.this);
+                                String destination = null;
+                                ArrayList<String> destinations = null;
+                                Log.d("City", city);
+
+                                if(city.equals("budapest")){
+                                    destination = jsonArray.getJSONObject(i).get("route_desc").toString();
+                                    destinations = new ArrayList<>(Arrays.asList(destination.split(" / ")));
+                                } else if(city.equals("szeged")){
+                                    destination = jsonArray.getJSONObject(i).get("route_long_name").toString();
+                                    destinations = new ArrayList<>(Arrays.asList(destination.split(" / ")));
+                                } else{
+                                    destination = jsonArray.getJSONObject(i).get("route_long_name").toString();
+                                    destinations = new ArrayList<>(Arrays.asList(destination.split(" - ")));
+                                }
+
+                                BusRoute b = new BusRoute(routeId, name, type, destinations.get(0), Routes.this, 0);
+                                BusRoute bb = new BusRoute(routeId, name, type, destinations.get(1), Routes.this, 1);
                                 resultArray.add(b);
+                                resultArray.add(bb);
                                 Log.d("Result", b.toString());
+                                Log.d("Result", bb.toString());
                             }
 
                             //creating adapter object and setting it to recyclerview

@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -44,12 +46,14 @@ import hu.thepocok.statements.Statements;
 public class Stops extends AppCompatActivity implements LocationListener {
     private RequestQueue mRequestQueue;
 
-    LocationManager locationManager;
-    boolean locationFound = false;
+    private LocationManager locationManager;
+    private boolean locationFound = false;
 
-    String stopName = null;
+    private String stopName = null;
+    private RecyclerView recyclerView;
 
-    RecyclerView recyclerView;
+    private String city;
+    private float radius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +66,16 @@ public class Stops extends AppCompatActivity implements LocationListener {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        city = sharedPreferences.getString("city", "budapest");
+        radius = sharedPreferences.getFloat("radius", (float) 1.0);
+
         Intent i = this.getIntent();
         stopName = i.getStringExtra("stopName");
 
         if(stopName != null){
-            loadResources(URL, "budapest",
+            loadResources(URL, city,
                     Statements.getStopsByNameWithRoutes(stopName.toLowerCase(Locale.getDefault())));
         }
 
@@ -197,8 +206,8 @@ public class Stops extends AppCompatActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         if(!locationFound && stopName == null){
-            loadResources(URL, "budapest",
-                    Statements.getNearbyStops(location.getLatitude(), location.getLongitude(), 0.5));
+            loadResources(URL, city,
+                    Statements.getNearbyStops(location.getLatitude(), location.getLongitude(), radius));
             locationFound = true;
         }
 

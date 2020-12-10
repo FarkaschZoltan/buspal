@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -58,6 +59,8 @@ import java.util.HashMap;
 public class Map extends AppCompatActivity implements LocationListener {
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
+    public static final GeoPoint PECS = new GeoPoint(46.07070, 18.23310);
+    public static final GeoPoint SZEGED = new GeoPoint(46.25390, 20.14610);
     public static final GeoPoint MISKOLC = new GeoPoint(48.10367, 20.79933);
     public static final GeoPoint BUDAPEST = new GeoPoint(47.497913, 19.040236);
     private MapView map = null;
@@ -75,15 +78,18 @@ public class Map extends AppCompatActivity implements LocationListener {
     private String routeName;
     private boolean showingPath;
 
+    private String city;
+    private float radius;
+
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
             if(!locationFound && !showingPath){
                 map.getOverlays().clear();
                 mapController.setCenter(new GeoPoint(location.getLatitude(), location.getLongitude()));
-                loadResources(URL, "budapest",
+                loadResources(URL, city,
                         Statements.getNearbyStops(location.getLatitude(), location.getLongitude(),
-                                1));
+                                radius));
                 locationFound = true;
             }
             currentLat = location.getLatitude();
@@ -106,6 +112,12 @@ public class Map extends AppCompatActivity implements LocationListener {
 
         setContentView(R.layout.activity_map);
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Log.d("FoundInSharedPref", sharedPreferences.getString("city", "Nothing"));
+        city = sharedPreferences.getString("city", "budapest");
+        radius = sharedPreferences.getFloat("radius", (float) 1.0);
+
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setClickable(true);
@@ -114,7 +126,17 @@ public class Map extends AppCompatActivity implements LocationListener {
 
         mapController = map.getController();
         mapController.setZoom(16.0);
-        mapController.setCenter(BUDAPEST);
+
+        if(city.equals("budapest")){
+            mapController.setCenter(BUDAPEST);
+        } else if(city.equals("miskolc")){
+            mapController.setCenter(MISKOLC);
+        } else if(city.equals("pecs")){
+            mapController.setCenter(PECS);
+        } else if(city.equals("szeged")){
+            mapController.setCenter(SZEGED);
+        }
+
 
         Intent i = this.getIntent();
         int shapeId = i.getIntExtra("shapeId", -1);
@@ -149,7 +171,7 @@ public class Map extends AppCompatActivity implements LocationListener {
             }
         });
 
-        map.setMapListener(new DelayedMapListener(new MapListener() {
+        /*map.setMapListener(new DelayedMapListener(new MapListener() {
             public boolean onZoom(final ZoomEvent e) {
                 if(e.getZoomLevel() < 16){
                     map.getOverlays().clear();
@@ -163,10 +185,10 @@ public class Map extends AppCompatActivity implements LocationListener {
                 Log.i("zoom", e.toString());
                 return true;
             }
-        }, 1000 ));
+        }, 1000 ));*/
 
         if(shapeId != -1){
-            loadRouteShape(URL, "budapest",
+            loadRouteShape(URL, city,
                     Statements.getShape(shapeId));
         }
     }
@@ -456,8 +478,8 @@ public class Map extends AppCompatActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         if(!locationFound && !showingPath){
-            loadResources(URL, "budapest", Statements.getNearbyStops(location.getLatitude(),
-                            location.getLongitude(), 1));
+            loadResources(URL, city, Statements.getNearbyStops(location.getLatitude(),
+                            location.getLongitude(), radius));
             locationFound = true;
         }
     }

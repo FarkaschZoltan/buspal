@@ -1,8 +1,10 @@
 package hu.kristol.buspal;
 
 import android.Manifest;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -12,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
@@ -19,19 +22,32 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
-    Context c = this;
+    private Context c = this;
+    private String city;
+    private float radius;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        city = sharedPreferences.getString("city", "budapest");
+        radius = sharedPreferences.getFloat("radius", (float) 1.0);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Button button = findViewById(R.id.button);
+
+        TextView cityName = findViewById(R.id.selected_city);
+        cityName.setText("Current city: " + city.substring(0, 1).toUpperCase() + city.substring(1));
+
+        Button button = findViewById(R.id.button);
         Button button2 = findViewById(R.id.button2);
         Button button3 = findViewById(R.id.button3);
         Button button4 = findViewById(R.id.button4);
@@ -40,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         checkPermission(Manifest.permission.INTERNET,101);
         checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 102);
 
-        /*button.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TextView out = findViewById(R.id.out);
@@ -48,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
                 String inText = in.getText().toString();
                 
                 Intent i = new Intent(c, Routes.class);
-                i.putExtra("stop", inText);
+                i.putExtra("name", inText);
                 c.startActivity(i);
             }
-        });*/
+        });
 
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,13 +95,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Log.d("Context", c.toString());
+        Log.d("FoundInSharedPref", sharedPreferences.getString("city", "Nothing"));
+        Log.d("FoundInSharedPref", String.valueOf(sharedPreferences.getFloat("radius", (float) 0.0)));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent i = new Intent(c, Settings.class);
+                c.startActivity(i);
+                return false;
+            }
+        });
+
         return true;
     }
 

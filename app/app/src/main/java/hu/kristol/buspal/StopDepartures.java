@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +44,8 @@ import hu.thepocok.statements.Statements;
 public class StopDepartures extends AppCompatActivity {
     private RequestQueue mRequestQueue;
 
-    List<BusRoute> routesList;
+    private String city;
+    private float radius;
 
     //the recyclerview
     RecyclerView recyclerView;
@@ -54,6 +58,11 @@ public class StopDepartures extends AppCompatActivity {
         recyclerView = findViewById(R.id.departure_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        city = sharedPreferences.getString("city", "budapest");
+        radius = sharedPreferences.getFloat("radius", (float) 1.0);
 
         Intent i = this.getIntent();
         Log.d("StopId", String.valueOf(i.getIntExtra("stop", 0)));
@@ -73,11 +82,11 @@ public class StopDepartures extends AppCompatActivity {
         String routeName = i.getStringExtra("route_name");
 
         if(routeName == null){
-            loadResources(URL, "budapest",
-                    Statements.getDepartureFromStop(stopId, Integer.parseInt(currentDate)));
+            loadResources(URL, city,
+                    Statements.getDepartureFromStop(stopId, Integer.parseInt(currentDate), city));
         } else{
-            loadResources(URL, "budapest",
-                    Statements.getDepartureFromStopByRouteName(stopId, routeName, Integer.parseInt(currentDate)));
+            loadResources(URL, city,
+                    Statements.getDepartureFromStopByRouteName(stopId, routeName, Integer.parseInt(currentDate), city));
         }
 
 
@@ -104,7 +113,21 @@ public class StopDepartures extends AppCompatActivity {
                                 String name = jsonArray.getJSONObject(i).get("route_short_name").toString();
                                 Time departureTime = new Time(jsonArray.getJSONObject(i)
                                         .get("departure_time").toString());
-                                String destination = jsonArray.getJSONObject(i).get("trip_headsign").toString();
+                                String destination = null;
+                                if(city.equals("budapest")){
+                                    destination = jsonArray.getJSONObject(i).get("trip_headsign").toString();
+                                } else if(city.equals("szeged")){
+                                    int direction = Integer.parseInt(jsonArray.getJSONObject(i).get("direction_id").toString());
+                                    destination = jsonArray.getJSONObject(i).get("route_long_name").toString();
+                                    ArrayList<String> destinations = new ArrayList<>(Arrays.asList(destination.split(" / ")));
+                                    destination = destinations.get(direction);
+                                } else{
+                                    int direction = Integer.parseInt(jsonArray.getJSONObject(i).get("direction_id").toString());
+                                    destination = jsonArray.getJSONObject(i).get("route_long_name").toString();
+                                    ArrayList<String> destinations = new ArrayList<>(Arrays.asList(destination.split(" - ")));
+                                    destination = destinations.get(direction);
+                                }
+
                                 int routeType = Integer.parseInt(jsonArray.getJSONObject(i)
                                         .get("route_type").toString());
 
