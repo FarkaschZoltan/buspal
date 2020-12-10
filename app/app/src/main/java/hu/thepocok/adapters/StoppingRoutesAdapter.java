@@ -98,7 +98,7 @@ public class StoppingRoutesAdapter extends RecyclerView.Adapter<StoppingRoutesAd
                 }else if(route.getName().equals("H8") || route.getName().equals("H9")){
                     holder.cardView.setCardBackgroundColor(mCtx.getResources().getColor(R.color.suburban_8));
                 }else{
-                    Log.d("RouteType", "Egyik sem");
+                    Log.d("RouteType", "None of the above");
                 }
             default:
                 holder.cardView.setBackgroundColor(mCtx.getResources().getColor(R.color.bus));
