@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import hu.farkasch.buspalbackend.datastructures.Time;
@@ -141,6 +142,12 @@ public class DepartureAdapter extends RecyclerView.Adapter<DepartureAdapter.Depa
     @Override
     public int getItemCount() {
         return departureList.size();
+    }
+
+    public void updateData(ArrayList<Departure> departureList) {
+        this.departureList.clear();
+        this.departureList.addAll(departureList);
+        notifyDataSetChanged();
     }
 
     class DepartureViewHolder extends RecyclerView.ViewHolder {

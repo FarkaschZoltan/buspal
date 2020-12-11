@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,11 +24,17 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
     private Context mCtx;
     private List<BusRoute> routeList;
     private RecyclerView recyclerView;
+    private boolean empty;
 
     public RouteAdapter(Context mCtx, List<BusRoute> routeList, RecyclerView recyclerView) {
         this.mCtx = mCtx;
         this.routeList = routeList;
         this.recyclerView = recyclerView;
+        empty = routeList.isEmpty();
+
+        if(empty){
+            routeList.add(new BusRoute("0", "No such line found", null));
+        }
     }
 
     @Override
@@ -41,20 +46,23 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
             public void onClick(View v) {
                 int itemPosition = recyclerView.getChildLayoutPosition(view);
                 BusRoute item = routeList.get(itemPosition);
-                if(item.getStops() == null){
+                /*if(item.getStops() == null){
                     Toast toast = Toast.makeText(mCtx,
                             "Data is loading, please try again in a few seconds", Toast.LENGTH_SHORT);
                     toast.show();
                     return;
-                }
+                }*/
 
-                Toast toast = Toast.makeText(mCtx,
+                /*Toast toast = Toast.makeText(mCtx,
                         "Timetable is under development. Please check back later!", Toast.LENGTH_SHORT);
-                toast.show();
-                /*Intent i = new Intent(mCtx, Timetable.class);
-                i.putExtra("stopsList", item.getStops());
+                toast.show();*/
+                Intent i = new Intent(mCtx, Timetable.class);
+                i.putExtra("route", item);
+                /*i.putExtra("stopName", item.getFirstStop());
                 i.putExtra("routeName", item.getName());
-                mCtx.startActivity(i);*/
+                i.putExtra("direction", item.getDirection());
+                i.putExtra("destination", item.getDestinations());*/
+                mCtx.startActivity(i);
             }
         });
 

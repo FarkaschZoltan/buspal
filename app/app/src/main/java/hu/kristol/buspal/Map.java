@@ -40,10 +40,7 @@ import org.json.JSONException;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.api.IMapController;
-import org.osmdroid.events.DelayedMapListener;
-import org.osmdroid.events.MapListener;
-import org.osmdroid.events.ScrollEvent;
-import org.osmdroid.events.ZoomEvent;
+
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -84,6 +81,11 @@ public class Map extends AppCompatActivity implements LocationListener {
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
+            Intent i = getIntent();
+            double stopLat = i.getDoubleExtra("stopLat", 0.0);
+            showingPath = stopLat != 0.0;
+            Log.d("ShowingPath", String.valueOf(showingPath));
+
             if(!locationFound && !showingPath){
                 map.getOverlays().clear();
                 mapController.setCenter(new GeoPoint(location.getLatitude(), location.getLongitude()));
@@ -92,6 +94,7 @@ public class Map extends AppCompatActivity implements LocationListener {
                                 radius));
                 locationFound = true;
             }
+
             currentLat = location.getLatitude();
             currentLon = location.getLongitude();
         }
@@ -127,21 +130,27 @@ public class Map extends AppCompatActivity implements LocationListener {
         mapController = map.getController();
         mapController.setZoom(16.0);
 
-        if(city.equals("budapest")){
-            mapController.setCenter(BUDAPEST);
-        } else if(city.equals("miskolc")){
-            mapController.setCenter(MISKOLC);
-        } else if(city.equals("pecs")){
-            mapController.setCenter(PECS);
-        } else if(city.equals("szeged")){
-            mapController.setCenter(SZEGED);
-        }
-
-
         Intent i = this.getIntent();
         int shapeId = i.getIntExtra("shapeId", -1);
         routeType = i.getIntExtra("routeType", -1);
         routeName = i.getStringExtra("routeName");
+        double stopLat = i.getDoubleExtra("stopLat", 0.0);
+        double stopLon = i.getDoubleExtra("stopLon", 0.0);
+        Log.d("StopLat", String.valueOf(stopLat));
+
+        if(stopLat == 0.0){
+            if(city.equals("budapest")){
+                mapController.setCenter(BUDAPEST);
+            } else if(city.equals("miskolc")){
+                mapController.setCenter(MISKOLC);
+            } else if(city.equals("pecs")){
+                mapController.setCenter(PECS);
+            } else if(city.equals("szeged")){
+                mapController.setCenter(SZEGED);
+            }
+        } else{
+            mapController.setCenter(new GeoPoint(stopLat, stopLon));
+        }
 
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -170,22 +179,6 @@ public class Map extends AppCompatActivity implements LocationListener {
                 mCtx.startActivity(i);
             }
         });
-
-        /*map.setMapListener(new DelayedMapListener(new MapListener() {
-            public boolean onZoom(final ZoomEvent e) {
-                if(e.getZoomLevel() < 16){
-                    map.getOverlays().clear();
-                } else{
-                    map.getOverlays().add(mOverlay);
-                }
-                return true;
-            }
-
-            public boolean onScroll(final ScrollEvent e) {
-                Log.i("zoom", e.toString());
-                return true;
-            }
-        }, 1000 ));*/
 
         if(shapeId != -1){
             loadRouteShape(URL, city,

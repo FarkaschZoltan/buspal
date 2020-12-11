@@ -1,6 +1,7 @@
 package hu.kristol.buspal;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class Settings extends AppCompatActivity {
     private String selectedCity;
@@ -32,6 +32,10 @@ public class Settings extends AppCompatActivity {
 
         selectedCity = sharedPreferences.getString("city", "budapest");
         selectedRadius = sharedPreferences.getFloat("radius", (float) 1.0);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Settings");
 
         Spinner spinner = (Spinner) findViewById(R.id.city_selection);
 

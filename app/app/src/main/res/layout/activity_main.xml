@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text"
-            android:hint="Enter stop name" />
+            android:hint="Enter stop / line name" />
 
         <TextView
             android:id="@+id/out"
@@ -74,6 +74,7 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="10dp"
             android:text="Please note, that due to server capacities, first query can be slow (e.g. 10-15 sec)" />
 
     </LinearLayout>

@@ -1,7 +1,6 @@
 package hu.kristol.buspal;
 
 import android.Manifest;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,6 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 String inText = in.getText().toString();
                 
                 Intent i = new Intent(c, Routes.class);
-                i.putExtra("name", inText);
+                i.putExtra("name", inText.toUpperCase(Locale.getDefault()));
                 c.startActivity(i);
             }
         });

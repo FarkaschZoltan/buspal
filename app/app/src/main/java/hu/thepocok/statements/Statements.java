@@ -1,8 +1,8 @@
 package hu.thepocok.statements;
 
 public class Statements {
-    public static String getScheduleByStop(String route, String stop, String direction, String date) {
-        String statement = "SELECT stop_times.departure_time FROM routes " +
+    public static String getScheduleByStop(String route, String stop, int direction, int date) {
+        String statement = "SELECT stop_times.departure_time, trips.trip_id, routes.route_type FROM routes " +
                 "INNER JOIN trips on routes.route_id = trips.route_id " +
                 "INNER JOIN stop_times on stop_times.trip_id = trips.trip_id " +
                 "INNER JOIN stops on stops.stop_id = stop_times.stop_id " +
@@ -93,17 +93,6 @@ public class Statements {
         return statement;
     }
 
-    public static String getRouteDeparturesFromStop(int stopId){
-        String statement = "SELECT stop_times.departure_time, routes.route_short_name\n" +
-                "FROM routes\n" +
-                "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
-                "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
-                "WHERE stop_times.stop_id = " + stopId + "\n" +
-                "GROUP BY stop_times.departure_time, routes.route_short_name\n" +
-                "ORDER BY departure_time";
-        return statement;
-    }
-
     public static String routeFirstStop(int tripId){
         String statement = "SELECT stops.stop_name\n" +
                 "FROM stops\n" +
@@ -130,21 +119,25 @@ public class Statements {
                     "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
                     "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
                     "INNER JOIN calendar_dates ON calendar_dates.service_id = trips.service_id\n" +
-                    "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = " + date + " AND calendar_dates.exception_type = '1'\n" +
+                    "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = " + date +
+                    " AND calendar_dates.exception_type = '1'\n" +
                     "GROUP BY trips.trip_id, trips.trip_headsign, stop_times.departure_time, " +
                     "routes.route_short_name, routes.route_type\n" +
                     "ORDER BY departure_time";
         } else if(city.equals("szeged")){
             statement = "SELECT trips.trip_id, stop_times.departure_time, routes.route_short_name, " +
-                    "routes.route_type, routes.route_long_name, trips.direction_id\n" +
+                    "routes.route_type, routes.route_long_name, trips.direction_id, " +
+                    "calendar_dates.exception_type, stops.stop_name\n" +
                     "FROM routes\n" +
                     "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
                     "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
                     "INNER JOIN calendar_dates ON calendar_dates.service_id = trips.service_id\n" +
-                    "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = " + date + " AND calendar_dates.exception_type = '1'\n" +
-                    "GROUP BY trips.trip_id, stop_times.departure_time, routes.route_long_name, routes.route_short_name, " +
-                    "routes.route_type, trips.direction_id\n" +
-                    "ORDER BY departure_time";
+                    "INNER JOIN stops ON stops.stop_id = stop_times.stop_id\n" +
+                    "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = " + date + "\n" +
+                    "GROUP BY trips.trip_id, stop_times.departure_time, routes.route_long_name, " +
+                    "routes.route_short_name, routes.route_type, trips.direction_id, " +
+                    "calendar_dates.exception_type, stops.stop_name\n" +
+                    "ORDER BY departure_time;";
         } else {
             statement = "SELECT trips.trip_id, stop_times.departure_time, routes.route_short_name, " +
                     "routes.route_type, routes.route_long_name, trips.direction_id\n" +
@@ -152,8 +145,10 @@ public class Statements {
                     "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
                     "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
                     "INNER JOIN calendar_dates ON calendar_dates.service_id = trips.service_id\n" +
-                    "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = " + date + " AND calendar_dates.exception_type = '1'\n" +
-                    "GROUP BY trips.trip_id, stop_times.departure_time, routes.route_long_name, routes.route_short_name, " +
+                    "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = " + date +
+                    " AND calendar_dates.exception_type = '1'\n" +
+                    "GROUP BY trips.trip_id, stop_times.departure_time, routes.route_long_name, " +
+                    "routes.route_short_name, " +
                     "routes.route_type, trips.direction_id\n" +
                     "ORDER BY departure_time";
         }
@@ -174,6 +169,21 @@ public class Statements {
                     "GROUP BY trips.trip_id, trips.trip_headsign, stop_times.departure_time, " +
                     "routes.route_short_name, routes.route_type\n" +
                     "ORDER BY departure_time";
+        } else if(city.equals("szeged")){
+            statement = "SELECT trips.trip_id, stop_times.departure_time, routes.route_short_name, " +
+                    "routes.route_type, routes.route_long_name, trips.direction_id, " +
+                    "calendar_dates.exception_type, stops.stop_name\n" +
+                    "FROM routes\n" +
+                    "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
+                    "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
+                    "INNER JOIN calendar_dates ON calendar_dates.service_id = trips.service_id\n" +
+                    "INNER JOIN stops ON stops.stop_id = stop_times.stop_id\n" +
+                    "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = " + date + "\n" +
+                    "AND route_short_name = '" + routeName + "'\n" +
+                    "GROUP BY trips.trip_id, stop_times.departure_time, routes.route_long_name, " +
+                    "routes.route_short_name, routes.route_type, trips.direction_id, " +
+                    "calendar_dates.exception_type, stops.stop_name\n" +
+                    "ORDER BY departure_time;";
         } else{
             statement = "SELECT trips.trip_id, stop_times.departure_time, routes.route_short_name, " +
                     "routes.route_type, routes.route_long_name, trips.direction_id\n" +
@@ -181,9 +191,11 @@ public class Statements {
                     "INNER JOIN trips ON routes.route_id = trips.route_id\n" +
                     "INNER JOIN stop_times ON trips.trip_id = stop_times.trip_id\n" +
                     "INNER JOIN calendar_dates ON calendar_dates.service_id = trips.service_id\n" +
-                    "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = " + date + " AND calendar_dates.exception_type = '1'\n" +
+                    "WHERE stop_times.stop_id = " + stopId + " AND calendar_dates.date = " + date +
+                    " AND calendar_dates.exception_type = '1'\n" +
                     "AND route_short_name = '" + routeName + "'\n" +
-                    "GROUP BY trips.trip_id, stop_times.departure_time, routes.route_long_name, routes.route_short_name, routes.route_type, trips.direction_id\n" +
+                    "GROUP BY trips.trip_id, stop_times.departure_time, routes.route_long_name, " +
+                    "routes.route_short_name, routes.route_type, trips.direction_id\n" +
                     "ORDER BY departure_time";
         }
         return statement;

@@ -31,11 +31,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import hu.farkasch.buspalbackend.datastructures.Time;
-import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.farkasch.buspalbackend.objects.Departure;
 import hu.thepocok.adapters.DepartureAdapter;
 import hu.thepocok.statements.Statements;
@@ -117,14 +115,18 @@ public class StopDepartures extends AppCompatActivity {
                                 if(city.equals("budapest")){
                                     destination = jsonArray.getJSONObject(i).get("trip_headsign").toString();
                                 } else if(city.equals("szeged")){
-                                    int direction = Integer.parseInt(jsonArray.getJSONObject(i).get("direction_id").toString());
+                                    int direction = Integer.parseInt(jsonArray.getJSONObject(i)
+                                            .get("direction_id").toString());
                                     destination = jsonArray.getJSONObject(i).get("route_long_name").toString();
-                                    ArrayList<String> destinations = new ArrayList<>(Arrays.asList(destination.split(" / ")));
+                                    ArrayList<String> destinations = new ArrayList<>(Arrays.asList(destination
+                                            .split(" / ")));
                                     destination = destinations.get(direction);
                                 } else{
-                                    int direction = Integer.parseInt(jsonArray.getJSONObject(i).get("direction_id").toString());
+                                    int direction = Integer.parseInt(jsonArray.getJSONObject(i)
+                                            .get("direction_id").toString());
                                     destination = jsonArray.getJSONObject(i).get("route_long_name").toString();
-                                    ArrayList<String> destinations = new ArrayList<>(Arrays.asList(destination.split(" - ")));
+                                    ArrayList<String> destinations = new ArrayList<>(Arrays.asList(destination
+                                            .split(" - ")));
                                     destination = destinations.get(direction);
                                 }
 

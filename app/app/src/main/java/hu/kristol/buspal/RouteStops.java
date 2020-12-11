@@ -185,6 +185,8 @@ public class RouteStops extends AppCompatActivity {
                                             }
                                             i.putExtra("routeType", routeType);
                                             i.putExtra("routeName", routeName);
+                                            i.putExtra("stopLat", stopLat);
+                                            i.putExtra("stopLon", stopLon);
                                             context.startActivity(i);
                                         }
                                     });

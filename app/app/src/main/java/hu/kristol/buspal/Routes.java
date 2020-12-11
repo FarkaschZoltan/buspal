@@ -30,7 +30,6 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import hu.farkasch.buspalbackend.objects.BusRoute;
@@ -103,8 +102,10 @@ public class Routes extends AppCompatActivity {
                                     destinations = new ArrayList<>(Arrays.asList(destination.split(" - ")));
                                 }
 
-                                BusRoute b = new BusRoute(routeId, name, type, destinations.get(0), Routes.this, 0);
-                                BusRoute bb = new BusRoute(routeId, name, type, destinations.get(1), Routes.this, 1);
+                                BusRoute b = new BusRoute(routeId, name, type, destinations.get(0), 1,
+                                        destinations.get(1));
+                                BusRoute bb = new BusRoute(routeId, name, type, destinations.get(1), 0,
+                                        destinations.get(0));
                                 resultArray.add(b);
                                 resultArray.add(bb);
                                 Log.d("Result", b.toString());

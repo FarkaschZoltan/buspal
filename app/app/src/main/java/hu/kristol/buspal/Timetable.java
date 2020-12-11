@@ -4,6 +4,7 @@ import static hu.thepocok.serverlocation.ServerLocation.URL;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 
@@ -21,14 +22,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,9 +41,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import hu.farkasch.buspalbackend.datastructures.Time;
+import hu.farkasch.buspalbackend.objects.BusRoute;
 import hu.farkasch.buspalbackend.objects.BusStop;
 import hu.farkasch.buspalbackend.objects.Departure;
-import hu.thepocok.adapters.TimetableAdapter;
+import hu.thepocok.adapters.DepartureAdapter;
 import hu.thepocok.statements.Statements;
 
 public class Timetable extends AppCompatActivity {
@@ -57,14 +60,16 @@ public class Timetable extends AppCompatActivity {
 
     private ArrayList<BusStop> stopsList;
     private int selectedDate;
-    private int selectedStopId;
+    private String selectedStop;
     private String selectedRoute;
     private int selectedDirection;
+    private BusRoute route;
 
-    private ArrayList<BusStop> stopsOnwards = new ArrayList<>();
-    private ArrayList<BusStop> stopsBackwards = new ArrayList<>();
-    private ArrayList<String> onwardStopNames = new ArrayList<>();
-    private ArrayList<String> backwardStopNames = new ArrayList<>();
+    private String city;
+    private double radius;
+
+    private boolean isSetForFirstTime = false;
+    private DepartureAdapter adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,19 +84,16 @@ public class Timetable extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Intent i = this.getIntent();
-        stopsList = (ArrayList<BusStop>) i.getSerializableExtra("stopsList");
-        selectedRoute = i.getStringExtra("routeName");
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        for(BusStop b : stopsList){
-            if(b.getDirection() == 0){
-                stopsOnwards.add(b);
-                onwardStopNames.add(b.getStopName());
-            } else{
-                stopsBackwards.add(b);
-                backwardStopNames.add(b.getStopName());
-            }
-        }
+        city = sharedPreferences.getString("city", "budapest");
+        radius = sharedPreferences.getFloat("radius", (float) 1.0);
+
+        Intent i = this.getIntent();
+        route = (BusRoute) i.getSerializableExtra("route");
+        selectedStop = route.getFirstStop();
+        selectedDirection = route.getDirection();
+        selectedRoute = route.getName();
 
         date = findViewById(R.id.date);
 
@@ -102,7 +104,6 @@ public class Timetable extends AppCompatActivity {
 
         formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         selectedDate = Integer.parseInt(currentDate.format(formatter));
-        selectedDirection = 0;
 
         date.setInputType(InputType.TYPE_NULL);
         date.setOnClickListener(new View.OnClickListener() {
@@ -131,15 +132,43 @@ public class Timetable extends AppCompatActivity {
                                         return true;
                                     }
                                 });
-                                loadResources(URL, "budapest", Statements
-                                        .getDepartureFromStopByRouteName(selectedStopId, selectedRoute, selectedDate, "budapest"));
+                                loadResources(URL, city, Statements
+                                        .getScheduleByStop(selectedRoute, selectedStop,
+                                                selectedDirection, selectedDate));
                             }
                         }, year, month, day);
                 picker.show();
             }
         });
 
-        Spinner spinner = (Spinner) findViewById(R.id.stop_selection);
+        TextView direction = findViewById(R.id.destination_stop);
+        direction.setText("In the direction of " + selectedStop);
+        direction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selectedDirection == 1){
+                    selectedDirection = 0;
+                } else{
+                    selectedDirection = 1;
+                }
+
+                if(selectedStop.equals(route.getDestinations())){
+                    selectedStop = route.getFirstStop();
+                } else{
+                    selectedStop = route.getDestinations();
+                }
+
+                direction.setText("In the direction of " + selectedStop);
+
+                recyclerView = new RecyclerView(Timetable.this);
+                Log.d("NewSelectedData", selectedRoute + " " + selectedStop + " " + String.valueOf(selectedDirection));
+
+                loadResources(URL, city, Statements
+                        .getScheduleByStop(selectedRoute, selectedStop, selectedDirection, selectedDate));
+            }
+        });
+
+        /*Spinner spinner = (Spinner) findViewById(R.id.stop_selection);
 
         ArrayAdapter<String> stopNameAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, onwardStopNames);
@@ -161,9 +190,10 @@ public class Timetable extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        });*/
 
-        //loadResources(URL, "budapest", Statements.getRoutesByStop(stop, "budapest"));
+        loadResources(URL, city, Statements
+                .getScheduleByStop(selectedRoute, selectedStop, selectedDirection, selectedDate));
 
     }
 
@@ -172,7 +202,8 @@ public class Timetable extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("Routes", response);
+                        Log.d("Query", statement);
+                        Log.d("Timetable", response);
                         try {
                             //converting the string to json array object
                             JSONArray jsonArray = new JSONArray(response);
@@ -181,17 +212,26 @@ public class Timetable extends AppCompatActivity {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 String departureTime = jsonArray.getJSONObject(i).get("departure_time").toString();
                                 int tripId = Integer.parseInt(jsonArray.getJSONObject(i).get("trip_id").toString());
-                                String name = jsonArray.getJSONObject(i).get("route_short_name").toString();
-                                //String destination = jsonArray.getJSONObject(i).get("trip_headsign").toString();
+                                String name = route.getName();
+                                String destination = route.getDestinations();
+                                int routeType = Integer.parseInt(jsonArray.getJSONObject(i)
+                                        .get("route_type").toString());
 
-                                Departure d = new Departure(tripId, name, "", departureTime);
+                                Departure d = new Departure(tripId, name, destination,
+                                        new Time(departureTime), routeType);
                                 resultArray.add(d);
                                 Log.d("Result", d.toString());
                             }
 
                             //creating adapter object and setting it to recyclerview
-                            TimetableAdapter adapter = new TimetableAdapter(Timetable.this, resultArray, recyclerView);
-                            recyclerView.setAdapter(adapter);
+                            if(!isSetForFirstTime){
+                                adapter = new DepartureAdapter(Timetable.this, resultArray, recyclerView);
+                                recyclerView.setAdapter(adapter);
+                            } else{
+                                adapter.updateData(resultArray);
+                            }
+
+                            isSetForFirstTime = true;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
